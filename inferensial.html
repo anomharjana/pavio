@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Tempel & Lihat Seketika</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9fb;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      flex-wrap: wrap;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-brand img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #777;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 960px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .feature {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature h3 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature h4 {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .feature ul {
+      padding-left: 1.2rem;
+      margin-top: 0.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature ul li {
+      margin-bottom: 0.25rem;
+      font-size: 0.95rem;
+    }
+
+    .btn-link {
+      display: inline-block;
+      margin-top: 1rem;
+      background-color: #333;
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-link:hover {
+      background-color: #000;
+      transform: scale(1.05);
+    }
+
+    .btn-inline {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-inline:hover {
+      background-color: #0056b3;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    .explanation {
+      font-size: 0.85rem;
+      color: #555;
+      margin-top: 0.25rem;
+      display: none;
+      padding-left: 1rem;
+    }
+
+    .explanation-button {
+      font-size: 0.9rem;
+      color: #007bff;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    .explanation-button:hover {
+      text-decoration: underline;
+    }
+
+    .feature-item {
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>Paste & View — That’s All It Takes.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="features">
+    <!-- CARD: Uji Beda Rata-rata -->
+    <div class="feature">
+      <h3>📏 Uji Beda: Rata-rata</h3>
+
+      <div class="feature-item">
+        <h4>Jika data berdistribusi normal (Parametrik)</h4>
+        <ul>
+          <li>
+            Independent t-test 
+            <a href="independent_t_test.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk menguji perbedaan rata-rata antara dua kelompok independen yang berdistribusi normal.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            Paired t-test 
+            <a href="paired_t_test.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk membandingkan rata-rata dua kelompok yang terkait atau berpasangan, misalnya sebelum dan sesudah perlakuan.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            One-Way ANOVA 
+            <a href="oneway_anova.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk menguji perbedaan rata-rata antara lebih dari dua kelompok yang independen satu sama lain.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            Repeated Measures ANOVA 
+            <a href="repeated_anova.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk data yang melibatkan pengukuran berulang dari subjek yang sama dalam beberapa kondisi.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="feature-item">
+        <h4>Jika data tidak berdistribusi normal (Non-Parametrik)</h4>
+        <ul>
+          <li>
+            Mann-Whitney U Test 
+            <a href="mann_whitney.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk menguji perbedaan antara dua kelompok independen pada data yang tidak berdistribusi normal.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            Wilcoxon Signed-Rank Test 
+            <a href="wilcoxon.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk menguji perbedaan antara dua kelompok yang berpasangan pada data ordinal atau data yang tidak berdistribusi normal.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+           <li>
+            Kruskall-Wallis Test 
+            <a href="kwallis.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk menguji perbedaan lebih dari dua kelompok yang tidak berpasangan pada data ordinal atau data yang tidak berdistribusi normal.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            Friedman Test 
+            <a href="friedman.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk menguji perbedaan lebih dari dua kelompok berpasangan pada data ordinal atau tidak berdistribusi normal.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+        </ul>
+      </div>
+
+      <strong>📊 Visualisasi Beda Rata-rata</strong>
+      <ul>
+        <li>📦 Boxplot</li>
+        <li>📈 Bar chart dengan error bars</li>
+      </ul>
+    </div>
+
+    <!-- CARD: Uji Beda Proporsi -->
+    <div class="feature">
+      <h3>% Uji Beda: Proporsi</h3>
+      <div class="feature-item">
+        <h4>Jenis Uji:</h4>
+        <ul>
+          <li>
+            Uji Z untuk dua proporsi 
+            <a href="uji_z_proporsi.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk membandingkan dua proporsi dari dua kelompok independen.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            Chi-Square & Fisher’s Exact Test 
+            <a href="chisquare.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk menguji hubungan antara dua variabel kategori.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            McNemar Test 
+            <a href="mcnemar.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk menguji perubahan proporsi dalam data yang berpasangan.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+        </ul>
+      </div>
+
+      <strong>📈 Visualisasi Uji Beda Proporsi</strong>
+      <ul>
+        <li>📊 Bar Chart (Vertical or Stacked)</li>
+        <li>🥧 Pie Chart (jika hanya dua kategori)</li>
+        <li>↗️ 100% Stacked Bar Chart</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi. Developed by Anom Harjana
+  </footer>
+
+  <script>
+    document.querySelectorAll('.explanation-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const explanation = button.previousElementSibling;
+        if (explanation.style.display === 'block') {
+          explanation.style.display = 'none';
+          button.innerText = 'Lihat Penjelasan';
+        } else {
+          explanation.style.display = 'block';
+          button.innerText = 'Sembunyikan Penjelasan';
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

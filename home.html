@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Tempel & Lihat Seketika</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9fb;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      flex-wrap: wrap;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-brand img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #777;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 960px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .feature {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature h3 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature svg {
+      width: 22px;
+      height: 22px;
+      stroke: #333;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .feature button {
+      margin-top: 1rem;
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .feature button:hover {
+      background-color: #000;
+      transform: scale(1.05);
+    }
+
+    /* Badge Style */
+    .badge {
+      color: white;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.85rem;
+      border-radius: 12px;
+      margin-left: 10px;
+    }
+
+    .badge-gratis {
+      background-color: #4caf50; /* Hijau untuk "Gratis" */
+    }
+
+    .badge-premium {
+      background-color: #ff5722; /* Oranye untuk "Premium" */
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>Paste & View — That’s All It Takes.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="features">
+    <div class="feature">
+      <h3>
+        <!-- Statistik Deskriptif Icon -->
+        <svg viewBox="0 0 24 24"><path d="M4 20V10M8 20V4M12 20v-6M16 20v-2M20 20v-8"/></svg>
+        Statistik Deskriptif
+        <span class="badge badge-gratis">Gratis</span>
+      </h3>
+      <p>Rangkuman data: rata-rata, median, modus, histogram, pie chart, boxplot.</p>
+      <button onclick="window.location.href='deskriptif.html'">Lihat Statistik</button>
+    </div>
+
+    <div class="feature">
+      <h3>
+        <!-- Uji Perbedaan Icon -->
+        <svg viewBox="0 0 24 24"><path d="M3 12h18M12 3v18" /></svg>
+        Uji Perbedaan (Inferensial)
+        <span class="badge badge-premium">Premium</span>
+      </h3>
+      <p>Bandingkan kelompok: t-test, ANOVA, Chi-square, Fisher's Exact.</p>
+      <button onclick="window.location.href='inferensial.html'">Mulai Uji Perbedaan</button>
+    </div>
+
+    <div class="feature">
+      <h3>
+        <!-- Korelasi Icon -->
+        <svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><circle cx="3" cy="17" r="1"/><circle cx="9" cy="11" r="1"/><circle cx="13" cy="15" r="1"/><circle cx="21" cy="7" r="1"/></svg>
+        Uji Hubungan (Korelasi)
+        <span class="badge badge-premium">Premium</span>
+      </h3>
+      <p>Lihat hubungan variabel: Pearson, Spearman, regresi sederhana.</p>
+      <button onclick="window.location.href='korelasi.html'">Uji Hubungan</button>
+    </div>
+
+    <div class="feature">
+      <h3>
+        <!-- Multivariat Icon -->
+        <svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
+        Analisis Multivariat
+        <span class="badge badge-premium">Premium</span>
+      </h3>
+      <p>Regresi ganda, regresi logistik, PCA.</p>
+      <button onclick="window.location.href='multivariat.html'">Mulai Multivariat</button>
+    </div>
+
+    <div class="feature">
+      <h3>
+        <!-- Diagnostik Icon -->
+        <svg viewBox="0 0 24 24"><path d="M12 3v18M5 12h14M4 4l16 16"/></svg>
+        Uji Diagnostik & Validasi
+        <span class="badge badge-premium">Premium</span>
+      </h3>
+      <p>Evaluasi model: QQ plot, ROC, sensitivitas, spesifisitas.</p>
+      <button onclick="window.location.href='diagnostik.html'">Validasi Model</button>
+    </div>
+
+    <div class="feature">
+      <h3>
+        <!-- Sampel Icon -->
+        <svg viewBox="0 0 24 24"><path d="M5 3h14v2H5zM7 6h10v2H7zM4 9h16v2H4zM6 12h12v2H6zM5 15h14v2H5zM8 18h8v2H8z"/></svg>
+        Perhitungan Besar Sampel
+        <span class="badge badge-gratis">Gratis</span>
+      </h3>
+      <p>Hitung jumlah sampel: proporsi, rerata, korelasi.</p>
+      <button onclick="window.location.href='sampel.html'">Hitung Sampel</button>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi. Developed by Anom Harjana
+  </footer>
+</body>
+</html>

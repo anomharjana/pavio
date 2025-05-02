@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sample Size - Dua Rata-rata</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f2f4f8;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .card {
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      padding: 30px;
+    }
+    h1 {
+      font-size: 24px;
+      color: #333;
+      text-align: center;
+    }
+    h1 span {
+      font-size: 14px;
+      color: #777;
+      display: block;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 5px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    input:focus, select:focus {
+      border-color: #5ab0f7;
+      outline: none;
+    }
+    .tooltip {
+      font-size: 13px;
+      color: #777;
+      margin-top: 4px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result, .history {
+      background-color: #f9f9f9;
+      padding: 15px 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      border-left: 4px solid #007bff;
+    }
+    .result strong {
+      color: #333;
+    }
+    ul {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+    h2 {
+      font-size: 18px;
+      margin-top: 40px;
+      color: #444;
+    }
+    #downloadButtons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+    }
+    @media print {
+      button, .tooltip, #downloadButtons {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" id="outputArea">
+      <h1>Perhitungan Besar Sampel <span>Perbandingan Dua Rata-rata</span></h1>
+
+      <form id="sampleForm">
+        <label for="sigma">Simpangan Baku (σ):</label>
+        <input type="text" id="sigma" required />
+        <div class="tooltip">Contoh: 10</div>
+
+        <label for="delta">Δ (Perbedaan rata-rata yang dianggap signifikan):</label>
+        <input type="text" id="delta" required />
+        <div class="tooltip">Contoh: 5</div>
+
+        <label for="zAlpha">Tingkat Signifikansi (Zα/2):</label>
+        <select id="zAlpha">
+          <option value="1.645">90% (Z = 1.645)</option>
+          <option value="1.96" selected>95% (Z = 1.96)</option>
+          <option value="2.576">99% (Z = 2.576)</option>
+        </select>
+
+        <label for="zBeta">Kekuatan Uji (Zβ):</label>
+        <select id="zBeta">
+          <option value="0.84" selected>80% (Z = 0.84)</option>
+          <option value="1.28">90% (Z = 1.28)</option>
+        </select>
+
+        <button type="submit">🔍 Hitung Sampel</button>
+      </form>
+
+      <div id="result" class="result" style="display:none;"></div>
+
+      <div class="history">
+        <h2>📊 Riwayat Perhitungan</h2>
+        <ul id="history"></ul>
+      </div>
+
+      <footer>
+        &copy; 2025 Pavio. Seluruh hak cipta dilindungi. Developed by Anom Harjana
+      </footer>
+    </div>
+
+    <div id="downloadButtons">
+      <button id="downloadPNG">🖼️ Download PNG</button>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("sampleForm");
+    const resultDiv = document.getElementById("result");
+    const historyList = document.getElementById("history");
+    const pngBtn = document.getElementById("downloadPNG");
+    const outputArea = document.getElementById("outputArea");
+
+    let history = [];
+
+    function parseLocaleNumber(input) {
+      return parseFloat(input.replace(",", "."));
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const sigma = parseLocaleNumber(document.getElementById("sigma").value);
+      const delta = parseLocaleNumber(document.getElementById("delta").value);
+      const zAlpha = parseFloat(document.getElementById("zAlpha").value);
+      const zBeta = parseFloat(document.getElementById("zBeta").value);
+
+      if ([sigma, delta].some(val => isNaN(val) || val <= 0)) {
+        alert("Input harus berupa angka positif.");
+        return;
+      }
+
+      const numerator = 2 * Math.pow(zAlpha + zBeta, 2) * Math.pow(sigma, 2);
+      const denominator = Math.pow(delta, 2);
+      const n = Math.round(numerator / denominator);
+      const nRecommended = Math.round(n * 1.1);
+
+      const explanation = `
+        <strong>Hasil Perhitungan:</strong><br/>
+        Rumus: n = 2 × (Zα/2 + Zβ)² × σ² / Δ²<br/><br/>
+        n = 2 × (${zAlpha} + ${zBeta})² × (${sigma})² / (${delta})²<br/><br/>
+        <strong>n = ${n}</strong><br/><br/>
+        <strong>Interpretasi:</strong><br/>
+        Minimal ${n} responden diperlukan untuk mendeteksi perbedaan rata-rata antar dua grup.<br/>
+        Disarankan menambahkan 10%: <strong>${nRecommended} responden</strong>.
+      `;
+
+      resultDiv.innerHTML = explanation;
+      resultDiv.style.display = "block";
+
+      const historyItem = `σ=${sigma}, Δ=${delta}, Zα/2=${zAlpha}, Zβ=${zBeta} → n=${n} (rekomendasi: ${nRecommended})`;
+      history.unshift(historyItem);
+      updateHistory();
+    });
+
+    function updateHistory() {
+      historyList.innerHTML = "";
+      history.slice(0, 5).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        historyList.appendChild(li);
+      });
+    }
+
+    pngBtn.addEventListener("click", () => {
+      html2canvas(outputArea).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "hasil-perhitungan-rata-rata.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perhitungan Sampel Dua Proporsi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f2f4f8;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .card {
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      padding: 30px;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 24px;
+      color: #333;
+      text-align: center;
+    }
+    h1 span {
+      font-size: 14px;
+      color: #777;
+      display: block;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 5px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    input:focus, select:focus {
+      border-color: #5ab0f7;
+      outline: none;
+    }
+    .tooltip {
+      font-size: 13px;
+      color: #777;
+      margin-top: 4px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result, .history {
+      background-color: #f9f9f9;
+      padding: 15px 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      border-left: 4px solid #007bff;
+    }
+    .result strong {
+      color: #333;
+    }
+    ul {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+    h2 {
+      font-size: 18px;
+      margin-top: 40px;
+      color: #444;
+    }
+    #downloadButtons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #777;
+    }
+    @media (max-width: 600px) {
+      .card {
+        padding: 20px;
+      }
+    }
+    @media print {
+      button, .tooltip, #downloadButtons {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" id="outputArea">
+      <h1>Perhitungan Sampel Dua Proporsi <span>Two Proportions Sample Size Calculation</span></h1>
+
+      <form id="twoProportionsForm">
+        <label for="prop1">Proporsi Kelompok 1 (p1):</label>
+        <input type="number" step="0.01" id="prop1" required min="0" max="1" />
+        <div class="tooltip">Contoh: 0.6 untuk 60% proporsi</div>
+
+        <label for="prop2">Proporsi Kelompok 2 (p2):</label>
+        <input type="number" step="0.01" id="prop2" required min="0" max="1" />
+        <div class="tooltip">Contoh: 0.5 untuk 50% proporsi</div>
+
+        <label for="zScore">Z-score (Tingkat Kepercayaan):</label>
+        <select id="zScore" required>
+          <option value="1.645">90% (Z=1.645)</option>
+          <option value="1.96">95% (Z=1.96)</option>
+          <option value="2.576">99% (Z=2.576)</option>
+        </select>
+
+        <label for="margin">Margin of Error (e):</label>
+        <input type="number" step="0.01" id="margin" required min="0.01" max="1" />
+        <div class="tooltip">Contoh: 0.05 untuk margin of error 5%</div>
+
+        <button type="submit">🔍 Hitung Sampel</button>
+      </form>
+
+      <div id="result" class="result" style="display:none;"></div>
+
+      <div class="history">
+        <h2>📊 Riwayat Perhitungan</h2>
+        <ul id="history"></ul>
+      </div>
+
+      <footer>
+        &copy; 2025 Pavio. Seluruh hak cipta dilindungi. Developed by Anom Harjana
+      </footer>
+    </div>
+
+    <div id="downloadButtons">
+      <button id="downloadPNG">🖼️ Download PNG</button>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("twoProportionsForm");
+    const resultDiv = document.getElementById("result");
+    const historyList = document.getElementById("history");
+    const pngBtn = document.getElementById("downloadPNG");
+    const outputArea = document.getElementById("outputArea");
+
+    let history = [];
+
+    function convertCommaToDot(value) {
+      return value.replace(',', '.');
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      let p1 = convertCommaToDot(document.getElementById("prop1").value);
+      let p2 = convertCommaToDot(document.getElementById("prop2").value);
+      let Z = parseFloat(document.getElementById("zScore").value);
+      let margin = convertCommaToDot(document.getElementById("margin").value);
+
+      p1 = parseFloat(p1);
+      p2 = parseFloat(p2);
+      margin = parseFloat(margin);
+
+      if (isNaN(p1) || p1 < 0 || p1 > 1) {
+        alert("Proporsi p1 harus antara 0 dan 1.");
+        return;
+      }
+
+      if (isNaN(p2) || p2 < 0 || p2 > 1) {
+        alert("Proporsi p2 harus antara 0 dan 1.");
+        return;
+      }
+
+      if (isNaN(Z)) {
+        alert("Pilih Z-score untuk tingkat kepercayaan.");
+        return;
+      }
+
+      if (isNaN(margin) || margin <= 0 || margin >= 1) {
+        alert("Margin of error harus antara 0 dan 1.");
+        return;
+      }
+
+      if (p1 === p2) {
+        alert("p₁ dan p₂ tidak boleh sama. Perbedaan harus ada agar sampel bisa dihitung.");
+        return;
+      }
+
+      const numerator = (p1 * (1 - p1)) + (p2 * (1 - p2));
+      const denominator = Math.pow(p1 - p2, 2);
+      let n = Math.ceil((Math.pow(Z, 2) * numerator) / denominator);
+
+      const nWithMargin = Math.ceil(n * 1.1);
+
+      const explanation = `
+        <strong>Hasil Perhitungan:</strong><br/>
+        n = (Z² × ((p₁(1 - p₁)) + (p₂(1 - p₂)))) / (p₁ - p₂)²<br/>
+        n = (${Z}² × ((${p1} × (1 - ${p1})) + (${p2} × (1 - ${p2})))) / (${p1} - ${p2})²<br/>
+        <strong>n = ${n}</strong><br/><br/>
+
+        <strong>Rekomendasi tambahan (10% cadangan):</strong><br/>
+        Jumlah sampel yang disarankan setelah tambahan 10% cadangan: <strong>${nWithMargin}</strong> responden.
+      `;
+
+      resultDiv.innerHTML = explanation;
+      resultDiv.style.display = "block";
+
+      const historyItem = `p₁=${p1}, p₂=${p2}, Z=${Z}, e=${margin} → n=${n} (dengan cadangan 10%) → n dengan cadangan=${nWithMargin}`;
+      history.unshift(historyItem);
+      updateHistory();
+    });
+
+    function updateHistory() {
+      historyList.innerHTML = "";
+      history.slice(0, 5).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        historyList.appendChild(li);
+      });
+    }
+
+    pngBtn.addEventListener("click", () => {
+      html2canvas(outputArea).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "hasil-perhitungan-dua-proporsi.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
+  </script>
+</body>
+</html>

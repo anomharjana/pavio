@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slovin Sample Size Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f2f4f8;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .card {
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      padding: 30px;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 24px;
+      color: #333;
+      text-align: center;
+    }
+    h1 span {
+      font-size: 14px;
+      color: #777;
+      display: block;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 5px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    input:focus, select:focus {
+      border-color: #5ab0f7;
+      outline: none;
+    }
+    .tooltip {
+      font-size: 13px;
+      color: #777;
+      margin-top: 4px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result, .history {
+      background-color: #f9f9f9;
+      padding: 15px 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      border-left: 4px solid #007bff;
+    }
+    .result strong {
+      color: #333;
+    }
+    ul {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+    h2 {
+      font-size: 18px;
+      margin-top: 40px;
+      color: #444;
+    }
+    #downloadButtons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    @media (max-width: 600px) {
+      .card {
+        padding: 20px;
+      }
+    }
+    @media print {
+      button, .tooltip, #downloadButtons {
+        display: none !important;
+      }
+    }
+    footer {
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" id="outputArea">
+      <h1>Perhitungan Besar Sampel <span>Perbandingan Dua Rata-Rata Independen</span></h1>
+
+      <form id="sampleSizeForm">
+        <label for="sigma">Varians Populasi (σ²):</label>
+        <input type="number" id="sigma" required min="0" step="0.01" />
+        <div class="tooltip">Contoh: 5 (varians populasi)</div>
+
+        <label for="delta">Perbedaan Rata-Rata yang Diinginkan (Δ):</label>
+        <input type="number" id="delta" required min="0" step="0.01" />
+        <div class="tooltip">Contoh: 3 (perbedaan rata-rata yang diinginkan antara dua kelompok)</div>
+
+        <label for="zAlpha">Z-α/2 (Tingkat Kepercayaan):</label>
+        <select id="zAlpha" required>
+          <option value="1.645">90% (Z-α/2: 1.645)</option>
+          <option value="1.960">95% (Z-α/2: 1.960)</option>
+          <option value="2.576">99% (Z-α/2: 2.576)</option>
+        </select>
+        <div class="tooltip">Pilih tingkat kepercayaan yang umum (90%, 95%, atau 99%)</div>
+
+        <label for="zBeta">Z-β (Kekuatan Statistik):</label>
+        <select id="zBeta" required>
+          <option value="1.04">70% (Z-β: 1.04)</option>
+          <option value="0.84">80% (Z-β: 0.84)</option>
+          <option value="1.28">90% (Z-β: 1.28)</option>
+        </select>
+        <div class="tooltip">Pilih kekuatan statistik yang umum (70%, 80%, atau 90%)</div>
+
+        <button type="submit">🔍 Hitung Sampel</button>
+      </form>
+
+      <div id="result" class="result" style="display:none;"></div>
+
+      <div class="history">
+        <h2>📊 Riwayat Perhitungan</h2>
+        <ul id="history"></ul>
+      </div>
+    </div>
+
+    <div id="downloadButtons">
+      <button id="downloadPNG">🖼️ Download PNG</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi. Developed by Anom Harjana
+  </footer>
+
+  <script>
+    const form = document.getElementById("sampleSizeForm");
+    const resultDiv = document.getElementById("result");
+    const historyList = document.getElementById("history");
+    const pngBtn = document.getElementById("downloadPNG");
+    const outputArea = document.getElementById("outputArea");
+
+    let history = [];
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const sigma = parseFloat(document.getElementById("sigma").value);
+      const delta = parseFloat(document.getElementById("delta").value);
+      const zAlpha = parseFloat(document.getElementById("zAlpha").value);
+      const zBeta = parseFloat(document.getElementById("zBeta").value);
+
+      if (isNaN(sigma) || sigma <= 0) {
+        alert("Varians populasi harus bilangan positif.");
+        return;
+      }
+
+      if (isNaN(delta) || delta <= 0) {
+        alert("Perbedaan rata-rata yang diinginkan harus bilangan positif.");
+        return;
+      }
+
+      if (isNaN(zAlpha) || zAlpha <= 0) {
+        alert("Z-α/2 harus bilangan positif.");
+        return;
+      }
+
+      if (isNaN(zBeta) || zBeta <= 0) {
+        alert("Z-β harus bilangan positif.");
+        return;
+      }
+
+      // Perhitungan sampel dasar
+      const n = Math.ceil(2 * Math.pow(zAlpha + zBeta, 2) * Math.pow(sigma, 2) / Math.pow(delta, 2));
+
+      // Menambahkan 10% untuk rekomendasi tambahan
+      const nRecommended = Math.ceil(n * 1.1);
+
+      const explanation = `
+        <strong>Hasil Perhitungan:</strong><br/>
+        n = 2 × (Z-α/2 + Z-β)² × σ² / Δ²<br/>
+        n = 2 × (${zAlpha} + ${zBeta})² × ${sigma}² / ${delta}²<br/>
+        <strong>n = ${n}</strong><br/><br/>
+
+        <strong>Rekomendasi:</strong><br/>
+        Disarankan menambahkan 10% sampel: <strong>${nRecommended}</strong><br/>
+        Minimal ${n} sampel diperlukan untuk perbandingan dua rata-rata independen dengan varians σ², perbedaan rata-rata Δ, tingkat kepercayaan Z-α/2, dan kekuatan statistik Z-β.
+      `;
+
+      resultDiv.innerHTML = explanation;
+      resultDiv.style.display = "block";
+
+      const historyItem = `σ²=${sigma}, Δ=${delta}, Z-α/2=${zAlpha}, Z-β=${zBeta} → n=${n} (rekomendasi: ${nRecommended})`;
+      history.unshift(historyItem);
+      updateHistory();
+    });
+
+    function updateHistory() {
+      historyList.innerHTML = "";
+      history.slice(0, 5).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        historyList.appendChild(li);
+      });
+    }
+
+    pngBtn.addEventListener("click", () => {
+      // Tambahkan footer ke outputArea agar tercetak dalam PNG
+      const footer = document.querySelector('footer');
+      outputArea.appendChild(footer);
+
+      html2canvas(outputArea).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "hasil-perhitungan-sampel-perbandingan.png";
+        link.href = canvas.toDataURL();
+        link.click();
+
+        // Kembalikan footer ke posisi semula
+        document.body.appendChild(footer);
+      });
+    });
+  </script>
+</body>
+</html>

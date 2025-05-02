@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Tempel & Lihat Seketika</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9fb;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      flex-wrap: wrap;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-brand img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #777;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 960px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .feature {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature h3 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature h4 {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .feature ul {
+      padding-left: 1.2rem;
+      margin-top: 0.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature ul li {
+      margin-bottom: 0.25rem;
+      font-size: 0.95rem;
+    }
+
+    .btn-link {
+      display: inline-block;
+      margin-top: 1rem;
+      background-color: #333;
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-link:hover {
+      background-color: #000;
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>Paste & View — That’s All It Takes.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="features">
+    <!-- CARD: Pemusatan & Penyebaran Data -->
+    <div class="feature">
+      <h3>📐 Statistik Deskriptif: Numerik</h3>
+      <h4>Pemusatan & Penyebaran Data</h4>
+      <ul>
+        <li>Rata-rata (Mean)</li>
+        <li>Median</li>
+        <li>Modus</li>
+        <li>Minimum & Maksimum</li>
+        <li>Range</li>
+        <li>Kuartil (Q1, Q2, Q3)</li>
+        <li>Interquartile Range (IQR)</li>
+        <li>Simpangan Baku</li>
+        <li>Variansi</li>
+      </ul>
+      <strong>📊 Visualisasi Numerik</strong>
+      <ul>
+        <li>📉 Histogram</li>
+        <li>📦 Boxplot</li>
+        <li>🌿 Stem-and-Leaf Plot <em>(opsional)</em></li>
+      </ul>
+      <a href="deskriptif_numerik.html" class="btn-link">Analisis Numerik</a>
+    </div>
+
+    <!-- CARD: Frekuensi & Persentase -->
+    <div class="feature">
+      <h3>📊 Statistik Deskriptif: Kategorikal</h3>
+      <h4>Frekuensi & Persentase</h4>
+      <ul>
+        <li>Tabel frekuensi</li>
+        <li>Tabel frekuensi relatif (%)</li>
+        <li>Tabel frekuensi kumulatif</li>
+      </ul>
+      <strong>📈 Visualisasi Kategorikal</strong>
+      <ul>
+        <li>📊 Diagram Batang</li>
+        <li>🥧 Diagram Lingkaran</li>
+      </ul>
+      <a href="deskriptif_kategorikal.html" class="btn-link">Analisis Kategorikal</a>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi. Developed by Anom Harjana
+  </footer>
+</body>
+</html>

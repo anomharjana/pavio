@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Tempel & Lihat Seketika</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #f9f9fb;
+  color: #333;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  flex-wrap: wrap;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-brand img {
+  height: 48px;
+  width: 48px;
+  object-fit: contain;
+}
+
+.header-text h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.header-text p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #777;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 960px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+}
+
+.feature {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* Increase gap between elements */
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.feature h3 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feature h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.feature ul {
+  padding-left: 1.2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem; /* Increase bottom margin for better spacing */
+}
+
+.feature ul li {
+  margin-bottom: 0.75rem; /* Increased spacing between list items */
+  font-size: 0.95rem;
+}
+
+.btn-link {
+  display: inline-block;
+  margin-top: 1rem;
+  background-color: #333;
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-link:hover {
+  background-color: #000;
+  transform: scale(1.05);
+}
+
+.btn-inline {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-inline:hover {
+  background-color: #0056b3;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.explanation {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 0.25rem;
+  display: none;
+  padding-left: 1rem;
+}
+
+.explanation-button {
+  font-size: 0.9rem;
+  color: #007bff;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.explanation-button:hover {
+  text-decoration: underline;
+}
+
+.feature-item {
+  margin-bottom: 1.5rem; /* Increased space between items */
+}
+
+
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>Paste & View — That’s All It Takes.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="features">
+    <!-- CARD: Uji Regresi dan Multivariat -->
+    <div class="feature">
+      <h3>🎢 Uji Regresi</h3>
+      <div class="feature-item">
+        <h4>Jenis Uji:</h4>
+        <ul>
+          <li>
+            Regresi Linier Berganda
+            <a href="regresi_linier_berganda.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk menguji perbedaan rata-rata antara dua kelompok independen yang berdistribusi normal.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            Regresi Logistik Berganda
+            <a href="regresi_logistik_berganda.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan ketika variabel dependen kategorikal biner, dengan satu atau lebih variabel independen.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            Regresi Logistik Ordinal
+            <a href="regresi_logistik_ordinal.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk memodelkan variabel dependen kategorikal ordinal yang memiliki urutan tertentu.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            Regresi Logistik Multinomial
+            <a href="regresi_logistik_multinomial.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk variabel dependen kategorikal dengan lebih dari dua kategori tanpa urutan.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            Regresi Poisson
+            <a href="regresi_poison.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk memodelkan jumlah kejadian suatu peristiwa dalam suatu periode waktu atau ruang.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <!-- More list items -->
+        </ul>
+        <strong>📈 Visualisasi Regresi</strong>
+        <ul>
+          <li>🌌 Scatter Plot dengan Garis Regresi</li>
+          <li>📊 Plot Residu</li>
+          <li>📉 Histogram Residual</li>
+          <li>📍 Box Plot untuk Variabel Dependen</li>
+        </ul>
+      </div>
+    </div> <!-- Close first feature card -->
+
+    <!-- CARD: Survival Analisis -->
+    <div class="feature">
+      <h3> 🪫 Survival Analisis</h3>
+      <div class="feature-item">
+        <h4>Jenis Uji:</h4>
+        <ul>
+          <li>
+            Proportional Hazards Model
+            <a href="survival.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk membandingkan dua proporsi dari dua kelompok independen.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            Kaplan-Meier Estimator
+            <a href="kaplanmeier.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk memperkirakan fungsi survival dan membandingkan waktu bertahan antar kelompok.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          <li>
+            Log-Rank Test
+            <a href="logrank.html" class="btn-inline">Coba</a>
+            <div class="explanation">
+              Digunakan untuk menguji apakah terdapat perbedaan yang signifikan antara dua atau lebih kurva survival.
+            </div>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </li>
+          </li><!-- More list items -->
+        </ul>
+      </div>
+      <strong>📈 Visualisasi Survival Analisis </strong>
+      <ul>
+        <li>📊 Kaplan-Meier Survival Curve</li>
+        <li>📉 Cumulative Incidence Function (CIF)</li>
+        <li>🩺 Hazard Function Plot</li>
+      </ul>
+    </div> <!-- Close second feature card -->
+  </section> <!-- Close features section -->
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi. Developed by Anom Harjana
+  </footer>
+
+  <script>
+    document.querySelectorAll('.explanation-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const explanation = button.previousElementSibling;
+        if (explanation.style.display === 'block') {
+          explanation.style.display = 'none';
+          button.innerText = 'Lihat Penjelasan';
+        } else {
+          explanation.style.display = 'block';
+          button.innerText = 'Sembunyikan Penjelasan';
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

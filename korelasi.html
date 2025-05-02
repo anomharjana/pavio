@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Tempel & Lihat Seketika</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9fb;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      flex-wrap: wrap;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-brand img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #777;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 960px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .feature {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .feature h3 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature h4 {
+      margin: 1.2rem 0 0.6rem;
+      font-size: 1rem;
+    }
+
+    .feature ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .feature ul li {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0.9rem;
+      font-size: 0.95rem;
+    }
+
+    .uji-info {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .btn-inline {
+      font-size: 0.75rem;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-inline:hover {
+      background-color: #0056b3;
+    }
+
+    .explanation-button {
+      font-size: 0.8rem;
+      color: #007bff;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .explanation {
+      display: none;
+      margin-top: 0.3rem;
+      font-size: 0.85rem;
+      color: #555;
+      padding-left: 1rem;
+    }
+
+    .feature strong {
+      display: block;
+      margin-top: 1.5rem;
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png"
+        alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>Paste & View — That’s All It Takes.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="features">
+    <div class="feature">
+      <h3>🔀 Uji Korelasi</h3>
+      <h4>Jenis-jenis uji:</h4>
+      <ul>
+        <li>
+          <div class="uji-info">
+            Pearson Correlation
+            <a href="pearson.html" class="btn-inline">Coba</a>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </div>
+          <div class="explanation">
+            Digunakan untuk data numerik yang berdistribusi normal. Mengukur hubungan linear antara dua variabel.
+          </div>
+        </li>
+        <li>
+          <div class="uji-info">
+            Spearman’s Rank Correlation
+            <a href="spearman.html" class="btn-inline">Coba</a>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </div>
+          <div class="explanation">
+            Cocok untuk data ordinal atau numerik tidak normal. Mengukur hubungan monotonic antar variabel.
+          </div>
+        </li>
+        <li>
+          <div class="uji-info">
+            Kendall’s Tau
+            <a href="kendall.html" class="btn-inline">Coba</a>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </div>
+          <div class="explanation">
+            Alternatif Spearman untuk data ordinal dengan sampel kecil (≤10). Mengukur konsistensi peringkat.
+          </div>
+        </li>
+        <li>
+          <div class="uji-info">
+            Korelasi Point-Biserial
+            <a href="biserial.html" class="btn-inline">Coba</a>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </div>
+          <div class="explanation">
+            Digunakan saat satu variabel bersifat dikotomi dan yang lain numerik. Mengukur kekuatan hubungan di antara keduanya.
+          </div>
+        </li>
+        <li>
+          <div class="uji-info">
+            Regresi Linier Sederhana
+            <a href="regresi_linier_sederhana.html" class="btn-inline">Coba</a>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </div>
+          <div class="explanation">
+            Menganalisis hubungan antara satu variabel independen dan satu variabel dependen kontinu. Cocok untuk memprediksi nilai dan melihat tren linear.
+          </div>
+        </li>
+        <li>
+          <div class="uji-info">
+            Regresi Logistik Sederhana
+            <a href="regresi_logistik_sederhana.html" class="btn-inline">Coba</a>
+            <span class="explanation-button">Lihat Penjelasan</span>
+          </div>
+          <div class="explanation">
+            Digunakan ketika variabel dependen bersifat dikotomi (ya/tidak). Memodelkan peluang kejadian berdasarkan variabel independen.
+          </div>
+        </li>
+      </ul>
+
+      <strong>📈 Visualisasi Regresi</strong>
+<ul>
+  <li>🌌 Scatter Plot dengan Garis Regresi</li>
+  <li>📊 Plot Residu</li>
+  <li>📉 Histogram Residual</li>
+  <li>📍 Box Plot untuk Variabel Dependen</li>
+</ul>
+
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi. Developed by Anom Harjana
+  </footer>
+
+  <script>
+    document.querySelectorAll('.explanation-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const explanation = button.closest('li').querySelector('.explanation');
+        const isVisible = explanation.style.display === 'block';
+        explanation.style.display = isVisible ? 'none' : 'block';
+        button.textContent = isVisible ? 'Lihat Penjelasan' : 'Sembunyikan Penjelasan';
+      });
+    });
+  </script>
+</body>
+
+</html>

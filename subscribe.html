@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Berlangganan Aplikasi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9fb;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      flex-wrap: wrap;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-brand img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #777;
+    }
+
+    .subscription-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 960px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .subscription-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .subscription-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .subscription-card h3 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .subscription-card .price {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #111;
+      margin: 0.5rem 0 1rem 0;
+    }
+
+    .subscription-card p {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .subscription-card button {
+      margin-top: 1.5rem;
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .subscription-card button:hover {
+      background-color: #000;
+      transform: scale(1.05);
+    }
+
+    .popular {
+      border: 2px solid #3b82f6;
+    }
+
+    .badge {
+      position: absolute;
+      top: -12px;
+      left: 16px;
+      background-color: #3b82f6;
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .badge.starter {
+      background-color: #f97316; /* orange */
+    }
+
+    .badge.pro {
+      background-color: #10b981; /* green */
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>Berlangganan & Nikmati Fitur Premium</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="subscription-section">
+    <div class="subscription-card" style="border: 2px solid #f97316;">
+      <span class="badge starter">Cocok untuk Pemula</span>
+      <h3>Langganan 1 Bulan</h3>
+      <p class="price">Rp25.000 / bulan</p>
+      <p>Akses semua fitur premium Pavio selama 30 hari.</p>
+      <button onclick="window.location.href='pembayaran-1bulan.html'">Mulai Berlangganan</button>
+    </div>
+
+    <div class="subscription-card popular">
+      <span class="badge">Paling Populer</span>
+      <h3>Langganan 6 Bulan</h3>
+      <p class="price">Rp120.000 / 6 bulan</p>
+      <p>Lebih hemat! Nikmati fitur premium selama 6 bulan penuh.</p>
+      <button onclick="window.location.href='pembayaran-6bulan.html'">Mulai Berlangganan</button>
+    </div>
+
+    <div class="subscription-card" style="border: 2px solid #10b981;">
+      <span class="badge pro">Terbaik untuk Profesional</span>
+      <h3>Langganan 12 Bulan</h3>
+      <p class="price">Rp220.000 / tahun</p>
+      <p>Langganan tahunan untuk pengalaman tanpa gangguan sepanjang tahun.</p>
+      <button onclick="window.location.href='pembayaran-12bulan.html'">Mulai Berlangganan</button>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi. Developed by Anom Harjana
+  </footer>
+</body>
+</html>
