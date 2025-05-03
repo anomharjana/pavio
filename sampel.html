@@ -175,15 +175,6 @@ details p {
   <!-- CARD: Rumus Slovin (Untuk Survei) -->
   <div class="feature">
     <h3>🎛️ Rumus Slovin (Untuk Survei)</h3>
-    <h4>Formula:</h4>
-    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745558625/Picture1_xd2r11.png" alt="Rumus Slovin" style="display: block; margin: 0.5rem 0;" />
-    <strong>Di mana:</strong>
-    <ul>
-      <li>n = jumlah sampel.</li>
-      <li>N = ukuran populasi.</li>
-      <li>e = margin kesalahan yang diinginkan (misalnya, 0.05 untuk 5%).</li>
-    </ul>
-    <a href="sample_slovin.html" class="btn-link">Hitung Sampel</a>
     <details class="accordion-box">
   <summary>🔍 Penjelasan Lengkap</summary>
   <p><strong>Kapan Digunakan:</strong> 
@@ -208,8 +199,17 @@ details p {
     &bullet; Ryan, T. P. (2013).<em>Sample size determination and power.</em> ohn Wiley & Sons.
   </p>
 </details>
-
+    <h4>Formula:</h4>
+    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745558625/Picture1_xd2r11.png" alt="Rumus Slovin" style="display: block; margin: 0.5rem 0;" />
+    <strong>Di mana:</strong>
+    <ul>
+      <li>n = jumlah sampel.</li>
+      <li>N = ukuran populasi.</li>
+      <li>e = margin kesalahan yang diinginkan (misalnya, 0.05 untuk 5%).</li>
+    </ul>
+    <a href="sample_slovin.html" class="btn-link">Hitung Sampel</a>
   </div>
+  
 <!-- CARD: Perhitungan Sampel untuk Proporsi Tunggal (Single Proportion) -->
 <div class="feature">
   <h3>🎛️ Perhitungan Sampel untuk Proporsi Tunggal (Single Proportion)</h3>
@@ -677,6 +677,49 @@ details p {
     &bullet; Machin, D., Campbell, M. J., & Tan, S. B. (2011). <em>Sample Sizes for Clinical, Epidemiological, and Social Research</em> (2nd ed.). Wiley.
   </p>
 </details>
+</div>
+
+<!-- CARD: Perhitungan Sampel Krejcie-Morgan -->
+<div class="feature">
+  <h3>🎛️ Perhitungan Sampel Krejcie-Morgan</h3>
+  <h4>Formula:</h4>
+  <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746282048/Picture13_fuft1o.png" alt="Rumus Krejcie-Morgan" style="display: block; margin: 0.5rem 0;" />
+  <strong>Di mana:</strong>
+  <ul>
+    <li>S = ukuran sampel.</li>
+    <li>X² = nilai chi-square pada df = 1 dan tingkat signifikansi 0.05 (biasanya 3.841).</li>
+    <li>N = jumlah populasi.</li>
+    <li>P = proporsi populasi (umumnya diasumsikan 0.5).</li>
+    <li>d = margin of error yang dapat diterima (umumnya 0.05).</li>
+  </ul>
+  <a href="sample_krejcie_morgan.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong>
+    Rumus Krejcie-Morgan digunakan untuk menentukan ukuran sampel yang dibutuhkan berdasarkan jumlah populasi yang diketahui secara pasti. Cocok untuk penelitian survei atau kuantitatif dengan populasi terbatas, dan mempertimbangkan tingkat kepercayaan serta margin of error.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong>
+    Jika seorang peneliti ingin meneliti persepsi guru di sebuah kota dengan populasi 500 orang, dan menginginkan tingkat kepercayaan 95% serta margin of error 5%, maka rumus Krejcie-Morgan dapat digunakan untuk menentukan jumlah responden yang representatif.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Tidak memerlukan nilai standar deviasi populasi.<br>
+    &bullet; Praktis dan cepat digunakan, terutama jika dibantu tabel Krejcie-Morgan.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Tidak fleksibel untuk margin of error dan tingkat kepercayaan yang berbeda dari standar.<br>
+    &bullet; Kurang akurat untuk populasi yang sangat besar atau sangat kecil (karena asumsi umum proporsi).
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Krejcie, R. V., & Morgan, D. W. (1970). Determining Sample Size for Research Activities. <em>Educational and Psychological Measurement, 30</em>(3), 607–610.<br>
+    &bullet; Israel, G. D. (1992). <em>Determining Sample Size</em>. University of Florida IFAS Extension.
+  </p>
+</details>
+
+</div>
+
 
 </div>
 
