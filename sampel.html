@@ -122,6 +122,41 @@
     max-width: 100%;
     height: auto;
     }
+    
+    .accordion-box {
+  margin-top: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #e0f7fa;
+}
+
+details summary {
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  outline: none;
+}
+
+details[open] summary::after {
+  content: "▲";
+  float: right;
+}
+
+details summary::after {
+  content: "▼";
+  float: right;
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+details p {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
   </style>
 </head>
 
@@ -149,6 +184,31 @@
       <li>e = margin kesalahan yang diinginkan (misalnya, 0.05 untuk 5%).</li>
     </ul>
     <a href="sample_slovin.html" class="btn-link">Hitung Sampel</a>
+    <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong> 
+    Rumus Slovin digunakan untuk menghitung ukuran sampel yang diperlukan dalam penelitian survei, ketika jumlah total populasi sangat besar dan tidak mungkin untuk menyurvei seluruh populasi. Dengan rumus ini, peneliti dapat menentukan jumlah sampel yang cukup representatif dengan mempertimbangkan margin kesalahan yang diinginkan.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong> 
+    Misalkan sebuah kota memiliki populasi sebesar 50.000 orang, dan peneliti ingin mengukur preferensi pemilih terhadap kandidat dalam pemilihan umum dengan margin kesalahan 5% (e = 0.05). Dengan menggunakan Rumus Slovin, peneliti dapat menghitung ukuran sampel yang diperlukan untuk penelitian tersebut.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Sangat mudah digunakan untuk penelitian survei dengan populasi besar.<br>
+    &bullet; Tidak memerlukan informasi tentang varians populasi.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Tidak selalu akurat jika populasi tidak homogen atau data tidak terdistribusi secara acak.<br>
+    &bullet; Margin kesalahan yang lebih kecil membutuhkan sampel yang lebih besar.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Tejada, J. J., & Punzalan, J. R. B. (2012). On the misuse of Slovin’s formula.<em>The philippine statistician, 61</em> (1), 129-136.<br>
+    &bullet; Ryan, T. P. (2013).<em>Sample size determination and power.</em> ohn Wiley & Sons.
+  </p>
+</details>
+
   </div>
 <!-- CARD: Perhitungan Sampel untuk Proporsi Tunggal (Single Proportion) -->
 <div class="feature">
@@ -163,6 +223,31 @@
     <li>E = margin kesalahan yang diinginkan (misalnya, 0.05 untuk 5%).</li>
   </ul>
   <a href="sample_proporsi_tunggal.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong> 
+    Digunakan untuk menghitung ukuran sampel yang diperlukan ketika penelitian ingin memperkirakan proporsi suatu kejadian dalam populasi. Misalnya, peneliti ingin mengetahui proporsi orang yang memilih suatu kandidat politik, atau proporsi keberhasilan dalam percobaan.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong> 
+    Sebuah survei ingin mengukur proporsi pemilih yang mendukung kandidat politik tertentu. Dari survei awal, diperkirakan 60% pemilih akan mendukung kandidat tersebut. Peneliti ingin menggunakan tingkat kepercayaan 95% dan margin of error 5%. Maka perhitungan ukuran sampel dapat dilakukan dengan rumus ini.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Sederhana dan mudah digunakan untuk estimasi proporsi.<br>
+    &bullet; Cocok untuk penelitian sosial dan pemilu.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Membutuhkan estimasi proporsi awal yang mungkin tidak selalu akurat.<br>
+    &bullet; Tidak berlaku untuk perbandingan antara dua kelompok atau lebih.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Gonçalves, L., de Oliveira, M. R., Pascoal, C., & Pires, A. (2012). Sample size for estimating a binomial proportion: comparison of different methods. <em>Journal of Applied Statistics, 39 </em> (11), 2453-2473.<br>
+    &bullet; Vasudevan, S. (2024). Sample size calculation in various medical research. <em>International Journal of Medical Sciences and Nursing Research, 4 </em> (3), 22-29.
+  </p>
+</details>
+
 </div>
 <!-- CARD: Perhitungan Sampel untuk Dua Proporsi (Two Proportions) -->
 <div class="feature">
@@ -176,6 +261,31 @@
     <li>Z = skor Z untuk tingkat kepercayaan (misalnya, 1.96 untuk 95% confidence level).</li>
   </ul>
   <a href="sample_dua_proporsi.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong> 
+    Digunakan ketika peneliti ingin membandingkan dua proporsi (persentase) antara dua kelompok yang independen. Contohnya, membandingkan tingkat keberhasilan suatu pengobatan (proporsi sembuh) antara dua kelompok yang diberi pengobatan berbeda.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong> 
+    Sebuah penelitian ingin mengetahui apakah ada perbedaan proporsi keberhasilan antara dua jenis vaksin dalam mencegah infeksi. Diketahui bahwa proporsi keberhasilan vaksin A adalah 80% (P1), sedangkan vaksin B memiliki proporsi keberhasilan 70% (P2). Peneliti menggunakan tingkat signifikansi 5% dan kekuatan uji 80%.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Dapat digunakan untuk perbandingan antara dua proporsi dalam populasi yang berbeda.<br>
+    &bullet; Cocok untuk studi klinis atau eksperimen yang melibatkan kategori binomial (misalnya, sukses/gagal).<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Asumsi independensi antara dua kelompok harus dipenuhi.<br>
+    &bullet; Membutuhkan estimasi proporsi yang cukup akurat untuk menghitung ukuran sampel dengan benar.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Gonçalves, L., de Oliveira, M. R., Pascoal, C., & Pires, A. (2012). Sample size for estimating a binomial proportion: comparison of different methods. <em>Journal of Applied Statistics, 39 </em> (11), 2453-2473.<br>
+    &bullet; Vasudevan, S. (2024). Sample size calculation in various medical research. <em>International Journal of Medical Sciences and Nursing Research, 4 </em> (3), 22-29.
+  </p>
+</details>
+
 </div>
 <!-- CARD: Perhitungan Sampel untuk Dua Rata-Rata Independen -->
 <div class="feature">
@@ -190,6 +300,31 @@
     <li>Zβ = skor Z sesuai kekuatan uji yang diinginkan (misalnya 0.84 untuk 80%).</li>
   </ul>
   <a href="sample_rerata_independen.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong> 
+    Digunakan ketika peneliti ingin membandingkan dua rata-rata dari dua kelompok yang <em>independen</em> (tidak saling berhubungan), misalnya kelompok kontrol vs. kelompok perlakuan. Metode ini berguna dalam uji hipotesis parametrik untuk membuktikan adanya perbedaan yang signifikan secara statistik antara kedua kelompok.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong> 
+    Sebuah penelitian ingin mengetahui perbedaan rata-rata kadar gula darah antara pasien yang diberikan obat A dan pasien yang diberikan obat B. Diketahui varians populasi dari kedua kelompok, tingkat signifikansi 5% (Zα/2 = 1.96), serta kekuatan uji 80% (Zβ = 0.84). Perbedaan rata-rata yang dianggap signifikan adalah 10 mg/dL.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Memungkinkan perbandingan dua kelompok secara langsung dengan mempertimbangkan variasi data.<br>
+    &bullet; Cocok untuk desain penelitian eksperimental sederhana.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Membutuhkan asumsi normalitas distribusi dan homogenitas varians kedua kelompok.<br>
+    &bullet; Perlu data varians populasi yang sering kali tidak selalu tersedia.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Gonçalves, L., de Oliveira, M. R., Pascoal, C., & Pires, A. (2012). Sample size for estimating a binomial proportion: comparison of different methods. <em>Journal of Applied Statistics, 39 </em> (11), 2453-2473.<br>
+    &bullet; Vasudevan, S. (2024). Sample size calculation in various medical research. <em>International Journal of Medical Sciences and Nursing Research, 4 </em> (3), 22-29.
+  </p>
+</details>
+
 </div>
 <!-- CARD: Perhitungan Sampel untuk Studi Kohort -->
 <div class="feature">
@@ -203,6 +338,31 @@
     <li>Z = skor Z untuk tingkat kepercayaan (misalnya, 1.96 untuk 95% confidence level).</li>
   </ul>
   <a href="sample_kohort.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong> 
+    Perhitungan ini digunakan dalam studi kohort untuk menentukan ukuran sampel yang diperlukan agar dapat mendeteksi perbedaan signifikan antara dua kelompok berdasarkan proporsi kejadian suatu peristiwa, seperti perbandingan antara kelompok yang terpapar dan yang tidak terpapar suatu faktor risiko.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong> 
+    Sebuah penelitian ingin mengetahui apakah merokok meningkatkan risiko terkena kanker paru-paru. Kelompok pertama (eksposur) terdiri dari perokok, dan kelompok kedua (non-eksposur) terdiri dari non-perokok. Diketahui bahwa proporsi kejadian kanker paru-paru pada perokok adalah 10% (P1), sedangkan pada non-perokok adalah 2% (P2). Penelitian ini menginginkan tingkat signifikansi 5% dan kekuatan uji 80%.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Dapat digunakan untuk membandingkan kejadian penyakit atau kondisi tertentu pada dua kelompok dengan faktor eksposur yang berbeda.<br>
+    &bullet; Bermanfaat untuk menentukan besar sampel yang tepat berdasarkan perbedaan proporsi kejadian.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Membutuhkan data proporsi kejadian yang akurat untuk kedua kelompok.<br>
+    &bullet; Hasil dapat dipengaruhi oleh bias seleksi atau informasi jika pengumpulan data tidak hati-hati.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Liu, H., Shen, Y., Ning, J., & Qin, J. (2017). Sample size calculations for prevalent cohort designs. <em>Statistical methods in medical research, 26</em> (1), 280-291.<br>
+    &bullet; Mitra, A. K. (2023). Sample Size Estimation. <em>In Statistical Approaches for Epidemiology: From Concept to Application</em> (pp. 275-292). Cham: Springer International Publishing.
+  </p>
+</details>
+
 </div>
 <!-- CARD: Perhitungan Sampel untuk Studi Kasus-Kontrol -->
 <div class="feature">
@@ -214,6 +374,31 @@
     <li>(Formula ini mirip dengan perhitungan untuk studi kohort, digunakan untuk kasus-kontrol dengan perbedaan proporsi).</li>
   </ul>
   <a href="sample_kasus_kontrol.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong> 
+    Digunakan untuk menghitung jumlah sampel yang dibutuhkan dalam penelitian dengan desain studi kasus-kontrol. Studi ini umumnya digunakan untuk membandingkan proporsi kejadian atau eksposur antara dua kelompok: <em>kelompok kasus</em> (yang memiliki penyakit atau kondisi) dan <em>kelompok kontrol</em> (yang tidak memiliki penyakit atau kondisi).
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong> 
+    Dalam sebuah penelitian untuk mengetahui hubungan antara merokok dan kanker paru-paru, 100 orang dengan kanker paru-paru (kelompok kasus) dibandingkan dengan 100 orang yang sehat tanpa kanker paru-paru (kelompok kontrol). Peneliti ingin mengetahui proporsi orang yang merokok pada kedua kelompok tersebut. Dalam hal ini, rumus perhitungan sampel digunakan untuk menentukan ukuran sampel yang cukup agar hasilnya dapat dipercaya.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Memungkinkan perbandingan proporsi kejadian antara kelompok kasus dan kontrol.<br>
+    &bullet; Sangat berguna dalam penelitian retrospektif.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Membutuhkan data yang akurat mengenai proporsi kejadian pada masing-masing kelompok.<br>
+    &bullet; Bisa memerlukan banyak sampel jika perbedaan antara proporsi sangat kecil.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Kubota, K., & Wakana, A. (2011). Sample-size formula for case-cohort studies. <em>Epidemiology, 22</em> (2), 279.<br>
+    &bullet; Woolson, R. F., Bean, J. A., & Rojas, P. B. (1986). Sample size for case-control studies using Cochran's statistic. <em>Biometrics</em>, 927-932.
+  </p>
+</details>
+
 </div>
 <!-- CARD: Perhitungan Sampel untuk Studi Longitudinal -->
 <div class="feature">
@@ -228,6 +413,31 @@
     <li>Zβ = skor Z sesuai kekuatan uji yang diinginkan (misalnya 0.84 untuk 80%).</li>
   </ul>
   <a href="sample_longitudinal.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong>
+    Perhitungan sampel untuk studi longitudinal digunakan ketika peneliti ingin mengukur perubahan dalam kelompok yang sama selama beberapa periode waktu. Studi ini berfokus pada pengukuran berulang pada individu yang sama untuk melihat efek dari intervensi atau perubahan seiring waktu.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong>
+    Penelitian ingin mengetahui perubahan tekanan darah di kelompok pasien yang menerima pengobatan hipertensi selama 6 bulan. Data tekanan darah diukur pada tiga waktu yang berbeda. Peneliti ingin mendeteksi perubahan rata-rata tekanan darah di antara waktu tersebut dan menggunakan tingkat signifikansi 5% dan kekuatan uji 80%.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Mampu mengidentifikasi perubahan yang terjadi dalam waktu.<br>
+    &bullet; Menggunakan data pengukuran berulang yang dapat meningkatkan efisiensi sampel.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Membutuhkan kontrol yang ketat terhadap faktor pengganggu yang dapat mempengaruhi pengukuran berulang.<br>
+    &bullet; Memerlukan metode analisis statistik yang lebih kompleks, seperti analisis varians berulang (ANOVA) atau model campuran.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Fitzmaurice, G. M., Laird, N. M., & Ware, J. H. (2011). <em>Applied Longitudinal Analysis</em> (2nd ed.). Wiley.<br>
+    &bullet; Diggle, P. J., Heagerty, P., Liang, K. Y., & Zeger, S. L. (2002). <em>Analysis of Longitudinal Data</em> (2nd ed.). Oxford University Press.
+  </p>
+</details>
+
 </div>
 <!-- CARD: Perhitungan Sampel untuk Uji T (Independent Two-Sample T-Test) -->
 <div class="feature">
@@ -242,6 +452,31 @@
     <li>Zβ = skor Z sesuai kekuatan uji yang diinginkan (misalnya 0.84 untuk 80%).</li>
   </ul>
   <a href="sample_independen_t.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong> 
+    Uji T Independen digunakan untuk membandingkan dua kelompok yang <em>independen</em> (tidak saling berhubungan) berdasarkan rata-rata mereka, untuk melihat apakah terdapat perbedaan yang signifikan secara statistik. Biasanya digunakan ketika kedua kelompok tidak saling mempengaruhi satu sama lain dan memiliki distribusi data yang relatif normal.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong> 
+    Sebuah penelitian ingin mengetahui apakah terdapat perbedaan signifikan dalam rata-rata berat badan antara pria dan wanita yang mengikuti program diet yang sama. Diketahui varians berat badan dari masing-masing kelompok, tingkat signifikansi 5% (Zα/2 = 1.96), dan ukuran sampel yang akan digunakan untuk setiap kelompok.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Sederhana dan mudah diterapkan untuk dua kelompok.<br>
+    &bullet; Cocok untuk eksperimen yang membandingkan dua kelompok dengan distribusi normal.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Memerlukan asumsi tentang normalitas data dan kesetaraan varians antar kelompok (homoskedastisitas).<br>
+    &bullet; Rentan terhadap outliers yang bisa mempengaruhi hasil.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Field, A. (2013). <em>Discovering Statistics Using IBM SPSS Statistics</em> (4th ed.). SAGE Publications.<br>
+    &bullet; Weiss, N. A. (2005). <em>Introductory Statistics</em> (8th ed.). Pearson Prentice Hall.
+  </p>
+</details>
+
 </div>
 <!-- CARD: Perhitungan Sampel untuk Uji Paired T-Test -->
 <div class="feature">
@@ -256,6 +491,31 @@
     <li>Zβ = skor Z sesuai kekuatan uji yang diinginkan (misalnya 0.84 untuk 80%).</li>
   </ul>
   <a href="sample_paired_t.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong> 
+    Digunakan untuk menghitung jumlah sampel yang diperlukan dalam uji statistik <em>paired t-test</em>, yang membandingkan dua set data yang saling berhubungan. Uji ini digunakan ketika data yang diambil berasal dari dua pengukuran yang dilakukan pada unit yang sama (misalnya, pengukuran sebelum dan sesudah perlakuan pada subjek yang sama).
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong> 
+    Sebuah studi ingin mengetahui apakah ada perubahan signifikan dalam berat badan pasien setelah mengikuti program diet selama 6 bulan. Data yang tersedia adalah pengukuran berat badan sebelum dan setelah program diet untuk setiap pasien. Berdasarkan data yang ada, peneliti perlu menghitung jumlah sampel yang dibutuhkan untuk mendeteksi perubahan rata-rata berat badan yang signifikan.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Cocok untuk eksperimen dengan pengukuran berulang pada subjek yang sama.<br>
+    &bullet; Mengurangi variabilitas dengan membandingkan dua kondisi pada individu yang sama.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Hanya dapat digunakan jika data berpasangan, sehingga tidak cocok untuk kelompok yang independen.<br>
+    &bullet; Perlu asumsi bahwa perbedaan antara dua pengukuran berdistribusi normal.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Altman, D. G. (1991). <em>Practical Statistics for Medical Research</em>. CRC Press.<br>
+    &bullet; Bland, M. (2015). <em>An Introduction to Medical Statistics</em> (4th ed.). Oxford University Press.
+  </p>
+</details>
+
 </div>
 <!-- CARD: Perhitungan Sampel untuk Uji Chi-Square (Goodness of Fit atau Homogeneity) -->
 <div class="feature">
@@ -269,6 +529,44 @@
     <li>Z = skor Z untuk tingkat kepercayaan (misalnya, 1.96 untuk 95% confidence level).</li>
   </ul>
   <a href="sample_chisquare.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong>
+    Uji Chi-Square digunakan untuk menentukan apakah ada perbedaan yang signifikan antara distribusi frekuensi yang diamati (observed) dan yang diharapkan (expected) dalam kategori tertentu. Uji ini dapat digunakan dalam dua bentuk:
+    <br>
+    &bullet; <strong>Goodness of Fit</strong>: Digunakan untuk menguji apakah data yang diamati sesuai dengan distribusi teoretis yang diharapkan.<br>
+    &bullet; <strong>Homogeneity</strong>: Digunakan untuk menguji apakah dua atau lebih sampel independen berasal dari populasi yang memiliki distribusi yang sama.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong>
+    Misalkan seorang peneliti ingin mengetahui apakah ada hubungan antara jenis kelamin dan preferensi warna di kalangan siswa. Mereka mengumpulkan data frekuensi preferensi warna dari sampel siswa laki-laki dan perempuan. Uji Chi-Square akan digunakan untuk membandingkan distribusi warna yang diamati dengan distribusi yang diharapkan berdasarkan hipotesis nol bahwa tidak ada perbedaan preferensi warna antara siswa laki-laki dan perempuan.
+  </p>
+
+  <p><strong>Langkah-Langkah Penghitungan:</strong>
+    1. Tentukan hipotesis nol (H₀) dan hipotesis alternatif (H₁).<br>
+    2. Hitung frekuensi yang diharapkan (E) untuk setiap kategori.<br>
+    3. Hitung nilai chi-square (χ²) dengan rumus: 
+    <br>
+    <em>χ² = Σ [(O - E)² / E]</em>, di mana O adalah frekuensi yang diamati dan E adalah frekuensi yang diharapkan.<br>
+    4. Tentukan derajat kebebasan (df), yaitu (k - 1) untuk <em>Goodness of Fit</em> dan (r - 1)(c - 1) untuk <em>Homogeneity</em>.<br>
+    5. Bandingkan nilai χ² yang dihitung dengan nilai χ² tabel untuk menentukan apakah hipotesis nol dapat ditolak.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Tidak memerlukan asumsi distribusi normal.<br>
+    &bullet; Dapat digunakan untuk data kategorikal.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Memerlukan ukuran sampel yang cukup besar agar hasil uji dapat dipercaya.<br>
+    &bullet; Tidak cocok untuk kategori dengan frekuensi yang sangat rendah (<5).
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Agresti, A. (2007). <em>An Introduction to Categorical Data Analysis</em>. Wiley-Interscience.<br>
+    &bullet; Everett, B. (2015). <em>Practical Statistics for Data Scientists</em>. O'Reilly Media.
+  </p>
+</details>
+
 </div>
 <!-- CARD: Perhitungan Sampel untuk Varians (Single Variance) -->
 <div class="feature">
@@ -282,6 +580,31 @@
     <li>σ2 = Varians populasi atau sampel.</li>
   </ul>
   <a href="sample_varian_tunggal.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong> 
+    Digunakan untuk menentukan ukuran sampel yang diperlukan saat kita ingin memperkirakan <em>varians populasi</em> dengan tingkat kepercayaan tertentu. Ini sering digunakan dalam uji statistik yang berkaitan dengan sebaran atau variabilitas data dalam sebuah populasi tunggal.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong> 
+    Sebuah perusahaan ingin memperkirakan varians waktu yang dibutuhkan pelanggan untuk melakukan pembelian. Mereka menginginkan margin kesalahan tidak lebih dari 5 detik, dengan tingkat kepercayaan 95%. Perusahaan tersebut harus menghitung ukuran sampel yang diperlukan berdasarkan varians yang telah diketahui dari data sampel awal.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Memungkinkan penentuan ukuran sampel yang diperlukan untuk memperkirakan varians dengan presisi yang tinggi.<br>
+    &bullet; Berguna dalam penelitian yang melibatkan data numerik yang sangat bervariasi.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Memerlukan estimasi awal dari varians populasi yang dapat mempengaruhi akurasi hasil.<br>
+    &bullet; Asumsi normalitas sangat penting untuk perhitungan yang tepat.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Cochran, W. G. (1977). <em>Sampling Techniques</em> (3rd ed.). John Wiley & Sons.<br>
+    &bullet; Kish, L. (1965). <em>Sociological Methodology</em>. John Wiley & Sons.
+  </p>
+</details>
+
 </div>
 <!-- CARD: Perhitungan Sampel untuk Penelitian Eksperimental (Randomized Controlled Trial / RCT) -->
 <div class="feature">
@@ -295,6 +618,31 @@
     <li>Zα/2 = skor Z sesuai tingkat signifikansi (misalnya 1.96 untuk 95%).</li>
     <li>Zβ = skor Z sesuai kekuatan uji yang diinginkan (misalnya 0.84 untuk 80%).</li>
   <a href="sample_rct1.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong> 
+    Digunakan ketika peneliti ingin membandingkan dua proporsi kejadian antara dua kelompok dalam penelitian eksperimen, seperti RCT (Randomized Controlled Trial). Ini sering digunakan untuk mengukur efektivitas pengobatan atau intervensi dengan membandingkan dua grup, misalnya grup yang diberi perlakuan dan grup kontrol.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong> 
+    Sebuah penelitian ingin mengetahui apakah obat A lebih efektif daripada obat B dalam mengurangi kejadian penyakit X. Dari uji coba sebelumnya, proporsi kejadian penyakit X pada grup obat A adalah 30% (P1 = 0.30), dan pada grup obat B adalah 50% (P2 = 0.50). Diketahui tingkat signifikansi 5% (Zα/2 = 1.96) dan kekuatan uji 80% (Zβ = 0.84).
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Memungkinkan penilaian yang kuat terhadap perbedaan antara dua grup dalam penelitian eksperimental.<br>
+    &bullet; Cocok untuk eksperimen dengan dua intervensi atau dua kelompok yang berbeda.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Membutuhkan asumsi proporsi yang dapat dihitung dengan baik di populasi.<br>
+    &bullet; Tidak cocok jika data tidak dapat dipasangkan atau kelompok tidak independen.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Freedman, L. S., Pisani, R., & Purves, R. (2007). <em>Statistics: The Art and Science of Learning from Data</em>. Pearson.<br>
+    &bullet; Piantadosi, S. (2017). <em>Clinical Trials: A Methodologic Perspective</em> (2nd ed.). Wiley-Interscience.
+  </p>
+</details>
+
   <h4>Formula 2. Jika berbasis perbandingan dua rata-rata:</h4>
   <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745588920/Picture14_se16kr.png" alt="Rumus Slovin" style="display: block; margin: 0.5rem 0;" />
   <strong>Di mana:</strong>
@@ -305,6 +653,31 @@
     <li>Zβ = skor Z sesuai kekuatan uji yang diinginkan (misalnya 0.84 untuk 80%).</li>
   </ul>
   <a href="sample_rct2.html" class="btn-link">Hitung Sampel</a>
+  <details class="accordion-box">
+  <summary>🔍 Penjelasan Lengkap</summary>
+  <p><strong>Kapan Digunakan:</strong> 
+    Rumus ini digunakan dalam penelitian eksperimental, khususnya untuk desain penelitian dengan dua kelompok yang diberikan perlakuan berbeda. Dalam konteks <i>Randomized Controlled Trial (RCT)</i>, rumus ini digunakan untuk menentukan jumlah sampel yang dibutuhkan untuk membandingkan dua rata-rata kelompok yang diacak.
+  </p>
+
+  <p><strong>Contoh Penerapan (Studi Kasus):</strong> 
+    Sebuah RCT dilakukan untuk menguji efektivitas dua jenis obat terhadap penurunan tekanan darah. Kelompok 1 diberikan obat A dan kelompok 2 diberikan obat B. Peneliti ingin mengetahui perbedaan rata-rata tekanan darah antara kedua kelompok dengan tingkat signifikansi 5% dan kekuatan uji 80%. Varians pada masing-masing kelompok diketahui, dan perbedaan rata-rata yang dianggap signifikan adalah 10 mmHg.
+  </p>
+
+  <p><strong>Kelebihan dan Kelemahan:</strong><br>
+    ✅ <u>Kelebihan:</u><br>
+    &bullet; Menyediakan pembanding yang jelas antara dua kelompok perlakuan yang berbeda dalam uji klinis.<br>
+    &bullet; Sesuai untuk desain penelitian terkontrol dengan acakan.<br><br>
+    ❌ <u>Kelemahan:</u><br>
+    &bullet; Memerlukan varians populasi yang dapat diperkirakan atau diestimasi dari sampel.<br>
+    &bullet; Asumsi bahwa varians di kedua kelompok adalah homogen (sama) terkadang sulit dipenuhi.
+  </p>
+
+  <p><strong>Referensi:</strong><br>
+    &bullet; Piantadosi, S. (2005). <em>Clinical Trials: A Methodologic Perspective</em> (2nd ed.). Wiley-Interscience.<br>
+    &bullet; Machin, D., Campbell, M. J., & Tan, S. B. (2011). <em>Sample Sizes for Clinical, Epidemiological, and Social Research</em> (2nd ed.). Wiley.
+  </p>
+</details>
+
 </div>
 
   </section>
