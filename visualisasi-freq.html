@@ -81,82 +81,83 @@
       document.getElementById("variableSelectSection").classList.remove("hidden");
     }
 
-    function generateSelectedChart() {
-      const variable = document.getElementById("variableSelect").value;
-      const type = document.getElementById("chartType").value;
-      const dataSet = groupedData[variable];
+   function generateSelectedChart() {
+  const variable = document.getElementById("variableSelect").value;
+  const type = document.getElementById("chartType").value;
+  const dataSet = groupedData[variable];
 
-      const labels = dataSet.map(d => d.kategori);
-      const data = dataSet.map(d => d.frekuensi);
-      const total = data.reduce((a, b) => a + b, 0);
-      const percentages = data.map(d => ((d / total) * 100).toFixed(2));
+  const labels = dataSet.map(d => d.kategori);
+  const data = dataSet.map(d => d.frekuensi);
+  const total = data.reduce((a, b) => a + b, 0);
+  const percentages = data.map(d => ((d / total) * 100).toFixed(2));
 
-      const backgroundColors = labels.map((_, i) => `hsl(${i * 40}, 70%, 70%)`);
+  const backgroundColors = labels.map((_, i) => `hsl(${i * 40}, 70%, 70%)`);
 
-      const chartData = {
-        labels: labels,
-        datasets: [{
-          data: percentages,
-          backgroundColor: backgroundColors
-        }]
-      };
+  const chartData = {
+    labels: labels,
+    datasets: [{
+      data: percentages,
+      backgroundColor: backgroundColors
+    }]
+  };
 
-      const options = {
-        responsive: true,
-        plugins: {
-          legend: { display: type === 'pie' },
-          tooltip: {
-            callbacks: {
-              label: function (context) {
-                const val = context.raw;
-                const percent = val.toFixed(2);
-                return `${context.label}: ${percent}%`;
-              }
-            }
-          },
-          datalabels: {
-            color: '#000',
-            formatter: function (value, context) {
-              return `${value}%`;
-            }
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            max: 100,
-            title: {
-              display: true,
-              text: 'Persentase (%)',
-              font: {
-                size: 14
-              }
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Kategori Variabel',
-              font: {
-                size: 14
-              }
-            }
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: { display: type === 'pie' },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const val = context.raw;
+            const percent = val.toFixed(2);
+            return `${context.label}: ${percent}%`;
           }
         }
-      };
-
-      const ctx = document.getElementById("chartCanvas").getContext("2d");
-      if (window.currentChart) window.currentChart.destroy();
-      window.currentChart = new Chart(ctx, {
-        type: type,
-        data: chartData,
-        options: options,
-        plugins: [ChartDataLabels]
-      });
-
-      const title = `${variable} (n = ${total})`;
-      document.getElementById("chartTitle").textContent = title; // Set the title for the chart
+      },
+      datalabels: {
+        color: '#000',
+        formatter: function (value, context) {
+          return `${value}%`;
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 100,
+        title: {
+          display: true,
+          text: 'Persentase (%)',
+          font: {
+            size: 14
+          }
+        }
+      },
+      x: {
+        title: {
+          display: true,
+          text: `Kategori Variabel ${variable}`,  // Title now includes the selected variable
+          font: {
+            size: 14
+          }
+        }
+      }
     }
+  };
+
+  const ctx = document.getElementById("chartCanvas").getContext("2d");
+  if (window.currentChart) window.currentChart.destroy();
+  window.currentChart = new Chart(ctx, {
+    type: type,
+    data: chartData,
+    options: options,
+    plugins: [ChartDataLabels]
+  });
+
+  const title = `${variable} (n = ${total})`;
+  document.getElementById("chartTitle").textContent = title; // Set the title for the chart
+}
+
 
     // Download chart as PNG
    function downloadChart() {
