@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualisasi Data Frekuensi</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+
+<body class="bg-white text-gray-800 p-6">
+  <div class="max-w-4xl mx-auto space-y-6">
+    <h1 class="text-3xl font-bold text-center">📊 Visualisasi Data Frekuensi</h1>
+
+    <div class="bg-gray-50 p-4 rounded-xl shadow">
+      <label class="block text-sm font-medium mb-1">Paste Data Tabel:</label>
+      <textarea id="pastedData" rows="10" class="w-full border rounded px-3 py-2 mb-4" placeholder="Tempel data dari Excel di sini..."></textarea>
+
+      <button onclick="prosesPasteData()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
+        Proses Data
+      </button>
+    </div>
+
+    <div id="variableSelectSection" class="hidden">
+      <label class="block text-sm font-medium mb-1">Pilih Variabel:</label>
+      <select id="variableSelect" class="w-full border rounded px-3 py-2 mb-4"></select>
+
+      <label class="block text-sm font-medium mb-1">Jenis Grafik:</label>
+      <select id="chartType" class="w-full border rounded px-3 py-2 mb-4">
+        <option value="bar">Bar Chart</option>
+        <option value="pie">Pie Chart</option>
+      </select>
+
+      <div class="text-center">
+        <button onclick="generateSelectedChart()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Tampilkan Grafik</button>
+        <button onclick="downloadChart()" class="bg-green-600 text-white px-4 py-2 rounded ml-2 hover:bg-green-700">Download PNG</button>
+      </div>
+    </div>
+
+    <div id="chartOutput" class="mt-6">
+      <h2 id="chartTitle" class="text-center text-xl font-semibold mb-4"></h2>
+      <canvas id="chartCanvas"></canvas>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-8 text-center text-sm text-gray-500">
+      <p>© 2025 Pavio. Seluruh hak cipta dilindungi. Developed by Anom Harjana</p>
+    </div>
+  </div>
+
+  <script>
+    let groupedData = {};
+
+    function prosesPasteData() {
+      const raw = document.getElementById('pastedData').value.trim();
+      const lines = raw.split(/\r?\n/);
+
+      groupedData = {};
+      let currentGroup = '';
+
+      for (const line of lines) {
+        const parts = line.split(/\t|\s{2,}/).map(p => p.trim()).filter(p => p !== '');
+
+        if (parts.length === 1) {
+          currentGroup = parts[0];
+          groupedData[currentGroup] = [];
+        } else if (parts.length >= 2 && currentGroup) {
+          const [kategori, frekStr, persenStr] = parts;
+          const frekuensi = parseInt(frekStr);
+          if (!isNaN(frekuensi)) {
+            groupedData[currentGroup].push({ kategori, frekuensi });
+          }
+        }
+      }
+
+      const select = document.getElementById("variableSelect");
+      select.innerHTML = Object.keys(groupedData).map(k => `<option value="${k}">${k}</option>`).join('');
+      document.getElementById("variableSelectSection").classList.remove("hidden");
+    }
+
+    function generateSelectedChart() {
+      const variable = document.getElementById("variableSelect").value;
+      const type = document.getElementById("chartType").value;
+      const dataSet = groupedData[variable];
+
+      const labels = dataSet.map(d => d.kategori);
+      const data = dataSet.map(d => d.frekuensi);
+      const total = data.reduce((a, b) => a + b, 0);
+      const percentages = data.map(d => ((d / total) * 100).toFixed(2));
+
+      const backgroundColors = labels.map((_, i) => `hsl(${i * 40}, 70%, 70%)`);
+
+      const chartData = {
+        labels: labels,
+        datasets: [{
+          data: percentages,
+          backgroundColor: backgroundColors
+        }]
+      };
+
+      const options = {
+        responsive: true,
+        plugins: {
+          legend: { display: type === 'pie' },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const val = context.raw;
+                const percent = val.toFixed(2);
+                return `${context.label}: ${percent}%`;
+              }
+            }
+          },
+          datalabels: {
+            color: '#000',
+            formatter: function (value, context) {
+              return `${value}%`;
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            title: {
+              display: true,
+              text: 'Persentase (%)',
+              font: {
+                size: 14
+              }
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Kategori Variabel',
+              font: {
+                size: 14
+              }
+            }
+          }
+        }
+      };
+
+      const ctx = document.getElementById("chartCanvas").getContext("2d");
+      if (window.currentChart) window.currentChart.destroy();
+      window.currentChart = new Chart(ctx, {
+        type: type,
+        data: chartData,
+        options: options,
+        plugins: [ChartDataLabels]
+      });
+
+      const title = `${variable} (n = ${total})`;
+      document.getElementById("chartTitle").textContent = title; // Set the title for the chart
+    }
+
+    // Download chart as PNG
+   function downloadChart() {
+  // Get the chart, title, and footer elements
+  const chartCanvas = document.getElementById("chartCanvas");
+  const chartTitle = document.getElementById("chartTitle").textContent;
+  const footer = document.querySelector(".mt-8.text-center.text-sm.text-gray-500");
+
+  // Create an offscreen canvas with enough space to hold the chart and the other elements
+  const offscreenCanvas = document.createElement("canvas");
+  const offscreenCtx = offscreenCanvas.getContext("2d");
+
+  // Set the offscreen canvas dimensions (taking into account title, chart, and footer)
+  const titleHeight = 40;  // Approx height for the chart title
+  const footerHeight = 40; // Approx height for the footer
+  offscreenCanvas.width = chartCanvas.width;
+  offscreenCanvas.height = chartCanvas.height + titleHeight + footerHeight;
+
+  // Set the background color of the offscreen canvas to white
+  offscreenCtx.fillStyle = "#ffffff";
+  offscreenCtx.fillRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+
+  // Draw the title at the top of the offscreen canvas
+  offscreenCtx.font = "24px Arial";
+  offscreenCtx.textAlign = "center";
+  offscreenCtx.fillStyle = "#000000";
+  offscreenCtx.fillText(chartTitle, offscreenCanvas.width / 2, titleHeight / 2);
+
+  // Draw the chart below the title
+  offscreenCtx.drawImage(chartCanvas, 0, titleHeight);
+
+  // Draw the footer at the bottom of the offscreen canvas
+  offscreenCtx.font = "12px Arial";
+  offscreenCtx.fillStyle = "#555555";
+  offscreenCtx.fillText(footer.textContent, offscreenCanvas.width / 2, offscreenCanvas.height - footerHeight / 2);
+
+  // Get the data URL of the offscreen canvas (with title, chart, and footer)
+  const newImageUrl = offscreenCanvas.toDataURL("image/png");
+
+  // Create a download link
+  const link = document.createElement('a');
+  link.href = newImageUrl;
+  link.download = 'chart_with_footer.png'; // File name for the downloaded image
+  link.click();
+}
+
+
+  </script>
+</body>
+
+</html>
