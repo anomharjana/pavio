@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CSV Dotmap Viewer (Indonesia)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+  <!-- PapaParse for CSV -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Upload CSV & Show Dotmap (Indonesia)</h2>
+  <input type="file" id="csvFile" accept=".csv" />
+  <button id="showMapBtn" disabled>Show Dotmap</button>
+
+  <div id="map"></div>
+
+  <script>
+    // Initialize Leaflet map focused on Indonesia
+    const map = L.map('map').setView([-2.5, 118], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    let parsedData = []; // Global array to store GPS points
+    let latKey, lonKey;
+
+    // Column name detection
+    function detectLatLonFields(headers) {
+      const latCandidates = ['lat', 'latitude', 'Latitude', 'LAT'];
+      const lonCandidates = ['lon', 'lng', 'long', 'longitude', 'Longitude', 'LON', 'LNG'];
+
+      let lat = null, lon = null;
+
+      for (const key of headers) {
+        const lower = key.toLowerCase();
+        if (!lat && latCandidates.includes(lower)) lat = key;
+        if (!lon && lonCandidates.includes(lower)) lon = key;
+      }
+
+      return { latKey: lat, lonKey: lon };
+    }
+
+    // Handle CSV file upload
+    document.getElementById('csvFile').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: function (results) {
+          const headers = results.meta.fields;
+          const { latKey: detectedLat, lonKey: detectedLon } = detectLatLonFields(headers);
+
+          if (!detectedLat || !detectedLon) {
+            alert("Latitude or longitude columns not detected.");
+            return;
+          }
+
+          latKey = detectedLat;
+          lonKey = detectedLon;
+          parsedData = results.data.filter(row => {
+            const lat = parseFloat(row[latKey]);
+            const lon = parseFloat(row[lonKey]);
+            return !isNaN(lat) && !isNaN(lon);
+          });
+
+          if (parsedData.length > 0) {
+            document.getElementById('showMapBtn').disabled = false;
+            alert("CSV parsed successfully. Click 'Show Dotmap' to display points.");
+          } else {
+            alert("No valid coordinates found in the file.");
+          }
+        }
+      });
+    });
+
+    // Show Dotmap on button click
+    document.getElementById('showMapBtn').addEventListener('click', function () {
+      parsedData.forEach(row => {
+        const lat = parseFloat(row[latKey]);
+        const lon = parseFloat(row[lonKey]);
+        if (!isNaN(lat) && !isNaN(lon)) {
+          L.circleMarker([lat, lon], {
+            radius: 5,
+            fillColor: "#007BFF",
+            color: "#fff",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+          }).addTo(map);
+        }
+      });
+      this.disabled = true; // Disable to prevent duplicate drawing
+    });
+  </script>
+</body>
+
+</html>
