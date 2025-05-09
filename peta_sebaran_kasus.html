@@ -117,25 +117,31 @@
     }
 
     // Fungsi untuk menampilkan legenda
-    function updateLegend(categories) {
-      // Menghapus legenda lama jika ada
-      const existingLegend = document.querySelector('.legend');
-      if (existingLegend) {
-        existingLegend.remove();
-      }
+    let legendControl;
 
-      const legendDiv = document.createElement('div');
-      legendDiv.className = 'legend absolute bottom-2 left-2 bg-white p-3 rounded-lg shadow-md';
-      let legendHTML = '<strong>Legenda:</strong><br>';
+function updateLegend(categories) {
+  // Hapus legend lama jika ada
+  if (legendControl) {
+    map.removeControl(legendControl);
+  }
 
-      categories.forEach((category, index) => {
-        const color = getCategoryColor(category, categories);
-        legendHTML += `<i style="background:${color};" class="inline-block w-4 h-4 rounded-full mr-2"></i> ${category}<br>`;
-      });
+  legendControl = L.control({ position: 'bottomright' });
 
-      legendDiv.innerHTML = legendHTML;
-      document.body.appendChild(legendDiv);
-    }
+  legendControl.onAdd = function () {
+    const div = L.DomUtil.create('div', 'info legend bg-white p-2 rounded shadow');
+    div.innerHTML = '<strong>Legenda:</strong><br>';
+
+    categories.forEach(category => {
+      const color = getCategoryColor(category, categories);
+      div.innerHTML += `<i style="background:${color}; width:12px; height:12px; display:inline-block; margin-right:8px; border-radius:50%;"></i>${category}<br>`;
+    });
+
+    return div;
+  };
+
+  legendControl.addTo(map);
+}
+
 
     document.getElementById('csvFile').addEventListener('change', function (event) {
       const file = event.target.files[0];
