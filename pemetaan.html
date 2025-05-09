@@ -150,24 +150,13 @@
       outline: none;
     }
 
-    /* Responsive iframe */
-    .responsive-iframe-container {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
+    .fixed-image {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
       border-radius: 8px;
       border: 1px solid #ccc;
       margin-top: 1rem;
-    }
-
-    .responsive-iframe-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
     }
   </style>
 </head>
@@ -182,130 +171,105 @@
     </div>
   </header>
 
-<section class="features">
-  <!-- PETA 1: Sebaran Kasus -->
-  <div class="feature">
-    <h3>🗺️ Peta Sebaran Kasus</h3>
-    <h4>Visualisasi Lokasi Kasus Individu</h4>
-    <ul>
-      <li>Titik mewakili satu atau lebih kasus</li>
-      <li>Melihat distribusi spasial langsung</li>
-      <li>Contoh: peta penyebaran DBD</li>
-    </ul>
-
-    <strong>🌍 Contoh Peta</strong>
-    <div class="responsive-iframe-container">
-      <iframe src="https://res.cloudinary.com/djexglfns/image/upload/v1746799745/Slide1_milb4z.png"></iframe>
-    </div>
-
-    <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-1')">Lihat Penjelasan</div>
-    <div id="expandable-content-map-1" class="expandable-content">
-      <p><strong>Definisi:</strong> Peta yang menampilkan lokasi kejadian atau kasus berdasarkan titik koordinat. Digunakan untuk mengidentifikasi area dengan konsentrasi tinggi kasus.</p>
-      <p><strong>Kapan Digunakan:</strong> Saat data tersedia dalam format titik (point data), seperti alamat atau koordinat lokasi kasus.</p>
-      <p><strong>Contoh Pertanyaan:</strong></p>
+  <section class="features">
+    <!-- PETA 1 -->
+    <div class="feature">
+      <h3>🗺️ Peta Sebaran Kasus</h3>
+      <h4>Visualisasi Lokasi Kasus Individu</h4>
       <ul>
-        <li>Di mana titik konsentrasi kasus flu burung di tahun tertentu?</li>
+        <li>Titik mewakili satu atau lebih kasus</li>
+        <li>Melihat distribusi spasial langsung</li>
+        <li>Contoh: peta penyebaran DBD</li>
       </ul>
-    </div>
-    <a href="peta_sebaran_kasus.html" class="btn-link">Buat Peta Sebaran Kasus</a>
-  </div>
-
-  <!-- PETA 2: Peta Panas -->
-  <div class="feature">
-    <h3>🔥 Peta Panas (Heatmap)</h3>
-    <h4>Kepadatan Data dalam Area Tertentu</h4>
-    <ul>
-      <li>Gradasi warna menunjukkan intensitas</li>
-      <li>Cocok untuk data volume besar</li>
-      <li>Contoh: kepadatan penduduk, titik kejadian</li>
-    </ul>
-
-    <strong>🌍 Contoh Peta</strong>
-    <div class="responsive-iframe-container">
-      <iframe src="https://res.cloudinary.com/djexglfns/image/upload/v1746799745/Slide2_xwro5j.png"></iframe>
+      <strong>🌍 Contoh Peta</strong>
+      <img class="fixed-image" src="https://res.cloudinary.com/djexglfns/image/upload/v1746799745/Slide1_milb4z.png" alt="Contoh Peta Sebaran Kasus" />
+      <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-1')">Lihat Penjelasan</div>
+      <div id="expandable-content-map-1" class="expandable-content">
+        <p><strong>Definisi:</strong> Peta yang menampilkan lokasi kejadian atau kasus berdasarkan titik koordinat.</p>
+        <p><strong>Kapan Digunakan:</strong> Saat data tersedia dalam format titik (point data).</p>
+        <p><strong>Contoh Pertanyaan:</strong></p>
+        <ul><li>Di mana titik konsentrasi kasus flu burung di tahun tertentu?</li></ul>
+      </div>
+      <a href="peta_sebaran_kasus.html" class="btn-link">Buat Peta Sebaran Kasus</a>
     </div>
 
-    <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-2')">Lihat Penjelasan</div>
-    <div id="expandable-content-map-2" class="expandable-content">
-      <p><strong>Definisi:</strong> Peta panas menggunakan warna untuk menunjukkan konsentrasi atau intensitas data pada lokasi geografis tertentu.</p>
-      <p><strong>Kapan Digunakan:</strong> Cocok saat data terlalu padat untuk divisualisasi dengan titik individu.</p>
-      <p><strong>Contoh Pertanyaan:</strong></p>
+    <!-- PETA 2 -->
+    <div class="feature">
+      <h3>🔥 Peta Panas (Heatmap)</h3>
+      <h4>Kepadatan Data dalam Area Tertentu</h4>
       <ul>
-        <li>Bagian kota mana yang memiliki lalu lintas kendaraan tertinggi?</li>
+        <li>Gradasi warna menunjukkan intensitas</li>
+        <li>Cocok untuk data volume besar</li>
+        <li>Contoh: kepadatan penduduk</li>
       </ul>
-    </div>
-    <a href="peta_panas.html" class="btn-link">Buat Peta Panas</a>
-  </div>
-
-  <!-- PETA 3: Peta Tematik -->
-  <div class="feature">
-    <h3>🎨 Peta Tematik</h3>
-    <h4>Visualisasi Berdasarkan Tema atau Variabel</h4>
-    <ul>
-      <li>Menunjukkan topik spesifik (mis. pendidikan, kesehatan)</li>
-      <li>Menyesuaikan warna/simbol dengan nilai data</li>
-      <li>Contoh: Peta tingkat literasi, akses air bersih</li>
-    </ul>
-
-    <strong>🌍 Contoh Peta</strong>
-    <div class="responsive-iframe-container">
-      <iframe src="https://res.cloudinary.com/djexglfns/image/upload/v1746799745/Slide3_mptcac.png"></iframe>
+      <strong>🌍 Contoh Peta</strong>
+      <img class="fixed-image" src="https://res.cloudinary.com/djexglfns/image/upload/v1746799745/Slide2_xwro5j.png" alt="Contoh Peta Panas" />
+      <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-2')">Lihat Penjelasan</div>
+      <div id="expandable-content-map-2" class="expandable-content">
+        <p><strong>Definisi:</strong> Peta panas menggunakan warna untuk menunjukkan konsentrasi data.</p>
+        <p><strong>Kapan Digunakan:</strong> Cocok saat data terlalu padat untuk divisualisasi dengan titik individu.</p>
+        <p><strong>Contoh Pertanyaan:</strong></p>
+        <ul><li>Bagian kota mana yang memiliki lalu lintas tertinggi?</li></ul>
+      </div>
+      <a href="peta_panas.html" class="btn-link">Buat Peta Panas</a>
     </div>
 
-    <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-3')">Lihat Penjelasan</div>
-    <div id="expandable-content-map-3" class="expandable-content">
-      <p><strong>Definisi:</strong> Peta yang menggambarkan fenomena tertentu, seperti data demografi, sosial, atau ekonomi, pada wilayah tertentu.</p>
-      <p><strong>Kapan Digunakan:</strong> Ketika ingin menyampaikan narasi data berbasis wilayah dan tema khusus.</p>
-      <p><strong>Contoh Pertanyaan:</strong></p>
+    <!-- PETA 3 -->
+    <div class="feature">
+      <h3>🎨 Peta Tematik</h3>
+      <h4>Visualisasi Berdasarkan Tema atau Variabel</h4>
       <ul>
-        <li>Bagaimana sebaran fasilitas pendidikan di berbagai kabupaten?</li>
+        <li>Menunjukkan topik spesifik</li>
+        <li>Menyesuaikan warna/simbol dengan nilai data</li>
+        <li>Contoh: Peta tingkat literasi</li>
       </ul>
-    </div>
-    <a href="peta_tematik.html" class="btn-link">Buat Peta Tematik</a>
-  </div>
-
-  <!-- PETA 4: Peta Choropleth -->
-  <div class="feature">
-    <h3>🧭 Peta Choropleth</h3>
-    <h4>Warna untuk Menunjukkan Nilai Agregat</h4>
-    <ul>
-      <li>Wilayah diwarnai berdasarkan nilai data</li>
-      <li>Cocok untuk menunjukkan variasi antar area</li>
-      <li>Contoh: pendapatan rata-rata per kecamatan</li>
-    </ul>
-
-    <strong>🌍 Contoh Peta</strong>
-    <div class="responsive-iframe-container">
-      <iframe src="https://res.cloudinary.com/djexglfns/image/upload/v1746799744/Slide4_hft0zu.png"></iframe>
+      <strong>🌍 Contoh Peta</strong>
+      <img class="fixed-image" src="https://res.cloudinary.com/djexglfns/image/upload/v1746799745/Slide3_mptcac.png" alt="Contoh Peta Tematik" />
+      <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-3')">Lihat Penjelasan</div>
+      <div id="expandable-content-map-3" class="expandable-content">
+        <p><strong>Definisi:</strong> Peta yang menggambarkan fenomena tertentu pada wilayah tertentu.</p>
+        <p><strong>Kapan Digunakan:</strong> Ketika ingin menyampaikan narasi data tematik.</p>
+        <p><strong>Contoh Pertanyaan:</strong></p>
+        <ul><li>Bagaimana sebaran fasilitas pendidikan?</li></ul>
+      </div>
+      <a href="peta_tematik.html" class="btn-link">Buat Peta Tematik</a>
     </div>
 
-    <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-4')">Lihat Penjelasan</div>
-    <div id="expandable-content-map-4" class="expandable-content">
-      <p><strong>Definisi:</strong> Peta choropleth mengisi area (misalnya provinsi, kecamatan) dengan warna sesuai nilai statistik (seperti jumlah kasus, rata-rata skor).</p>
-      <p><strong>Kapan Digunakan:</strong> Sangat berguna saat membandingkan wilayah secara relatif berdasarkan satu variabel.</p>
-      <p><strong>Contoh Pertanyaan:</strong></p>
+    <!-- PETA 4 -->
+    <div class="feature">
+      <h3>🧭 Peta Choropleth</h3>
+      <h4>Warna untuk Menunjukkan Nilai Agregat</h4>
       <ul>
-        <li>Wilayah mana yang memiliki persentase pengangguran tertinggi?</li>
+        <li>Wilayah diwarnai berdasarkan nilai data</li>
+        <li>Cocok untuk variasi antar area</li>
+        <li>Contoh: pendapatan rata-rata</li>
       </ul>
+      <strong>🌍 Contoh Peta</strong>
+      <img class="fixed-image" src="https://res.cloudinary.com/djexglfns/image/upload/v1746799744/Slide4_hft0zu.png" alt="Contoh Peta Choropleth" />
+      <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-4')">Lihat Penjelasan</div>
+      <div id="expandable-content-map-4" class="expandable-content">
+        <p><strong>Definisi:</strong> Peta choropleth mengisi area dengan warna sesuai nilai statistik.</p>
+        <p><strong>Kapan Digunakan:</strong> Untuk membandingkan wilayah secara relatif.</p>
+        <p><strong>Contoh Pertanyaan:</strong></p>
+        <ul><li>Wilayah mana yang punya pengangguran tertinggi?</li></ul>
+      </div>
+      <a href="peta_choropleth.html" class="btn-link">Buat Peta Choropleth</a>
     </div>
-    <a href="peta_choropleth.html" class="btn-link">Buat Peta Choropleth</a>
-  </div>
-</section>
+  </section>
 
-<footer>
-  &copy; 2025 Pavio. Seluruh hak cipta dilindungi. 
-</footer>
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
+  </footer>
 
-<script>
-  function toggleExpand(contentId) {
-    var content = document.getElementById(contentId);
-    if (content.style.maxHeight) {
-      content.style.maxHeight = null;
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
+  <script>
+    function toggleExpand(contentId) {
+      var content = document.getElementById(contentId);
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
     }
-  }
-</script>
-
+  </script>
 </body>
 </html>
