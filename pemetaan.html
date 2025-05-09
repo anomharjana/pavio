@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Tempel & Lihat Seketika</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9fb;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      flex-wrap: wrap;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-brand img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #777;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 960px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .feature {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature h3 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature h4 {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .feature ul {
+      padding-left: 1.2rem;
+      margin-top: 0.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature ul li {
+      margin-bottom: 0.25rem;
+      font-size: 0.95rem;
+    }
+
+    .btn-link {
+      display: inline-block;
+      margin-top: 1rem;
+      background-color: #333;
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      align-self: flex-start;
+    }
+
+    .btn-link:hover {
+      background-color: #000;
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    /* Styling untuk expandable content */
+    .expandable-content {
+      background-color: #e0f7fa; /* Light blue */
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out;
+    }
+
+    .expand-btn {
+      cursor: pointer;
+      color: #007bff;
+      font-size: 0.95rem;
+      text-decoration: underline;
+      margin-bottom: 0.5rem;
+    }
+
+    .expand-btn:focus {
+      outline: none;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>Paste & View — That’s All It Takes.</p>
+      </div>
+    </div>
+  </header>
+
+<section class="features">
+  <!-- PETA 1: Sebaran Kasus -->
+  <div class="feature">
+    <h3>🗺️ Peta Sebaran Kasus</h3>
+    <h4>Visualisasi Lokasi Kasus Individu</h4>
+    <ul>
+      <li>Titik mewakili satu atau lebih kasus</li>
+      <li>Melihat distribusi spasial langsung</li>
+      <li>Contoh: peta penyebaran DBD</li>
+    </ul>
+
+    <strong>🌍 Contoh Peta Interaktif</strong>
+    <div style="margin-top:1rem;">
+      <iframe src="https://leafletjs.com/examples/quick-start/example.html" width="100%" height="250" style="border:1px solid #ccc; border-radius:8px;"></iframe>
+    </div>
+
+    <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-1')">Lihat Penjelasan</div>
+    <div id="expandable-content-map-1" class="expandable-content">
+      <p><strong>Definisi:</strong> Peta yang menampilkan lokasi kejadian atau kasus berdasarkan titik koordinat. Digunakan untuk mengidentifikasi area dengan konsentrasi tinggi kasus.</p>
+      <p><strong>Kapan Digunakan:</strong> Saat data tersedia dalam format titik (point data), seperti alamat atau koordinat lokasi kasus.</p>
+      <p><strong>Contoh Pertanyaan:</strong></p>
+      <ul>
+        <li>Di mana titik konsentrasi kasus flu burung di tahun tertentu?</li>
+      </ul>
+    </div>
+    <a href="peta_sebaran_kasus.html" class="btn-link">Pelajari Lebih Lanjut</a>
+  </div>
+
+  <!-- PETA 2: Peta Panas -->
+  <div class="feature">
+    <h3>🔥 Peta Panas (Heatmap)</h3>
+    <h4>Kepadatan Data dalam Area Tertentu</h4>
+    <ul>
+      <li>Gradasi warna menunjukkan intensitas</li>
+      <li>Cocok untuk data volume besar</li>
+      <li>Contoh: kepadatan penduduk, titik kejadian</li>
+    </ul>
+
+    <strong>🌍 Contoh Peta Interaktif</strong>
+    <div style="margin-top:1rem;">
+      <iframe src="https://www.patrick-wied.at/static/heatmapjs/example-heatmap.html" width="100%" height="250" style="border:1px solid #ccc; border-radius:8px;"></iframe>
+    </div>
+
+    <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-2')">Lihat Penjelasan</div>
+    <div id="expandable-content-map-2" class="expandable-content">
+      <p><strong>Definisi:</strong> Peta panas menggunakan warna untuk menunjukkan konsentrasi atau intensitas data pada lokasi geografis tertentu.</p>
+      <p><strong>Kapan Digunakan:</strong> Cocok saat data terlalu padat untuk divisualisasi dengan titik individu.</p>
+      <p><strong>Contoh Pertanyaan:</strong></p>
+      <ul>
+        <li>Bagian kota mana yang memiliki lalu lintas kendaraan tertinggi?</li>
+      </ul>
+    </div>
+    <a href="peta_panas.html" class="btn-link">Pelajari Lebih Lanjut</a>
+  </div>
+
+  <!-- PETA 3: Peta Tematik -->
+  <div class="feature">
+    <h3>🎨 Peta Tematik</h3>
+    <h4>Visualisasi Berdasarkan Tema atau Variabel</h4>
+    <ul>
+      <li>Menunjukkan topik spesifik (mis. pendidikan, kesehatan)</li>
+      <li>Menyesuaikan warna/simbol dengan nilai data</li>
+      <li>Contoh: Peta tingkat literasi, akses air bersih</li>
+    </ul>
+
+    <strong>🌍 Contoh Peta Interaktif</strong>
+    <div style="margin-top:1rem;">
+      <iframe src="https://storymaps.arcgis.com/stories/8e3d91aefb7e42a7b1b3e5c07b1f7ee5" width="100%" height="250" style="border:1px solid #ccc; border-radius:8px;"></iframe>
+    </div>
+
+    <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-3')">Lihat Penjelasan</div>
+    <div id="expandable-content-map-3" class="expandable-content">
+      <p><strong>Definisi:</strong> Peta yang menggambarkan fenomena tertentu, seperti data demografi, sosial, atau ekonomi, pada wilayah tertentu.</p>
+      <p><strong>Kapan Digunakan:</strong> Ketika ingin menyampaikan narasi data berbasis wilayah dan tema khusus.</p>
+      <p><strong>Contoh Pertanyaan:</strong></p>
+      <ul>
+        <li>Bagaimana sebaran fasilitas pendidikan di berbagai kabupaten?</li>
+      </ul>
+    </div>
+    <a href="peta_tematik.html" class="btn-link">Pelajari Lebih Lanjut</a>
+  </div>
+
+  <!-- PETA 4: Peta Choropleth -->
+  <div class="feature">
+    <h3>🧭 Peta Choropleth</h3>
+    <h4>Warna untuk Menunjukkan Nilai Agregat</h4>
+    <ul>
+      <li>Wilayah diwarnai berdasarkan nilai data</li>
+      <li>Cocok untuk menunjukkan variasi antar area</li>
+      <li>Contoh: pendapatan rata-rata per kecamatan</li>
+    </ul>
+
+    <strong>🌍 Contoh Peta Interaktif</strong>
+    <div style="margin-top:1rem;">
+      <iframe src="https://leafletjs.com/examples/choropleth/" width="100%" height="250" style="border:1px solid #ccc; border-radius:8px;"></iframe>
+    </div>
+
+    <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-4')">Lihat Penjelasan</div>
+    <div id="expandable-content-map-4" class="expandable-content">
+      <p><strong>Definisi:</strong> Peta choropleth mengisi area (misalnya provinsi, kecamatan) dengan warna sesuai nilai statistik (seperti jumlah kasus, rata-rata skor).</p>
+      <p><strong>Kapan Digunakan:</strong> Sangat berguna saat membandingkan wilayah secara relatif berdasarkan satu variabel.</p>
+      <p><strong>Contoh Pertanyaan:</strong></p>
+      <ul>
+        <li>Wilayah mana yang memiliki persentase pengangguran tertinggi?</li>
+      </ul>
+    </div>
+    <a href="peta_choropleth.html" class="btn-link">Pelajari Lebih Lanjut</a>
+  </div>
+</section>
+
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi. 
+  </footer>
+
+  <script>
+    function toggleExpand(contentId) {
+      var content = document.getElementById(contentId);
+      // Toggle max-height to expand/collapse
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    }
+  </script>
+
+</body>
+</html>
