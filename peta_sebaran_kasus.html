@@ -1,69 +1,48 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
   <meta charset="UTF-8">
   <title>Dotmap CSV Indonesia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- TailwindCSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- PapaParse -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-
 </head>
 
 <body class="bg-gray-100 flex flex-col items-center">
-
   <div class="container max-w-4xl w-full p-6 mt-10 bg-white shadow-lg rounded-lg">
-
     <h2 class="text-2xl text-center font-semibold text-gray-800 mb-4">Upload CSV dan Tampilkan Dotmap (Peta Kasus)</h2>
 
     <input type="file" id="csvFile" accept=".csv" class="px-4 py-2 border rounded-lg mb-4 w-full bg-gray-100" />
     <button id="showMapBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 w-full" disabled>Tampilkan Titik</button>
     <div id="status" class="mt-3 text-gray-600">Silakan upload file CSV berisi latitude & longitude.</div>
 
-    <!-- Dropdown untuk memilih kolom yang akan divisualisasikan -->
-    <div id="interpretation" class="mt-6 hidden">
+    <div id="interpretationSection" class="mt-6 hidden">
       <h3 class="text-xl font-semibold text-gray-700">Pilih Variabel untuk Interpretasi:</h3>
-      <div class="variable-selector mt-2">
-        <select id="columnSelect" class="px-4 py-2 border rounded-lg bg-gray-100 w-full">
-          <option value="" disabled selected>Pilih Kolom untuk Interpretasi</option>
-        </select>
-      </div>
+      <select id="columnSelect" class="mt-2 px-4 py-2 border rounded-lg bg-gray-100 w-full">
+        <option value="" disabled selected>Pilih Kolom untuk Interpretasi</option>
+      </select>
       <div id="summary" class="mt-4 text-gray-700"></div>
+      <div id="interpretation" class="mb-4 text-sm bg-blue-50 p-4 rounded"></div>
     </div>
 
-    <!-- Peta -->
     <div id="map" class="mt-6 rounded-lg border" style="height: 400px;"></div>
-
   </div>
 
   <script>
-    // Inisialisasi tile layer untuk OpenStreetMap
     const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap'
     });
-
-    // Inisialisasi tile layer untuk Satellite (ESRI)
-    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' +
-      'World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles © Esri'
     });
 
-    // Inisialisasi peta dengan OSM sebagai default
     const map = L.map('map', {
       center: [-2.5, 118],
       zoom: 5,
-      layers: [osmLayer] // default layer
+      layers: [osmLayer]
     });
-
-    // Control untuk ganti layer
     const baseMaps = {
       "OpenStreetMap": osmLayer,
       "Satellite": satelliteLayer
@@ -73,12 +52,11 @@
     let parsedData = [];
     let latKey, lonKey;
     let selectedColumn;
+    let legendControl;
 
-    // Fungsi deteksi kolom latitude/longitude
     function detectLatLonFields(headers) {
       const latCandidates = ['lat', 'latitude', 'Latitude', 'LAT'];
       const lonCandidates = ['lon', 'lng', 'long', 'longitude', 'Longitude', 'LON', 'LNG'];
-
       let lat = null, lon = null;
 
       for (const key of headers) {
@@ -86,15 +64,12 @@
         if (!lat && latCandidates.includes(lower)) lat = key;
         if (!lon && lonCandidates.includes(lower)) lon = key;
       }
-
       return { latKey: lat, lonKey: lon };
     }
 
-    // Fungsi untuk menganalisis data numerik atau kategorikal
     function analyzeColumn(data, column) {
       const values = data.map(row => row[column]);
       const isNumeric = values.every(value => !isNaN(value));
-
       if (isNumeric) {
         const numericValues = values.map(Number);
         const min = Math.min(...numericValues);
@@ -104,120 +79,65 @@
       } else {
         const freqMap = {};
         values.forEach(value => freqMap[value] = (freqMap[value] || 0) + 1);
-        const freqSummary = Object.entries(freqMap).map(([key, val]) => `${key}: ${val}`).join(', ');
-        return `Frekuensi: ${freqSummary}`;
+        return `Frekuensi: ${Object.entries(freqMap).map(([k, v]) => `${k}: ${v}`).join(', ')}`;
       }
     }
 
-    // Fungsi untuk mendapatkan warna berdasarkan kategori
     function getCategoryColor(value, categories) {
       const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#A1FF33', '#33FFF0'];
-      const categoryIndex = categories.indexOf(value);
-      return colors[categoryIndex % colors.length];
+      const index = categories.indexOf(value);
+      return colors[index % colors.length];
     }
 
-    // Fungsi untuk menampilkan legenda
-    let legendControl;
-
-function updateLegend(categories) {
-  // Hapus legend lama jika ada
-  if (legendControl) {
-    map.removeControl(legendControl);
-  }
-
-  legendControl = L.control({ position: 'bottomright' });
-
-  legendControl.onAdd = function () {
-    const div = L.DomUtil.create('div', 'info legend bg-white p-2 rounded shadow');
-    div.innerHTML = '<strong>Legenda:</strong><br>';
-
-    categories.forEach(category => {
-      const color = getCategoryColor(category, categories);
-      div.innerHTML += `<i style="background:${color}; width:12px; height:12px; display:inline-block; margin-right:8px; border-radius:50%;"></i>${category}<br>`;
-    });
-
-    return div;
-  };
-
-  legendControl.addTo(map);
-}
-
-
-    document.getElementById('csvFile').addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      document.getElementById('status').textContent = "Memproses file...";
-
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: function (results) {
-          const headers = results.meta.fields;
-          const detected = detectLatLonFields(headers);
-
-          if (!detected.latKey || !detected.lonKey) {
-            document.getElementById('status').textContent = "Kolom latitude/longitude tidak ditemukan.";
-            return;
-          }
-
-          latKey = detected.latKey;
-          lonKey = detected.lonKey;
-
-          parsedData = results.data.filter(row => {
-            const lat = parseFloat(row[latKey]);
-            const lon = parseFloat(row[lonKey]);
-            return !isNaN(lat) && !isNaN(lon);
-          });
-
-          if (parsedData.length > 0) {
-            document.getElementById('showMapBtn').disabled = false;
-            document.getElementById('status').textContent = `Berhasil memuat ${parsedData.length} titik. Klik "Tampilkan Titik".`;
-
-            // Menampilkan dropdown untuk memilih kolom lain
-            const columns = Object.keys(results.data[0]);
-            const selectElement = document.getElementById('columnSelect');
-            columns.forEach(col => {
-              if (col !== latKey && col !== lonKey) {
-                const option = document.createElement('option');
-                option.value = col;
-                option.textContent = col;
-                selectElement.appendChild(option);
-              }
-            });
-
-            // Menampilkan bagian interpretasi
-            document.getElementById('interpretation').style.display = 'block';
-
-            // Mendengarkan perubahan pilihan kolom
-            selectElement.addEventListener('change', function () {
-              selectedColumn = this.value;
-              const interpretation = analyzeColumn(parsedData, selectedColumn);
-              document.getElementById('summary').textContent = interpretation;
-
-              // Mengupdate titik pada peta dengan warna berdasarkan kategori
-              updateMapWithColor(selectedColumn);
-            });
-
-          } else {
-            document.getElementById('status').textContent = "Tidak ada titik valid yang ditemukan.";
-          }
-        }
+    function updateLegend(categories, data, column) {
+      const freqMap = {};
+      data.forEach(row => {
+        const value = row[column];
+        freqMap[value] = (freqMap[value] || 0) + 1;
       });
-    });
+      const total = data.length;
 
-    // Fungsi untuk menampilkan titik pada peta dengan warna berdasarkan kategori
+      if (legendControl) map.removeControl(legendControl);
+
+      legendControl = L.control({ position: 'bottomright' });
+      legendControl.onAdd = function () {
+        const div = L.DomUtil.create('div', 'info legend bg-white p-2 rounded shadow');
+        div.innerHTML = '<strong>Legenda:</strong><br>';
+        categories.forEach(category => {
+          const color = getCategoryColor(category, categories);
+          const count = freqMap[category] || 0;
+          const percentage = ((count / total) * 100).toFixed(1);
+          div.innerHTML += `<i style="background:${color}; width:12px; height:12px; display:inline-block; margin-right:8px; border-radius:50%;"></i>${category} ${count} (${percentage}%)<br>`;
+        });
+        return div;
+      };
+      legendControl.addTo(map);
+    }
+
+    function updateInterpretation(data, column) {
+      const freqMap = {};
+      data.forEach(row => {
+        const value = row[column];
+        freqMap[value] = (freqMap[value] || 0) + 1;
+      });
+      const total = data.length;
+      const sorted = Object.entries(freqMap).sort((a, b) => b[1] - a[1]);
+      const summary = sorted.map(([cat, count]) => {
+        const p = ((count / total) * 100).toFixed(1);
+        return `${count} wilayah (${p}%) termasuk dalam kategori "<strong>${cat}</strong>"`;
+      });
+      const sentence = `Berdasarkan data yang tersedia, dari total ${total} wilayah, ${summary.join(', ').replace(/, ([^,]*)$/, ', dan $1')}.`;
+      const maxCat = sorted[0][0];
+      const conclusion = `Temuan ini menunjukkan bahwa sebagian besar wilayah berada dalam kategori "<strong>${maxCat}</strong>".`;
+      document.getElementById('interpretation').innerHTML = `<p>${sentence}</p><p>${conclusion}</p>`;
+    }
+
     function updateMapWithColor(column) {
-      // Menghapus layer lama
       map.eachLayer(layer => {
-        if (layer instanceof L.Marker) {
-          map.removeLayer(layer);
-        }
+        if (layer instanceof L.CircleMarker) map.removeLayer(layer);
       });
 
-      const categories = [...new Set(parsedData.map(row => row[column]))];  // Menyaring kategori unik
-      updateLegend(categories);  // Memperbarui legenda dengan kategori baru
-
+      const categories = [...new Set(parsedData.map(row => row[column]))];
       const bounds = [];
 
       parsedData.forEach(row => {
@@ -231,31 +151,77 @@ function updateLegend(categories) {
             weight: 1,
             opacity: 1,
             fillOpacity: 0.85
-          }).bindPopup(`Lat: ${lat}<br>Lon: ${lon}`).addTo(map);
-
+          }).bindPopup(`${column}: ${row[column]}<br>Lat: ${lat}, Lon: ${lon}`).addTo(map);
           bounds.push([lat, lon]);
         }
       });
 
       if (bounds.length > 0) {
         map.fitBounds(bounds, { padding: [20, 20] });
-        document.getElementById('status').textContent = "Titik berhasil ditampilkan dan peta disesuaikan.";
-      } else {
-        document.getElementById('status').textContent = "Tidak ada titik valid untuk ditampilkan.";
+        document.getElementById('status').textContent = "Titik berhasil ditampilkan.";
       }
 
-      this.disabled = true;
+      updateLegend(categories, parsedData, column);
+      updateInterpretation(parsedData, column);
     }
 
+    document.getElementById('csvFile').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      document.getElementById('status').textContent = "Memproses file...";
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: function (results) {
+          const headers = results.meta.fields;
+          const detected = detectLatLonFields(headers);
+          if (!detected.latKey || !detected.lonKey) {
+            document.getElementById('status').textContent = "Kolom latitude/longitude tidak ditemukan.";
+            return;
+          }
+          latKey = detected.latKey;
+          lonKey = detected.lonKey;
+          parsedData = results.data.filter(row => {
+            const lat = parseFloat(row[latKey]);
+            const lon = parseFloat(row[lonKey]);
+            return !isNaN(lat) && !isNaN(lon);
+          });
+
+          if (parsedData.length > 0) {
+            document.getElementById('showMapBtn').disabled = false;
+            document.getElementById('status').textContent = `Berhasil memuat ${parsedData.length} titik.`;
+            const columns = headers.filter(col => col !== latKey && col !== lonKey);
+            const select = document.getElementById('columnSelect');
+            select.innerHTML = '<option value="" disabled selected>Pilih Kolom untuk Interpretasi</option>';
+            columns.forEach(col => {
+              const opt = document.createElement('option');
+              opt.value = col;
+              opt.textContent = col;
+              select.appendChild(opt);
+            });
+            document.getElementById('interpretationSection').style.display = 'block';
+          } else {
+            document.getElementById('status').textContent = "Tidak ada titik valid ditemukan.";
+          }
+        }
+      });
+    });
+
     document.getElementById('showMapBtn').addEventListener('click', function () {
-      const selectedColumn = document.getElementById('columnSelect').value;
-      updateMapWithColor(selectedColumn);
+      const col = document.getElementById('columnSelect').value;
+      if (col) updateMapWithColor(col);
+    });
+
+    document.getElementById('columnSelect').addEventListener('change', function () {
+      selectedColumn = this.value;
+      const summary = analyzeColumn(parsedData, selectedColumn);
+      document.getElementById('summary').textContent = summary;
     });
   </script>
 </body>
 
-<footer>
-    &copy; 2025 Pavio. Seluruh hak cipta dilindungi. 
-  </footer>
-  
+<footer class="text-sm text-center mt-8 text-gray-600">
+  &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
+</footer>
 </html>
