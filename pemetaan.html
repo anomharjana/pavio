@@ -13,6 +13,12 @@
       color: #333;
     }
 
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
     header {
       display: flex;
       align-items: center;
@@ -120,9 +126,8 @@
       font-size: 0.9rem;
     }
 
-    /* Styling untuk expandable content */
     .expandable-content {
-      background-color: #e0f7fa; /* Light blue */
+      background-color: #e0f7fa;
       padding: 1rem;
       border-radius: 8px;
       margin-top: 1rem;
@@ -145,6 +150,25 @@
       outline: none;
     }
 
+    /* Responsive iframe */
+    .responsive-iframe-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 1rem;
+    }
+
+    .responsive-iframe-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
   </style>
 </head>
 <body>
@@ -169,9 +193,9 @@
       <li>Contoh: peta penyebaran DBD</li>
     </ul>
 
-    <strong>🌍 Contoh Peta Interaktif</strong>
-    <div style="margin-top:1rem;">
-      <iframe src="https://leafletjs.com/examples/quick-start/example.html" width="100%" height="250" style="border:1px solid #ccc; border-radius:8px;"></iframe>
+    <strong>🌍 Contoh Peta</strong>
+    <div class="responsive-iframe-container">
+      <iframe src="https://res.cloudinary.com/djexglfns/image/upload/v1746799745/Slide1_milb4z.png"></iframe>
     </div>
 
     <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-1')">Lihat Penjelasan</div>
@@ -183,7 +207,7 @@
         <li>Di mana titik konsentrasi kasus flu burung di tahun tertentu?</li>
       </ul>
     </div>
-    <a href="peta_sebaran_kasus.html" class="btn-link">Pelajari Lebih Lanjut</a>
+    <a href="peta_sebaran_kasus.html" class="btn-link">Buat Peta Sebaran Kasus</a>
   </div>
 
   <!-- PETA 2: Peta Panas -->
@@ -196,9 +220,9 @@
       <li>Contoh: kepadatan penduduk, titik kejadian</li>
     </ul>
 
-    <strong>🌍 Contoh Peta Interaktif</strong>
-    <div style="margin-top:1rem;">
-      <iframe src="https://www.patrick-wied.at/static/heatmapjs/example-heatmap.html" width="100%" height="250" style="border:1px solid #ccc; border-radius:8px;"></iframe>
+    <strong>🌍 Contoh Peta</strong>
+    <div class="responsive-iframe-container">
+      <iframe src="https://res.cloudinary.com/djexglfns/image/upload/v1746799745/Slide2_xwro5j.png"></iframe>
     </div>
 
     <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-2')">Lihat Penjelasan</div>
@@ -210,7 +234,7 @@
         <li>Bagian kota mana yang memiliki lalu lintas kendaraan tertinggi?</li>
       </ul>
     </div>
-    <a href="peta_panas.html" class="btn-link">Pelajari Lebih Lanjut</a>
+    <a href="peta_panas.html" class="btn-link">Buat Peta Panas</a>
   </div>
 
   <!-- PETA 3: Peta Tematik -->
@@ -223,9 +247,9 @@
       <li>Contoh: Peta tingkat literasi, akses air bersih</li>
     </ul>
 
-    <strong>🌍 Contoh Peta Interaktif</strong>
-    <div style="margin-top:1rem;">
-      <iframe src="https://storymaps.arcgis.com/stories/8e3d91aefb7e42a7b1b3e5c07b1f7ee5" width="100%" height="250" style="border:1px solid #ccc; border-radius:8px;"></iframe>
+    <strong>🌍 Contoh Peta</strong>
+    <div class="responsive-iframe-container">
+      <iframe src="https://res.cloudinary.com/djexglfns/image/upload/v1746799745/Slide3_mptcac.png"></iframe>
     </div>
 
     <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-3')">Lihat Penjelasan</div>
@@ -237,7 +261,7 @@
         <li>Bagaimana sebaran fasilitas pendidikan di berbagai kabupaten?</li>
       </ul>
     </div>
-    <a href="peta_tematik.html" class="btn-link">Pelajari Lebih Lanjut</a>
+    <a href="peta_tematik.html" class="btn-link">Buat Peta Tematik</a>
   </div>
 
   <!-- PETA 4: Peta Choropleth -->
@@ -250,9 +274,9 @@
       <li>Contoh: pendapatan rata-rata per kecamatan</li>
     </ul>
 
-    <strong>🌍 Contoh Peta Interaktif</strong>
-    <div style="margin-top:1rem;">
-      <iframe src="https://leafletjs.com/examples/choropleth/" width="100%" height="250" style="border:1px solid #ccc; border-radius:8px;"></iframe>
+    <strong>🌍 Contoh Peta</strong>
+    <div class="responsive-iframe-container">
+      <iframe src="https://res.cloudinary.com/djexglfns/image/upload/v1746799744/Slide4_hft0zu.png"></iframe>
     </div>
 
     <div role="button" class="expand-btn" onclick="toggleExpand('expandable-content-map-4')">Lihat Penjelasan</div>
@@ -264,26 +288,24 @@
         <li>Wilayah mana yang memiliki persentase pengangguran tertinggi?</li>
       </ul>
     </div>
-    <a href="peta_choropleth.html" class="btn-link">Pelajari Lebih Lanjut</a>
+    <a href="peta_choropleth.html" class="btn-link">Buat Peta Choropleth</a>
   </div>
 </section>
 
+<footer>
+  &copy; 2025 Pavio. Seluruh hak cipta dilindungi. 
+</footer>
 
-  <footer>
-    &copy; 2025 Pavio. Seluruh hak cipta dilindungi. 
-  </footer>
-
-  <script>
-    function toggleExpand(contentId) {
-      var content = document.getElementById(contentId);
-      // Toggle max-height to expand/collapse
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-      }
+<script>
+  function toggleExpand(contentId) {
+    var content = document.getElementById(contentId);
+    if (content.style.maxHeight) {
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
     }
-  </script>
+  }
+</script>
 
 </body>
 </html>
