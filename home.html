@@ -102,28 +102,35 @@
       transform: scale(1.05);
     }
 
-    /* Badge Style */
-    .badge {
-      color: white;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.85rem;
-      border-radius: 12px;
-      margin-left: 10px;
-    }
-
-    .badge-gratis {
-      background-color: #4caf50; /* Hijau untuk "Gratis" */
-    }
-
-    .badge-premium {
-      background-color: #ff5722; /* Oranye untuk "Premium" */
-    }
-
     footer {
       text-align: center;
       padding: 2rem;
       color: #aaa;
       font-size: 0.9rem;
+    }
+
+    /* Floating Help Button */
+    .help-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .help-button:hover {
+      background-color: #43a047;
     }
   </style>
 </head>
@@ -138,13 +145,20 @@
     </div>
   </header>
 
+  <div class="feature">
+    <h3>
+      <svg viewBox="0 0 24 24"><path d="M5 3h14v2H5zM7 6h10v2H7zM4 9h16v2H4zM6 12h12v2H6zM5 15h14v2H5zM8 18h8v2H8z"/></svg>
+      Perhitungan Besar Sampel
+    </h3>
+    <p>Hitung jumlah sampel: proporsi, rerata, korelasi.</p>
+    <button onclick="window.location.href='sampel.html'">Hitung Sampel</button>
+  </div>
+
   <section class="features">
     <div class="feature">
       <h3>
-        <!-- Statistik Deskriptif Icon -->
         <svg viewBox="0 0 24 24"><path d="M4 20V10M8 20V4M12 20v-6M16 20v-2M20 20v-8"/></svg>
         Statistik Deskriptif
-        <span class="badge badge-gratis">Gratis</span>
       </h3>
       <p>Rangkuman data: rata-rata, median, modus, histogram, pie chart, boxplot.</p>
       <button onclick="window.location.href='deskriptif.html'">Lihat Statistik</button>
@@ -152,10 +166,8 @@
 
     <div class="feature">
       <h3>
-        <!-- Uji Perbedaan Icon -->
         <svg viewBox="0 0 24 24"><path d="M3 12h18M12 3v18" /></svg>
         Uji Perbedaan (Inferensial)
-        <span class="badge badge-premium">Premium</span>
       </h3>
       <p>Bandingkan kelompok: t-test, ANOVA, Chi-square, Fisher's Exact.</p>
       <button onclick="window.location.href='inferensial.html'">Mulai Uji Perbedaan</button>
@@ -163,10 +175,8 @@
 
     <div class="feature">
       <h3>
-        <!-- Korelasi Icon -->
         <svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><circle cx="3" cy="17" r="1"/><circle cx="9" cy="11" r="1"/><circle cx="13" cy="15" r="1"/><circle cx="21" cy="7" r="1"/></svg>
         Uji Hubungan (Korelasi)
-        <span class="badge badge-premium">Premium</span>
       </h3>
       <p>Lihat hubungan variabel: Pearson, Spearman, regresi sederhana.</p>
       <button onclick="window.location.href='korelasi.html'">Uji Hubungan</button>
@@ -174,10 +184,8 @@
 
     <div class="feature">
       <h3>
-        <!-- Multivariat Icon -->
         <svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
         Analisis Multivariat
-        <span class="badge badge-premium">Premium</span>
       </h3>
       <p>Regresi ganda, regresi logistik, PCA.</p>
       <button onclick="window.location.href='multivariat.html'">Mulai Multivariat</button>
@@ -185,10 +193,8 @@
 
     <div class="feature">
       <h3>
-        <!-- Diagnostik Icon -->
         <svg viewBox="0 0 24 24"><path d="M12 3v18M5 12h14M4 4l16 16"/></svg>
         Uji Diagnostik & Validasi
-        <span class="badge badge-premium">Premium</span>
       </h3>
       <p>Evaluasi model: QQ plot, ROC, sensitivitas, spesifisitas.</p>
       <button onclick="window.location.href='diagnostik.html'">Validasi Model</button>
@@ -196,31 +202,20 @@
 
     <div class="feature">
       <h3>
-        <!-- Sampel Icon -->
-        <svg viewBox="0 0 24 24"><path d="M5 3h14v2H5zM7 6h10v2H7zM4 9h16v2H4zM6 12h12v2H6zM5 15h14v2H5zM8 18h8v2H8z"/></svg>
-        Perhitungan Besar Sampel
-        <span class="badge badge-gratis">Gratis</span>
-      </h3>
-      <p>Hitung jumlah sampel: proporsi, rerata, korelasi.</p>
-      <button onclick="window.location.href='sampel.html'">Hitung Sampel</button>
-    </div>
-
-    <div class="feature">
-      <h3>
-        <!-- Mapping Icon -->
         <svg viewBox="0 0 24 24"><path d="M3 6l7-2 7 2 4-1v14l-4 1-7-2-7 2-4 1V6zM10 4v14M17 6v14"/></svg>
         Peta (Mapping)
-        <span class="badge badge-premium">Premium</span>
       </h3>
       <p>Visualisasi spasial: peta sebaran, peta panas, dan titik koordinat.</p>
       <button onclick="window.location.href='pemetaan.html'">Lihat Peta</button>
     </div>
-
-    
   </section>
 
   <footer>
     &copy; 2025 Pavio. Seluruh hak cipta dilindungi. 
   </footer>
+
+  <!-- Floating Help Button -->
+  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">?</button>
+
 </body>
 </html>
