@@ -158,6 +158,32 @@
     .feature-item {
       margin-bottom: 1.5rem;
     }
+
+    
+    /* Floating Help Button */
+    .help-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .help-button:hover {
+      background-color: #43a047;
+    }
+
   </style>
 </head>
 
@@ -320,6 +346,11 @@
       });
     });
   </script>
+
+  
+  <!-- Floating Help Button -->
+  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">?</button>
+
 </body>
 
 </html>
