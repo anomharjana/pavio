@@ -132,11 +132,11 @@
     }
 
     .badge.starter {
-      background-color: #f97316; /* orange */
+      background-color: #f97316;
     }
 
     .badge.pro {
-      background-color: #10b981; /* green */
+      background-color: #10b981;
     }
 
     footer {
@@ -146,7 +146,6 @@
       font-size: 0.9rem;
     }
 
-    /* Floating Help Button */
     .help-button {
       position: fixed;
       bottom: 20px;
@@ -169,7 +168,6 @@
     .help-button:hover {
       background-color: #43a047;
     }
-    
   </style>
 </head>
 <body>
@@ -183,12 +181,20 @@
     </div>
   </header>
 
-  <!-- Intro Teks Ditambahkan Di Sini -->
   <div class="subscription-intro">
     <p><strong>Nikmati semua akses fitur premium dan update tambahan fitur dengan berlangganan Pavio sekarang. </strong></p>
   </div>
 
   <section class="subscription-section">
+    <!-- Card Coba Gratis -->
+    <div class="subscription-card" style="border: 2px solid #6366f1;">
+      <span class="badge" style="background-color: #6366f1;">Coba Gratis</span>
+      <h3>Coba Gratis 7 Hari</h3>
+      <p class="price">Rp0 / 7 hari</p>
+      <p>Rasakan pengalaman fitur premium Pavio tanpa biaya selama 7 hari.</p>
+      <button onclick="window.location.href='http://lynk.id/anomharjana/free-trial'">Mulai Coba Gratis</button>
+    </div>
+
     <div class="subscription-card" style="border: 2px solid #f97316;">
       <span class="badge starter">Cocok untuk Pemula</span>
       <h3>Langganan 1 Bulan</h3>
@@ -218,18 +224,15 @@
     &copy; 2025 Pavio. Seluruh hak cipta dilindungi. 
   </footer>
 
-  <!-- Floating Help Button -->
   <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">?</button>
 
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TL1GH741HF"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TL1GH741HF');
-</script>
-  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TL1GH741HF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TL1GH741HF');
+  </script>
 </body>
 </html>
