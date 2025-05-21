@@ -76,8 +76,6 @@
     .access-form-container button {
       width: 100%;
       padding: 0.75rem 1rem;
-      background-color: #333;
-      color: white;
       border: none;
       border-radius: 8px;
       font-size: 1rem;
@@ -85,8 +83,24 @@
       transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    .access-form-container button:hover {
+    .access-form-container button.try {
+      background-color: #333;
+      color: white;
+      margin-bottom: 0.75rem;
+    }
+
+    .access-form-container button.try:hover {
       background-color: #000;
+      transform: scale(1.03);
+    }
+
+    .access-form-container button.get {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .access-form-container button.get:hover {
+      background-color: #43a047;
       transform: scale(1.03);
     }
 
@@ -145,7 +159,10 @@
   <section class="access-form-container">
     <h2>Masukkan Kode Akses</h2>
     <input type="text" id="kodeAkses" placeholder="Contoh: PAVIO123" />
-    <button onclick="cekKodeAkses()">Coba Sekarang</button>
+    <button class="try" onclick="cekKodeAkses()">Coba Sekarang</button>
+    <button class="get" onclick="window.location.href='https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20ingin%20mendapatkan%20kode%20trial.'">
+      Dapatkan Kode Trial
+    </button>
     <div id="peringatan" class="warning-box">Kode akses tidak valid. Silakan coba lagi.</div>
   </section>
 
@@ -158,8 +175,8 @@
   <script>
     function cekKodeAkses() {
       const input = document.getElementById('kodeAkses').value.trim().toUpperCase();
-      const kodeValid = ["PAVIO123", "COBA2025", "AKSESPENUH"]; // Tambahkan lebih banyak kode jika perlu
-      const halamanRedirect = "trial_sampling.html"; // Ganti dengan halaman tujuan
+      const kodeValid = ["PAVIO123", "COBA2025", "AKSESPENUH"]; // Tambahkan kode yang diizinkan di sini
+      const halamanRedirect = "trial_sampling.html";
 
       const peringatan = document.getElementById('peringatan');
 
