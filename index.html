@@ -261,7 +261,38 @@
 
   </header>
 
-  <section class="features">
+    <!-- Fitur 7: Carousel -->
+    <div class="feature" style="grid-column: 1 / -1">
+      <div class="carousel-container">
+        <h3> 🕹️ Proses Analisis Menggunakan Pavio </h3>
+        <div class="carousel-wrapper">
+          <div class="carousel" id="carouselImages">
+            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0001_mftemk.jpg" alt="Langkah 1" />
+            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148414/Tutorial_Pavio_page-0002_ujuiom.jpg" alt="Langkah 2" />
+            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0003_ogenvd.jpg" alt="Langkah 3" />
+            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0004_xqaqjb.jpg" alt="Langkah 4" />
+            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148417/Tutorial_Pavio_page-0005_b6ascm.jpg" alt="Langkah 5" />
+          </div>
+        </div>
+        <div class="carousel-controls">
+          <button onclick="prevSlide()">Sebelumnya</button>
+          <button onclick="nextSlide()">Berikutnya</button>
+        </div>
+        <div class="carousel-indicators" id="carouselDots"></div>
+      </div>
+    </div>
+
+    <!-- Fitur 8: Konversi Excel ke CSV -->
+    <div class="feature" style="grid-column: 1 / -1">
+      <div class="converter">
+        <h3>📤 Konversi Excel ke CSV</h3>
+        <input type="file" id="excelFile" accept=".xls,.xlsx" />
+        <br />
+        <button onclick="convertExcelToCSV()">Konversi Sekarang</button>
+      </div>
+    </div>
+
+<section class="features">
     <!-- 6 fitur asli Anda -->
     <div class="feature">
       <h3>
@@ -321,38 +352,7 @@
       </h3>
       <p>Unduh laporan analisis dalam format rapi dan siap cetak untuk presentasi atau dokumentasi.</p>
     </div>
-
-    <!-- Fitur 7: Carousel -->
-    <div class="feature" style="grid-column: 1 / -1">
-      <div class="carousel-container">
-        <h3> 🕹️ Proses Analisis Menggunakan Pavio </h3>
-        <div class="carousel-wrapper">
-          <div class="carousel" id="carouselImages">
-            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0001_mftemk.jpg" alt="Langkah 1" />
-            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148414/Tutorial_Pavio_page-0002_ujuiom.jpg" alt="Langkah 2" />
-            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0003_ogenvd.jpg" alt="Langkah 3" />
-            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0004_xqaqjb.jpg" alt="Langkah 4" />
-            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148417/Tutorial_Pavio_page-0005_b6ascm.jpg" alt="Langkah 5" />
-          </div>
-        </div>
-        <div class="carousel-controls">
-          <button onclick="prevSlide()">Sebelumnya</button>
-          <button onclick="nextSlide()">Berikutnya</button>
-        </div>
-        <div class="carousel-indicators" id="carouselDots"></div>
-      </div>
-    </div>
-
-    <!-- Fitur 8: Konversi Excel ke CSV -->
-    <div class="feature" style="grid-column: 1 / -1">
-      <div class="converter">
-        <h3>📤 Konversi Excel ke CSV</h3>
-        <input type="file" id="excelFile" accept=".xls,.xlsx" />
-        <br />
-        <button onclick="convertExcelToCSV()">Konversi Sekarang</button>
-      </div>
-    </div>
-
+    
     <!-- Fitur 9: Donasi -->
 <div class="feature" style="grid-column: 1 / -1; text-align: center;">
   <h3>❤️ Dukung pengembangan Pavio</h3>
