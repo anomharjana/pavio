@@ -70,8 +70,21 @@
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 8px;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       box-sizing: border-box;
+    }
+
+    .show-code-container {
+      text-align: left;
+      margin-bottom: 1rem;
+      user-select: none;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .show-code-container input[type="checkbox"] {
+      margin-right: 0.5rem;
+      cursor: pointer;
     }
 
     .access-form-container button {
@@ -218,7 +231,12 @@
 
   <section class="access-form-container">
     <h2>Masukkan Kode Akses</h2>
-    <input type="text" id="kodeAkses" placeholder="6 digit angka" />
+    <input type="password" id="kodeAkses" placeholder="6 digit angka" />
+    <div class="show-code-container">
+      <label>
+        <input type="checkbox" id="toggleShow" /> Tampilkan Kode
+      </label>
+    </div>
     <button class="try" onclick="cekKodeAkses()">Coba Sekarang</button>
 
     <div class="trial-container">
@@ -265,7 +283,7 @@
     }
 
     document.getElementById('infoIcon').addEventListener('click', function(event) {
-      event.stopPropagation(); // supaya klik tidak bubble ke body
+      event.stopPropagation();
       const tooltip = document.getElementById('tooltipInfo');
       if (tooltip.style.display === 'block') {
         tooltip.style.display = 'none';
@@ -274,10 +292,19 @@
       }
     });
 
-    // Klik di luar tooltip dan ikon untuk tutup tooltip
     document.body.addEventListener('click', function() {
       const tooltip = document.getElementById('tooltipInfo');
       tooltip.style.display = 'none';
+    });
+
+    // Toggle tampilkan kode akses
+    document.getElementById('toggleShow').addEventListener('change', function() {
+      const kodeInput = document.getElementById('kodeAkses');
+      if (this.checked) {
+        kodeInput.type = 'text';
+      } else {
+        kodeInput.type = 'password';
+      }
     });
   </script>
 
