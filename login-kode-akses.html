@@ -81,6 +81,12 @@
       fill: none;
     }
 
+    .feature svg.lock-icon {
+      fill: none;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
     .feature p {
       font-size: 0.95rem;
       color: #555;
@@ -178,7 +184,11 @@
   <section class="features">
     <form class="feature" onsubmit="return validateForm(event)">
       <h3>
-        <svg viewBox="0 0 24 24"><path d="M5 3h14v2H5zM7 6h10v2H7zM4 9h16v2H4zM6 12h12v2H6zM5 15h14v2H5zM8 18h8v2H8z"/></svg>
+        <!-- Ikon Kunci/Gembok -->
+        <svg class="lock-icon" viewBox="0 0 24 24" stroke="#333" stroke-width="2" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+          <rect x="6" y="10" width="12" height="10" rx="2" ry="2"/>
+          <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+        </svg>
         Masuk ke Pavio
       </h3>
       <p>Masukkan informasi Anda untuk melanjutkan.</p>
