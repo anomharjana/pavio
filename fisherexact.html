@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fisher's Exact Test Analyzer</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <script src="https://kit.fontawesome.com/a2d0c8e163.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800 p-6">
+  <div class="max-w-4xl mx-auto space-y-6">
+    <h1 class="text-3xl font-bold text-center">🔍 Analisis Fisher's Exact Test</h1>
+
+    <!-- Upload CSV dengan Drag & Drop -->
+    <div class="mb-6">
+      <label class="block font-medium mb-2"><i class="fa-solid fa-file-csv mr-2"></i>Upload Data CSV</label>
+      <div id="dropzone" class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center text-gray-500 cursor-pointer hover:bg-gray-50 transition">
+        <p class="mb-2"><i class="fa-solid fa-cloud-arrow-up text-3xl mb-2"></i><br>Seret file ke sini atau klik untuk memilih</p>
+        <input type="file" id="fileInput" accept=".csv" class="hidden">
+      </div>
+      <p class="text-sm text-gray-500 mt-1">Format: dua kolom tanpa header, contoh: <code>Laki-laki,Setuju</code></p>
+    </div>
+
+    <!-- Form Input -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Variabel 1 -->
+      <div class="bg-gray-50 p-4 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-3"><i class="fa-solid fa-layer-group mr-2"></i>Variabel 1 (Independen)</h2>
+        <label class="block text-sm font-medium mb-1">Nama Variabel:</label>
+        <input type="text" id="var1Name" class="w-full border rounded px-3 py-2 mb-2" />
+        <label class="block text-sm font-medium mb-1">Skala Data:</label>
+        <select id="var1Scale" class="w-full border rounded px-3 py-2 mb-2">
+          <option value="nominal">Nominal</option>
+          <option value="ordinal">Ordinal</option>
+        </select>
+        <label class="block text-sm font-medium mb-1">Data (1 kolom):</label>
+        <textarea id="var1Data" class="w-full border rounded px-3 py-2" rows="4"></textarea>
+      </div>
+
+      <!-- Variabel 2 -->
+      <div class="bg-gray-50 p-4 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-3"><i class="fa-solid fa-layer-group mr-2"></i>Variabel 2 (Dependen)</h2>
+        <label class="block text-sm font-medium mb-1">Nama Variabel:</label>
+        <input type="text" id="var2Name" class="w-full border rounded px-3 py-2 mb-2" />
+        <label class="block text-sm font-medium mb-1">Skala Data:</label>
+        <select id="var2Scale" class="w-full border rounded px-3 py-2 mb-2">
+          <option value="nominal">Nominal</option>
+          <option value="ordinal">Ordinal</option>
+        </select>
+        <label class="block text-sm font-medium mb-1">Data (1 kolom):</label>
+        <textarea id="var2Data" class="w-full border rounded px-3 py-2" rows="4"></textarea>
+      </div>
+    </div>
+
+    <!-- Button -->
+    <div class="text-center">
+      <button onclick="prosesAnalisis()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
+        <i class="fa-solid fa-magnifying-glass-chart mr-2"></i>Proses Analisis
+      </button>
+    </div>
+
+    <!-- Output -->
+    <div class="bg-white rounded-xl shadow p-6" id="hasil"></div>
+    <div class="chart-container" id="chartContainer"></div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    function handleCSVUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const text = e.target.result;
+        const rows = text.trim().split(/\r?\n/).map(line => line.split(","));
+
+        if (rows[0].length !== 2) {
+          alert("Format CSV tidak valid. Harus dua kolom tanpa header.");
+          return;
+        }
+
+        const var1 = rows.map(r => r[0].trim());
+        const var2 = rows.map(r => r[1].trim());
+
+        document.getElementById("var1Data").value = var1.join("\n");
+        document.getElementById("var2Data").value = var2.join("\n");
+      };
+
+      reader.readAsText(file);
+    }
+
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropzone.classList.add('bg-gray-100', 'border-blue-400');
+    });
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('bg-gray-100', 'border-blue-400');
+    });
+    dropzone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropzone.classList.remove('bg-gray-100', 'border-blue-400');
+      if (e.dataTransfer.files.length) {
+        handleCSVUpload({ target: { files: e.dataTransfer.files } });
+      }
+    });
+    fileInput.addEventListener('change', handleCSVUpload);
+
+    // Fisher's Exact Test function
+    function fisherExactTest(a, b, c, d) {
+      const numerator = (a * d) - (b * c);
+      const denominator = ((a + b) * (c + d) * (a + c) * (b + d));
+      return numerator / denominator;
+    }
+
+    function prosesAnalisis() {
+      const var1 = document.getElementById("var1Data").value.trim().split(/\r?\n/);
+      const var2 = document.getElementById("var2Data").value.trim().split(/\r?\n/);
+      const nama1 = document.getElementById("var1Name").value || "Variabel 1";
+      const nama2 = document.getElementById("var2Name").value || "Variabel 2";
+
+      if (var1.length !== var2.length) {
+        alert("Jumlah data kedua variabel harus sama.");
+        return;
+      }
+
+      // Create contingency table
+      const table = createContingencyTable(var1, var2);
+      console.log(table); // Debug: check if the table is created properly
+
+      // Fisher's exact test p-value calculation
+      const pValue = fisherExactTest(table[0][0], table[0][1], table[1][0], table[1][1]);
+
+      // Output interpretation
+      let interpretasi = pValue < 0.05
+        ? `✅ Terdapat hubungan signifikan antara <b>${nama1}</b> dan <b>${nama2}</b>, p = ${pValue.toFixed(4)} < 0.05.`
+        : `❌ Tidak terdapat hubungan signifikan antara <b>${nama1}</b> dan <b>${nama2}</b>, p = ${pValue.toFixed(4)} > 0.05.`;
+
+      // Display results
+      document.getElementById("hasil").innerHTML = `
+        <h3 class="text-xl font-semibold mb-2">Hasil Uji Fisher's Exact Test</h3>
+        <p class="mb-2">P-value: <b>${pValue.toFixed(4)}</b></p>
+        <p>${interpretasi}</p>
+        <div class="bg-gray-50 p-4 rounded-lg shadow mt-4">
+          <h4 class="text-lg font-semibold">Cross Tabulation Table:</h4>
+          <table class="table-auto border w-full mt-2">
+            <thead>
+              <tr>
+                <th class="border px-2 py-1">${nama2}</th>
+                ${[...new Set(var2)].map(item => `<th class="border px-2 py-1">${item}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${[...new Set(var1)].map(item => {
+                const rowData = var1.reduce((acc, val, idx) => {
+                  if (val === item) {
+                    acc[var2[idx]] = (acc[var2[idx]] || 0) + 1;
+                  }
+                  return acc;
+                }, {});
+                const row = [item];
+                Object.keys(rowData).forEach(col => {
+                  row.push(`${rowData[col]} (${((rowData[col] / var1.filter(v => v === item).length) * 100).toFixed(2)}%)`);
+                });
+                return `<tr><td class="border px-2 py-1">${item}</td>${row.slice(1).map(d => `<td class="border px-2 py-1">${d}</td>`).join('')}</tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    // Create cross-tabulation table from data
+    function createContingencyTable(var1, var2) {
+      const table = [];
+      const uniqueVar1 = [...new Set(var1)];
+      const uniqueVar2 = [...new Set(var2)];
+
+      uniqueVar1.forEach(() => {
+        table.push(new Array(uniqueVar2.length).fill(0));
+      });
+
+      for (let i = 0; i < var1.length; i++) {
+        const rowIndex = uniqueVar1.indexOf(var1[i]);
+        const colIndex = uniqueVar2.indexOf(var2[i]);
+        table[rowIndex][colIndex]++;
+      }
+
+      return table;
+    }
+  </script>
+</body>
+</html>
