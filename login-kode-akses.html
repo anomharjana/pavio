@@ -103,8 +103,6 @@
 
     .feature button {
       margin-top: 1.5rem;
-      background-color: #333;
-      color: white;
       border: none;
       padding: 0.6rem 1.2rem;
       font-size: 0.95rem;
@@ -114,8 +112,24 @@
       width: 100%;
     }
 
-    .feature button:hover {
-      background-color: #000;
+    .feature button.login-button {
+      background-color: #1e40af; /* biru tua */
+      color: white;
+    }
+
+    .feature button.login-button:hover {
+      background-color: #1e3a8a;
+      transform: scale(1.03);
+    }
+
+    .feature button.subscribe-button {
+      background-color: #f97316; /* oranye */
+      color: white;
+      margin-top: 0.8rem;
+    }
+
+    .feature button.subscribe-button:hover {
+      background-color: #c2410c;
       transform: scale(1.03);
     }
 
@@ -175,7 +189,8 @@
       <label for="kode">Kode Akses Pavio</label>
       <input type="text" id="kode" name="kode" required maxlength="11" placeholder="11 digit angka" />
 
-      <button type="submit">Masuk</button>
+      <button type="submit" class="login-button">Masuk</button>
+      <button type="button" class="subscribe-button" onclick="window.location.href='subscribe.html'">Mulai Berlangganan</button>
     </form>
   </section>
 
