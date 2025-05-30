@@ -55,6 +55,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
       text-align: center;
+      position: relative;
     }
 
     .access-form-container h2 {
@@ -94,14 +95,73 @@
       transform: scale(1.03);
     }
 
+    .trial-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
     .access-form-container button.get {
       background-color: #4caf50;
       color: white;
+      width: auto;
+      padding: 0.75rem 1.25rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      display: inline-block;
+      text-decoration: none;
+      user-select: none;
     }
 
     .access-form-container button.get:hover {
       background-color: #43a047;
       transform: scale(1.03);
+    }
+
+    .info-icon {
+      width: 24px;
+      height: 24px;
+      background-color: #4caf50;
+      color: white;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 24px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      transition: background-color 0.3s ease;
+    }
+
+    .info-icon:hover {
+      background-color: #43a047;
+    }
+
+    .tooltip-box {
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 280px;
+      padding: 0.75rem 1rem;
+      background-color: #e6f4ea;
+      color: #2e7d32;
+      border: 1px solid #a5d6a7;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
+      text-align: center;
+      user-select: none;
+      display: none;
+      z-index: 10;
+      pointer-events: auto;
     }
 
     .warning-box {
@@ -160,9 +220,17 @@
     <h2>Masukkan Kode Akses</h2>
     <input type="text" id="kodeAkses" placeholder="6 digit angka" />
     <button class="try" onclick="cekKodeAkses()">Coba Sekarang</button>
-    <button class="get" onclick="window.location.href='https://lynk.id/primajanaedu/l314kx5emnky/checkout'">
-      Dapatkan Kode Trial
-    </button>
+
+    <div class="trial-container">
+      <a href="https://lynk.id/primajanaedu/l314kx5emnky/checkout" class="get" target="_blank" rel="noopener noreferrer">
+        Dapatkan Kode Trial
+      </a>
+      <div class="info-icon" id="infoIcon" title="Informasi Kode Trial">i</div>
+      <div class="tooltip-box" id="tooltipInfo">
+        Kode akses akan dikirimkan via email, gratis dan bisa langsung dipakai
+      </div>
+    </div>
+
     <div id="peringatan" class="warning-box">Kode akses tidak valid. Silakan coba lagi.</div>
   </section>
 
@@ -195,6 +263,22 @@
         peringatan.style.display = "block";
       }
     }
+
+    document.getElementById('infoIcon').addEventListener('click', function(event) {
+      event.stopPropagation(); // supaya klik tidak bubble ke body
+      const tooltip = document.getElementById('tooltipInfo');
+      if (tooltip.style.display === 'block') {
+        tooltip.style.display = 'none';
+      } else {
+        tooltip.style.display = 'block';
+      }
+    });
+
+    // Klik di luar tooltip dan ikon untuk tutup tooltip
+    document.body.addEventListener('click', function() {
+      const tooltip = document.getElementById('tooltipInfo');
+      tooltip.style.display = 'none';
+    });
   </script>
 
   <!-- Google tag (gtag.js) -->
