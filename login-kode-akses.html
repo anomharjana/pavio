@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Masuk ke Sistem</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9fb;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      flex-wrap: wrap;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-brand img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #777;
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 70vh;
+      padding: 2rem;
+    }
+
+    .feature {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .feature h3 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature svg {
+      width: 24px;
+      height: 24px;
+      stroke: #333;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .feature p {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .feature label {
+      font-weight: 600;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    .feature input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .feature button {
+      margin-top: 1.5rem;
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      width: 100%;
+    }
+
+    .feature button:hover {
+      background-color: #000;
+      transform: scale(1.03);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    .help-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .help-button:hover {
+      background-color: #43a047;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>Paste & View — That’s All It Takes.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="features">
+    <form class="feature" onsubmit="return validateForm(event)">
+      <h3>
+        <svg viewBox="0 0 24 24"><path d="M5 3h14v2H5zM7 6h10v2H7zM4 9h16v2H4zM6 12h12v2H6zM5 15h14v2H5zM8 18h8v2H8z"/></svg>
+        Masuk ke Pavio
+      </h3>
+      <p>Masukkan informasi Anda untuk melanjutkan.</p>
+
+      <label for="email">Email</label>
+      <input type="text" id="email" name="email" placeholder="nama@email.com" />
+
+      <label for="kode">Kode Akses Pavio</label>
+      <input type="text" id="kode" name="kode" required maxlength="11" placeholder="11 digit angka" />
+
+      <button type="submit">Masuk</button>
+    </form>
+  </section>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
+  </footer>
+
+  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">?</button>
+
+  <script>
+    function validateForm(event) {
+      event.preventDefault();
+
+      const kode = document.getElementById("kode").value.trim();
+      const kodeBenar = "12345678901";
+
+      if (!/^[0-9]{11}$/.test(kode)) {
+        alert("Kode akses harus terdiri dari 11 digit angka.");
+        return false;
+      }
+
+      if (kode === kodeBenar) {
+        window.location.href = "dashboard.html";
+      } else {
+        alert("Kode akses salah. Silakan hubungi admin untuk mereset kode Anda.");
+      }
+
+      return false;
+    }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TL1GH741HF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TL1GH741HF');
+  </script>
+</body>
+</html>
