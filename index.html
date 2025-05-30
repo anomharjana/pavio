@@ -211,6 +211,41 @@
       background-color: #43a047;
     }
     
+    .cta.button-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.cta.button-group button {
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  color: white;
+}
+
+.cta .btn-try {
+  background-color: #333;
+}
+
+.cta .btn-try:hover {
+  background-color: #000;
+  transform: scale(1.05);
+}
+
+.cta .btn-login {
+  background-color: #007bff; /* biru */
+}
+
+.cta .btn-login:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
   </style>
 </head>
 
@@ -219,12 +254,11 @@
     <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745342403/Final_Logo_Pavio_rikmvg.png" alt="Logo Pavio" />
     <h1></h1>
     <p class="lead">Tempel atau unggah data Anda. Lihat hasil analisis langsung tanpa ribet!</p>
-    <div class="cta">
-      <button onclick="window.location.href='home.html'">Coba Pavio</button>
-    </div>
-    <div class="cta">
-      <button onclick="window.location.href='login-kode-akses.html'">Login Pavio</button>
-    </div>
+    <div class="cta button-group">
+  <button class="btn-try" onclick="window.location.href='home.html'">Coba Pavio Sekarang</button>
+  <button class="btn-login" onclick="window.location.href='login.html'">Login</button>
+</div>
+
   </header>
 
   <section class="features">
