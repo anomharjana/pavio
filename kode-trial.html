@@ -64,27 +64,38 @@
       font-weight: 600;
     }
 
-    .access-form-container input {
+    input#kodeAkses {
       width: 100%;
       padding: 0.75rem 1rem;
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 8px;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
       box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    input#kodeAkses:focus {
+      border-color: #4caf50;
+      outline: none;
     }
 
     .show-code-container {
-      text-align: left;
-      margin-bottom: 1rem;
-      user-select: none;
-      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
       color: #555;
+      user-select: none;
     }
 
     .show-code-container input[type="checkbox"] {
-      margin-right: 0.5rem;
+      width: 18px;
+      height: 18px;
       cursor: pointer;
+      accent-color: #4caf50;
     }
 
     .access-form-container button {
@@ -115,25 +126,21 @@
       gap: 0.5rem;
       position: relative;
       margin-bottom: 1rem;
+      font-size: 1rem;
     }
 
-    .access-form-container button.get {
-      background-color: #4caf50;
-      color: white;
-      width: auto;
-      padding: 0.75rem 1.25rem;
-      font-weight: 600;
-      border-radius: 8px;
+    /* Link biasa tanpa styling tombol */
+    .trial-container a.get {
+      color: #4caf50;
+      text-decoration: underline;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      display: inline-block;
-      text-decoration: none;
       user-select: none;
+      font-weight: 600;
     }
 
-    .access-form-container button.get:hover {
-      background-color: #43a047;
-      transform: scale(1.03);
+    .trial-container a.get:hover {
+      color: #43a047;
+      text-decoration: none;
     }
 
     .info-icon {
@@ -233,7 +240,7 @@
     <h2>Masukkan Kode Akses</h2>
     <input type="password" id="kodeAkses" placeholder="6 digit angka" />
     <div class="show-code-container">
-      <label>
+      <label for="toggleShow">
         <input type="checkbox" id="toggleShow" /> Tampilkan Kode
       </label>
     </div>
@@ -259,6 +266,17 @@
   <button class="help-button" onclick="window.open('https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20ingin%20mendapatkan%20kode%20trial.', '_blank')">?</button>
 
   <script>
+    // Toggle tampilkan kode akses
+    document.getElementById('toggleShow').addEventListener('change', function() {
+      const input = document.getElementById('kodeAkses');
+      if (this.checked) {
+        input.type = 'text';
+      } else {
+        input.type = 'password';
+      }
+    });
+
+    // Fungsi cek kode akses
     function cekKodeAkses() {
       const input = document.getElementById('kodeAkses').value.trim();
       const peringatan = document.getElementById('peringatan');
@@ -282,8 +300,9 @@
       }
     }
 
+    // Toggle tooltip info
     document.getElementById('infoIcon').addEventListener('click', function(event) {
-      event.stopPropagation();
+      event.stopPropagation(); // supaya klik tidak bubble ke body
       const tooltip = document.getElementById('tooltipInfo');
       if (tooltip.style.display === 'block') {
         tooltip.style.display = 'none';
@@ -292,19 +311,10 @@
       }
     });
 
+    // Klik di luar tooltip dan ikon untuk tutup tooltip
     document.body.addEventListener('click', function() {
       const tooltip = document.getElementById('tooltipInfo');
       tooltip.style.display = 'none';
-    });
-
-    // Toggle tampilkan kode akses
-    document.getElementById('toggleShow').addEventListener('change', function() {
-      const kodeInput = document.getElementById('kodeAkses');
-      if (this.checked) {
-        kodeInput.type = 'text';
-      } else {
-        kodeInput.type = 'password';
-      }
     });
   </script>
 
