@@ -160,7 +160,7 @@
     <h2>Masukkan Kode Akses</h2>
     <input type="text" id="kodeAkses" placeholder="6 digit angka" />
     <button class="try" onclick="cekKodeAkses()">Coba Sekarang</button>
-    <button class="get" onclick="window.location.href='http://lynk.id/primajanaedu/l314kx5emnky/checkout'">
+    <button class="get" onclick="window.open('https://lynk.id/primajanaedu/l314kx5emnky/checkout', '_blank')">
       Dapatkan Kode Trial
     </button>
     <div id="peringatan" class="warning-box">Kode akses tidak valid. Silakan coba lagi.</div>
@@ -170,19 +170,28 @@
     &copy; 2025 Pavio. Seluruh hak cipta dilindungi. 
   </footer>
 
-  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20ingin%20mendapatkan%20kode%20trial.'">?</button>
+  <button class="help-button" onclick="window.open('https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20ingin%20mendapatkan%20kode%20trial.', '_blank')">?</button>
 
   <script>
     function cekKodeAkses() {
-      const input = document.getElementById('kodeAkses').value.trim().toUpperCase();
-      const kodeValid = ["052025"]; // Tambahkan kode yang diizinkan di sini
+      const input = document.getElementById('kodeAkses').value.trim();
+      const peringatan = document.getElementById('peringatan');
+      peringatan.style.display = "none";
+
+      const formatValid = /^\d{6}$/.test(input);
+      const kodeValid = ["052025"]; // Daftar kode sah
       const halamanRedirect = "trial_home.html";
 
-      const peringatan = document.getElementById('peringatan');
+      if (!formatValid) {
+        peringatan.textContent = "Kode harus terdiri dari 6 digit angka.";
+        peringatan.style.display = "block";
+        return;
+      }
 
       if (kodeValid.includes(input)) {
         window.location.href = halamanRedirect;
       } else {
+        peringatan.textContent = "Kode akses tidak valid. Silakan coba lagi.";
         peringatan.style.display = "block";
       }
     }
