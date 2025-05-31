@@ -25,19 +25,31 @@
       align-items: center;
       gap: 1rem;
       border-bottom: 1px solid #ddd;
+      /* agar tidak terlalu besar di mobile */
+      flex-wrap: wrap;
+      justify-content: center;
     }
     header img {
       width: 48px;
       height: 48px;
+      flex-shrink: 0;
+    }
+    .header-title {
+      text-align: left;
+      min-width: 0;
+      flex: 1 1 auto;
     }
     .header-title h1 {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       font-weight: 700;
+      margin: 0;
+      line-height: 1.2;
     }
     .header-title p {
-      font-size: 0.9rem;
+      font-size: 1rem;
       color: #666;
-      margin-top: 4px;
+      margin: 4px 0 0;
+      line-height: 1.2;
     }
     main {
       flex: 1;
@@ -53,20 +65,21 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       width: 100%;
       max-width: 400px;
+      box-sizing: border-box;
     }
     form.card h2 {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.6rem;
+      margin-bottom: 0.75rem;
     }
     form.card p {
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      margin-bottom: 1.75rem;
       color: #555;
     }
     label {
       font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 0.3rem;
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
       display: block;
     }
     /* Container input with icon */
@@ -78,12 +91,13 @@
     input[type="text"],
     input[type="password"] {
       width: 100%;
-      padding: 0.5rem 2.8rem 0.5rem 0.75rem; /* space right for icon */
-      font-size: 0.95rem;
+      padding: 0.6rem 3.2rem 0.6rem 0.75rem; /* space right for icon */
+      font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 6px;
       outline-offset: 2px;
       transition: border-color 0.3s ease;
+      box-sizing: border-box;
     }
     input[type="text"]:focus,
     input[type="password"]:focus {
@@ -105,16 +119,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 24px;
-      height: 24px;
+      width: 32px;
+      height: 32px;
       transition: color 0.2s ease;
+      border-radius: 4px;
     }
-    .toggle-password:hover {
+    .toggle-password:hover,
+    .toggle-password:focus {
       color: #333;
+      outline: none;
+      background: #e2e8f0;
     }
     .toggle-password svg {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       stroke-width: 2;
       stroke-linejoin: round;
       stroke-linecap: round;
@@ -122,29 +140,34 @@
     button {
       display: block;
       width: 100%;
-      padding: 0.6rem;
+      padding: 0.7rem;
       border: none;
-      font-size: 1rem;
+      font-size: 1.1rem;
       border-radius: 6px;
       cursor: pointer;
       margin-top: 1.5rem;
       font-weight: 600;
       transition: background-color 0.3s ease;
+      box-sizing: border-box;
     }
     .login-btn {
       background-color: #111827;
       color: white;
     }
-    .login-btn:hover {
+    .login-btn:hover,
+    .login-btn:focus {
       background-color: #1f2937;
+      outline: none;
     }
     .subscribe-btn {
       background-color: #f97316;
       color: white;
       margin-top: 0.75rem;
     }
-    .subscribe-btn:hover {
+    .subscribe-btn:hover,
+    .subscribe-btn:focus {
       background-color: #ea580c;
+      outline: none;
     }
     footer {
       text-align: center;
@@ -165,21 +188,50 @@
       font-size: 1.25rem;
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
     }
+    /* Responsive adjustments */
     @media (max-width: 480px) {
       form.card {
-        padding: 1.5rem;
+        padding: 1.5rem 1.25rem;
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
       }
       header {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 1rem;
       }
       .header-title h1 {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
+        text-align: center;
       }
       .header-title p {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
+        text-align: center;
+        margin-bottom: 0;
+      }
+      main {
+        padding: 1.5rem 0.75rem;
+      }
+      input[type="text"],
+      input[type="password"] {
+        font-size: 1rem;
+        padding: 0.6rem 3.5rem 0.6rem 0.75rem;
+      }
+      .toggle-password {
+        width: 36px;
+        height: 36px;
+        right: 6px;
+      }
+      button {
+        font-size: 1.15rem;
+        padding: 0.8rem;
       }
     }
   </style>
