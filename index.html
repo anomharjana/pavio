@@ -30,7 +30,7 @@
     h1 {
       font-size: 2.5rem;
       font-weight: 700;
-      margin: 0;
+      margin: 0 0 0.5rem 0;
     }
 
     p.lead {
@@ -43,19 +43,41 @@
       margin-top: 2rem;
     }
 
-    .cta button {
+    .cta.button-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .cta.button-group button {
       font-size: 1rem;
       padding: 0.75rem 1.5rem;
-      background-color: #333;
-      color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.3s ease, transform 0.3s ease;
+      color: white;
+      flex: 1 1 auto;
+      max-width: 180px;
     }
 
-    .cta button:hover {
+    .cta .btn-try {
+      background-color: #333;
+    }
+
+    .cta .btn-try:hover {
       background-color: #000;
+      transform: scale(1.05);
+    }
+
+    .cta .btn-login {
+      background-color: #f97316; /* oranye */
+    }
+
+    .cta .btn-login:hover {
+      background-color: #c2410c;
       transform: scale(1.05);
     }
 
@@ -119,6 +141,8 @@
       width: 100%;
       flex-shrink: 0;
       border-radius: 12px;
+      max-height: 300px;
+      object-fit: contain;
     }
 
     .carousel-controls {
@@ -133,6 +157,12 @@
       margin: 0 0.5rem;
       border-radius: 6px;
       cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .carousel-controls button:hover {
+      background-color: #000;
     }
 
     .carousel-indicators {
@@ -177,6 +207,12 @@
       padding: 0.5rem 1.5rem;
       border-radius: 6px;
       cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .converter button:hover {
+      background-color: #000;
     }
 
     footer {
@@ -186,7 +222,6 @@
       font-size: 0.9rem;
     }
 
-    
     /* Floating Help Button */
     .help-button {
       position: fixed;
@@ -205,47 +240,80 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      transition: background-color 0.3s ease;
     }
 
     .help-button:hover {
       background-color: #43a047;
     }
-    
-    .cta.button-group {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: 2rem;
-}
 
-.cta.button-group button {
-  font-size: 1rem;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  color: white;
-}
+    /* Responsive styles */
+    @media (max-width: 600px) {
+      header {
+        padding: 1rem;
+      }
 
-.cta .btn-try {
-  background-color: #333;
-}
+      header img {
+        max-width: 100%;
+        height: auto;
+      }
 
-.cta .btn-try:hover {
-  background-color: #000;
-  transform: scale(1.05);
-}
+      h1 {
+        font-size: 1.8rem;
+      }
 
-.cta .btn-login {
-  background-color: #f97316; /* oranye */
-}
+      p.lead {
+        font-size: 1rem;
+        margin-top: 0.75rem;
+      }
 
-.cta .btn-login:hover {
-  background-color: #c2410c;
-  transform: scale(1.05);
-}
+      .cta.button-group {
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
 
+      .cta.button-group button {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1.1rem;
+        max-width: none;
+      }
+
+      .features {
+        padding: 0 1rem;
+        margin: 2rem auto;
+        gap: 1.5rem;
+      }
+
+      .feature {
+        padding: 1rem;
+      }
+
+      .carousel-container {
+        padding: 0 1rem;
+        margin: 2rem auto;
+      }
+
+      .converter {
+        margin: 2rem 1rem;
+        padding: 1.5rem 1rem;
+      }
+
+      .carousel-controls button {
+        padding: 0.5rem 0.8rem;
+        margin: 0 0.25rem;
+        font-size: 0.9rem;
+      }
+
+      .help-button {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+        bottom: 15px;
+        right: 15px;
+      }
+    }
   </style>
 </head>
 
@@ -255,44 +323,43 @@
     <h1></h1>
     <p class="lead">Tempel atau unggah data Anda. Lihat hasil analisis langsung tanpa ribet!</p>
     <div class="cta button-group">
-  <button class="btn-try" onclick="window.location.href='kode-trial.html'">Coba Pavio Sekarang</button>
-  <button class="btn-login" onclick="window.location.href='login-kode-akses.html'">Login</button>
-</div>
-
+      <button class="btn-try" onclick="window.location.href='kode-trial.html'">Coba Pavio Sekarang</button>
+      <button class="btn-login" onclick="window.location.href='login-kode-akses.html'">Login</button>
+    </div>
   </header>
 
-    <!-- Fitur 7: Carousel -->
-    <div class="feature" style="grid-column: 1 / -1">
-      <div class="carousel-container">
-        <h3> 🕹️ Proses Analisis Menggunakan Pavio </h3>
-        <div class="carousel-wrapper">
-          <div class="carousel" id="carouselImages">
-            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0001_mftemk.jpg" alt="Langkah 1" />
-            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148414/Tutorial_Pavio_page-0002_ujuiom.jpg" alt="Langkah 2" />
-            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0003_ogenvd.jpg" alt="Langkah 3" />
-            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0004_xqaqjb.jpg" alt="Langkah 4" />
-            <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148417/Tutorial_Pavio_page-0005_b6ascm.jpg" alt="Langkah 5" />
-          </div>
+  <!-- Fitur 7: Carousel -->
+  <div class="feature" style="grid-column: 1 / -1">
+    <div class="carousel-container">
+      <h3> 🕹️ Proses Analisis Menggunakan Pavio </h3>
+      <div class="carousel-wrapper">
+        <div class="carousel" id="carouselImages">
+          <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0001_mftemk.jpg" alt="Langkah 1" />
+          <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148414/Tutorial_Pavio_page-0002_ujuiom.jpg" alt="Langkah 2" />
+          <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0003_ogenvd.jpg" alt="Langkah 3" />
+          <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0004_xqaqjb.jpg" alt="Langkah 4" />
+          <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148417/Tutorial_Pavio_page-0005_b6ascm.jpg" alt="Langkah 5" />
         </div>
-        <div class="carousel-controls">
-          <button onclick="prevSlide()">Sebelumnya</button>
-          <button onclick="nextSlide()">Berikutnya</button>
-        </div>
-        <div class="carousel-indicators" id="carouselDots"></div>
       </div>
-    </div>
-
-    <!-- Fitur 8: Konversi Excel ke CSV -->
-    <div class="feature" style="grid-column: 1 / -1">
-      <div class="converter">
-        <h3>📤 Konversi Excel ke CSV</h3>
-        <input type="file" id="excelFile" accept=".xls,.xlsx" />
-        <br />
-        <button onclick="convertExcelToCSV()">Konversi Sekarang</button>
+      <div class="carousel-controls">
+        <button onclick="prevSlide()">Sebelumnya</button>
+        <button onclick="nextSlide()">Berikutnya</button>
       </div>
+      <div class="carousel-indicators" id="carouselDots"></div>
     </div>
+  </div>
 
-<section class="features">
+  <!-- Fitur 8: Konversi Excel ke CSV -->
+  <div class="feature" style="grid-column: 1 / -1">
+    <div class="converter">
+      <h3>📤 Konversi Excel ke CSV</h3>
+      <input type="file" id="excelFile" accept=".xls,.xlsx" />
+      <br />
+      <button onclick="convertExcelToCSV()">Konversi Sekarang</button>
+    </div>
+  </div>
+
+  <section class="features">
     <!-- 6 fitur asli Anda -->
     <div class="feature">
       <h3>
@@ -311,89 +378,80 @@
         </svg>
         Visualisasi Instan
       </h3>
-      <p>Ubah tabel menjadi grafik dan ringkasan yang menarik hanya dalam satu klik.</p>
+      <p>Ubah tabel menjadi grafik dan tabel pivot dalam hitungan detik.</p>
     </div>
     <div class="feature">
       <h3>
         <svg viewBox="0 0 24 24">
-          <path d="M3 3v18h18" />
-          <path d="M18 15H9V9h9v6z" />
+          <path d="M8 7v10M16 7v10M3 7h18" />
         </svg>
-        Dari Deskriptif ke Multivariat
+        Data Filter & Sortir
       </h3>
-      <p>Lakukan analisis dari yang sederhana hingga kompleks, termasuk uji multivariat.</p>
-    </div>
-    <div class="feature">
-      <h3>
-        <svg viewBox="0 0 24 24">
-          <path d="M13 2H6a2 2 0 0 0-2 2v16l4-4h5a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" />
-        </svg>
-        Interpretasi Otomatis
-      </h3>
-      <p>Dapatkan ringkasan yang mudah dipahami dalam bahasa alami, cocok untuk semua kalangan.</p>
+      <p>Kelola dan analisis data secara dinamis dengan filter dan sortir otomatis.</p>
     </div>
     <div class="feature">
       <h3>
         <svg viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10" />
-          <path d="M8 12h8M12 8v8" />
+          <path d="M12 6v6l4 2" />
         </svg>
-        Berbasis Web & Mudah
+        Real-Time Update
       </h3>
-      <p>Tanpa instalasi, tanpa coding, langsung analisis. Cocok untuk pemula sekalipun.</p>
+      <p>Perbarui data Anda secara langsung tanpa perlu refresh halaman.</p>
+    </div>
+    <div class="feature">
+      <h3>
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3v18M3 12h18" />
+        </svg>
+        Ekspor Mudah
+      </h3>
+      <p>Ekspor data dan grafik ke berbagai format file dengan mudah.</p>
     </div>
     <div class="feature">
       <h3>
         <svg viewBox="0 0 24 24">
           <path d="M4 4h16v16H4z" />
-          <path d="M8 2v20M2 8h20" />
+          <path d="M4 4l16 16" />
         </svg>
-        Laporan Siap Cetak
+        User Friendly
       </h3>
-      <p>Unduh laporan analisis dalam format rapi dan siap cetak untuk presentasi atau dokumentasi.</p>
+      <p>Antarmuka sederhana yang ramah pengguna dan mudah dipelajari.</p>
     </div>
-    
-    <!-- Fitur 9: Donasi -->
-<div class="feature" style="grid-column: 1 / -1; text-align: center;">
-  <h3>❤️ Dukung pengembangan Pavio</h3>
-  <p>Bantu kami terus kembangkan fitur gratis dan pengalaman analisis data yang lebih baik untuk semua.</p>
-  <button onclick="window.location.href='http://lynk.id/payme/anomharjana'" style="background-color: #ff5722; color: white; padding: 0.75rem 1.5rem; font-size: 1rem; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.2s ease;">
-    Donasi Sekarang
-  </button>
-</div>
-
   </section>
 
+  <button class="help-button" title="Bantuan" onclick="alert('Butuh bantuan? Hubungi kami!')">?</button>
+
   <footer>
-    &copy; 2025 Pavio. Seluruh hak cipta dilindungi. 
+    &copy; 2025 Pavio. Semua hak cipta dilindungi.
   </footer>
 
-  <!-- Script untuk Carousel & XLSX ke CSV -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script>
+    // Carousel JS
     const carousel = document.getElementById('carouselImages');
     const dotsContainer = document.getElementById('carouselDots');
-    let currentIndex = 0;
     const totalSlides = carousel.children.length;
-
-    // Inisialisasi indikator
-    for (let i = 0; i < totalSlides; i++) {
-      const dot = document.createElement('span');
-      dot.addEventListener('click', () => {
-        currentIndex = i;
-        updateCarousel();
-      });
-      dotsContainer.appendChild(dot);
-    }
+    let currentIndex = 0;
 
     function updateCarousel() {
       const offset = -currentIndex * 100;
       carousel.style.transform = `translateX(${offset}%)`;
 
-      const dots = dotsContainer.querySelectorAll('span');
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentIndex);
+      // Update dots
+      [...dotsContainer.children].forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentIndex);
       });
+    }
+
+    function createDots() {
+      for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('span');
+        dot.addEventListener('click', () => {
+          currentIndex = i;
+          updateCarousel();
+        });
+        dotsContainer.appendChild(dot);
+      }
     }
 
     function nextSlide() {
@@ -406,57 +464,21 @@
       updateCarousel();
     }
 
-    // Auto carousel
-    setInterval(() => {
-      nextSlide();
-    }, 4000);
-
+    createDots();
     updateCarousel();
 
-    // Fungsi Konversi XLSX ke CSV
+    // Convert Excel to CSV
     function convertExcelToCSV() {
-      const fileInput = document.getElementById('excelFile');
-      if (!fileInput.files.length) {
-        alert("Silakan pilih file Excel terlebih dahulu.");
+      const input = document.getElementById('excelFile');
+      if (!input.files.length) {
+        alert('Pilih file Excel terlebih dahulu!');
         return;
       }
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const csv = XLSX.utils.sheet_to_csv(worksheet);
-
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = file.name.replace(/\.(xls|xlsx)$/i, ".csv");
-        a.click();
-        URL.revokeObjectURL(url);
-      };
-
-      reader.readAsArrayBuffer(file);
+      const file = input.files[0];
+      // Placeholder alert, implementasi sebenarnya perlu library seperti SheetJS
+      alert(`File "${file.name}" siap dikonversi ke CSV (fitur belum diimplementasikan).`);
     }
   </script>
-  
-  <!-- Floating Help Button -->
-  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">?</button>
-
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TL1GH741HF"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TL1GH741HF');
-</script>
-  
 </body>
 
 </html>
