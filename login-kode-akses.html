@@ -3,221 +3,226 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pavio — Masuk ke Sistem</title>
+  <title>Pavio — Masuk</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #f9f9fb;
-      color: #333;
+      background-color: #f4f4f7;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.5rem 2rem;
       background-color: #fff;
-      border-bottom: 1px solid #eee;
-      flex-wrap: wrap;
-    }
-
-    .header-brand {
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #ddd;
       display: flex;
       align-items: center;
       gap: 1rem;
     }
 
-    .header-brand img {
+    header img {
       height: 48px;
       width: 48px;
-      object-fit: contain;
     }
 
-    .header-text h1 {
-      font-size: 1.5rem;
+    .header-title h1 {
+      margin: 0;
+      font-size: 1.25rem;
       font-weight: 700;
-      margin: 0;
     }
 
-    .header-text p {
+    .header-title p {
       margin: 0;
-      font-size: 0.95rem;
       color: #777;
+      font-size: 0.9rem;
     }
 
-    .features {
+    main {
+      flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 70vh;
       padding: 2rem;
     }
 
-    .feature {
+    .card {
       background: white;
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
       max-width: 400px;
       width: 100%;
     }
 
-    .feature h3 {
+    .card h2 {
       margin-top: 0;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .feature svg {
-      width: 24px;
-      height: 24px;
-      stroke: #333;
-      stroke-width: 2;
-      fill: none;
-    }
-
-    .feature svg.lock-icon {
-      fill: none;
-      stroke-linejoin: round;
-      stroke-linecap: round;
-    }
-
-    .feature p {
+    .card p {
       font-size: 0.95rem;
       color: #555;
+      margin-bottom: 1.5rem;
     }
 
-    .feature label {
+    label {
       font-weight: 600;
       display: block;
+      margin-bottom: 0.3rem;
       margin-top: 1rem;
     }
 
-    .feature input {
+    input[type="text"],
+    input[type="password"] {
       width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
+      padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+      font-size: 0.95rem;
       border: 1px solid #ccc;
       border-radius: 6px;
-      font-size: 0.95rem;
+      outline: none;
     }
 
-    .feature button {
-      margin-top: 1.5rem;
+    .input-group {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
       border: none;
-      padding: 0.6rem 1.2rem;
-      font-size: 0.95rem;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .toggle-password svg {
+      width: 20px;
+      height: 20px;
+      stroke: #666;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      padding: 0.6rem 1rem;
+      border: none;
+      font-size: 1rem;
       border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
       width: 100%;
     }
 
-    .feature button.login-button {
-      background-color: #000000; /* hitam */
+    .login-btn {
+      background-color: #111827;
       color: white;
     }
 
-    .feature button.login-button:hover {
-      background-color: #1e3a8a;
-      transform: scale(1.03);
+    .login-btn:hover {
+      background-color: #1f2937;
     }
 
-    .feature button.subscribe-button {
-      background-color: #f97316; /* oranye */
+    .subscribe-btn {
+      background-color: #f97316;
       color: white;
-      margin-top: 0.8rem;
+      margin-top: 0.75rem;
     }
 
-    .feature button.subscribe-button:hover {
-      background-color: #c2410c;
-      transform: scale(1.03);
+    .subscribe-btn:hover {
+      background-color: #ea580c;
     }
 
     footer {
       text-align: center;
-      padding: 2rem;
-      color: #aaa;
-      font-size: 0.9rem;
+      padding: 1rem;
+      font-size: 0.85rem;
+      color: #888;
     }
 
     .help-button {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background-color: #4caf50;
+      background: #22c55e;
       color: white;
       border: none;
-      font-size: 1.5rem;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 1.25rem;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
-    .help-button:hover {
-      background-color: #43a047;
+    @media (max-width: 480px) {
+      .card {
+        padding: 1.5rem;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="header-brand">
-      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
-      <div class="header-text">
-        <h1>Pavio</h1>
-        <p>Paste & View — That’s All It Takes.</p>
-      </div>
+    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio">
+    <div class="header-title">
+      <h1>Pavio</h1>
+      <p>Paste & View — That’s All It Takes.</p>
     </div>
   </header>
 
-  <section class="features">
-    <form class="feature" onsubmit="return validateForm(event)">
-      <h3>
-        <!-- Ikon Kunci/Gembok -->
-        <svg class="lock-icon" viewBox="0 0 24 24" stroke="#333" stroke-width="2" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
-          <rect x="6" y="10" width="12" height="10" rx="2" ry="2"/>
-          <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
-        </svg>
-        Masuk ke Pavio
-      </h3>
-      <p>Masukkan informasi Anda untuk melanjutkan.</p>
+  <main>
+    <form class="card" onsubmit="return validateForm(event)">
+      <h2>🔐 Masuk</h2>
+      <p>Silakan masukkan email dan kode akses Anda.</p>
 
       <label for="email">Email</label>
-      <input type="text" id="email" name="email" placeholder="nama@email.com" />
+      <input type="text" id="email" placeholder="nama@email.com">
 
-      <label for="kode">Kode Akses Pavio</label>
-      <input type="text" id="kode" name="kode" required maxlength="11" placeholder="11 digit angka" />
+      <label for="kode">Kode Akses</label>
+      <div class="input-group">
+        <input type="password" id="kode" maxlength="11" placeholder="11 digit angka">
+        <button type="button" class="toggle-password" onclick="togglePassword()">
+          <svg id="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.52 5 12 5c4.48 0 8.27 2.943 9.54 7-1.27 4.057-5.06 7-9.54 7-4.48 0-8.27-2.943-9.542-7z"/>
+          </svg>
+        </button>
+      </div>
 
-      <button type="submit" class="login-button">Masuk</button>
-      <button type="button" class="subscribe-button" onclick="window.location.href='subscribe.html'">Mulai Berlangganan</button>
+      <button type="submit" class="login-btn">Masuk</button>
+      <button type="button" class="subscribe-btn" onclick="window.location.href='subscribe.html'">Berlangganan</button>
     </form>
-  </section>
+  </main>
 
-  <footer>
-    &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
-  </footer>
+  <footer>&copy; 2025 Pavio. Hak cipta dilindungi.</footer>
 
-  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">?</button>
+  <button class="help-button" onclick="window.location.href='https://wa.me/6285935201571'">?</button>
 
   <script>
     function validateForm(event) {
       event.preventDefault();
-
       const kode = document.getElementById("kode").value.trim();
       const kodeBenar = "11716563980";
 
-      if (!/^[0-9]{11}$/.test(kode)) {
+      if (!/^\d{11}$/.test(kode)) {
         alert("Kode akses harus terdiri dari 11 digit angka.");
         return false;
       }
@@ -225,20 +230,34 @@
       if (kode === kodeBenar) {
         window.location.href = "home.html";
       } else {
-        alert("Kode akses salah. Silakan hubungi admin untuk mereset kode Anda.");
+        alert("Kode salah. Hubungi admin jika perlu bantuan.");
       }
 
       return false;
     }
-  </script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TL1GH741HF"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-TL1GH741HF');
+    function togglePassword() {
+      const input = document.getElementById("kode");
+      const icon = document.getElementById("eye-icon");
+
+      if (input.type === "password") {
+        input.type = "text";
+        icon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7
+               a10.05 10.05 0 012.355-3.943M3 3l18 18"/>
+        `;
+      } else {
+        input.type = "password";
+        icon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M2.458 12C3.732 7.943 7.52 5 12 5c4.48 0 8.27 2.943 9.54 7
+               -1.27 4.057-5.06 7-9.54 7-4.48 0-8.27-2.943-9.542-7z"/>
+        `;
+      }
+    }
   </script>
 </body>
 </html>
