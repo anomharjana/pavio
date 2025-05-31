@@ -8,12 +8,14 @@
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
       background-color: #f4f4f7;
+      color: #333;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
@@ -21,28 +23,26 @@
 
     header {
       background-color: #fff;
-      padding: 1rem 2rem;
-      border-bottom: 1px solid #ddd;
+      padding: 1rem 1.5rem;
       display: flex;
       align-items: center;
       gap: 1rem;
+      border-bottom: 1px solid #ddd;
     }
 
     header img {
-      height: 48px;
       width: 48px;
+      height: 48px;
     }
 
     .header-title h1 {
-      margin: 0;
       font-size: 1.25rem;
       font-weight: 700;
     }
 
     .header-title p {
-      margin: 0;
-      color: #777;
       font-size: 0.9rem;
+      color: #666;
     }
 
     main {
@@ -50,57 +50,53 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 2rem;
+      padding: 2rem 1rem;
     }
 
     .card {
-      background: white;
+      background: #fff;
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      max-width: 400px;
       width: 100%;
+      max-width: 400px;
     }
 
     .card h2 {
-      margin-top: 0;
       font-size: 1.4rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      margin-bottom: 0.5rem;
     }
 
     .card p {
       font-size: 0.95rem;
-      color: #555;
       margin-bottom: 1.5rem;
+      color: #555;
     }
 
     label {
-      font-weight: 600;
       display: block;
-      margin-bottom: 0.3rem;
       margin-top: 1rem;
-    }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+      font-weight: 600;
       font-size: 0.95rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      outline: none;
     }
 
     .input-group {
       position: relative;
     }
 
+    .input-group input {
+      width: 100%;
+      padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+      font-size: 0.95rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 0.3rem;
+    }
+
     .toggle-password {
       position: absolute;
-      right: 0.75rem;
       top: 50%;
+      right: 0.75rem;
       transform: translateY(-50%);
       background: none;
       border: none;
@@ -115,13 +111,14 @@
     }
 
     button {
-      margin-top: 1.5rem;
-      padding: 0.6rem 1rem;
+      display: block;
+      width: 100%;
+      padding: 0.6rem;
       border: none;
       font-size: 1rem;
       border-radius: 6px;
       cursor: pointer;
-      width: 100%;
+      margin-top: 1.5rem;
     }
 
     .login-btn {
@@ -162,7 +159,7 @@
       height: 48px;
       font-size: 1.25rem;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     @media (max-width: 480px) {
@@ -173,6 +170,14 @@
       header {
         flex-direction: column;
         align-items: flex-start;
+      }
+
+      .header-title h1 {
+        font-size: 1.1rem;
+      }
+
+      .header-title p {
+        font-size: 0.85rem;
       }
     }
   </style>
@@ -188,7 +193,7 @@
 
   <main>
     <form class="card" onsubmit="return validateForm(event)">
-      <h2>🔐 Masuk</h2>
+      <h2>Masuk ke Pavio</h2>
       <p>Silakan masukkan email dan kode akses Anda.</p>
 
       <label for="email">Email</label>
@@ -198,11 +203,12 @@
       <div class="input-group">
         <input type="password" id="kode" maxlength="11" placeholder="11 digit angka">
         <button type="button" class="toggle-password" onclick="togglePassword()">
-          <svg id="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M2.458 12C3.732 7.943 7.52 5 12 5c4.48 0 8.27 2.943 9.54 7-1.27 4.057-5.06 7-9.54 7-4.48 0-8.27-2.943-9.542-7z"/>
+              d="M2.458 12C3.732 7.943 7.52 5 12 5s8.268 2.943 9.542 7
+              -3.732 7-9.542 7S3.732 16.057 2.458 12z"/>
           </svg>
         </button>
       </div>
@@ -212,7 +218,7 @@
     </form>
   </main>
 
-  <footer>&copy; 2025 Pavio. Hak cipta dilindungi.</footer>
+  <footer>&copy; 2025 Pavio. Seluruh hak cipta dilindungi.</footer>
 
   <button class="help-button" onclick="window.location.href='https://wa.me/6285935201571'">?</button>
 
@@ -253,8 +259,8 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M2.458 12C3.732 7.943 7.52 5 12 5c4.48 0 8.27 2.943 9.54 7
-               -1.27 4.057-5.06 7-9.54 7-4.48 0-8.27-2.943-9.542-7z"/>
+            d="M2.458 12C3.732 7.943 7.52 5 12 5s8.268 2.943 9.542 7
+              -3.732 7-9.542 7S3.732 16.057 2.458 12z"/>
         `;
       }
     }
