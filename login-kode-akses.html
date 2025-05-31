@@ -1,244 +1,201 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pavio — Masuk</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pavio — Tempel & Lihat Seketika</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
     }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #f4f4f7;
+      background-color: #f9f9fb;
       color: #333;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      padding: 1rem;
     }
+
     header {
-      background: #fff;
-      padding: 1rem 1.5rem;
+      width: 100%;
+      max-width: 960px;
       display: flex;
       align-items: center;
-      gap: 1rem;
-      border-bottom: 1px solid #ddd;
-      /* agar tidak terlalu besar di mobile */
+      padding: 1rem 1.5rem;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 3rem;
       flex-wrap: wrap;
-      justify-content: center;
+      gap: 1rem;
     }
     header img {
-      width: 48px;
       height: 48px;
-      flex-shrink: 0;
+      width: 48px;
+      object-fit: contain;
     }
     .header-title {
-      text-align: left;
-      min-width: 0;
-      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
     .header-title h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
       margin: 0;
-      line-height: 1.2;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #222;
+      text-align: left;
     }
     .header-title p {
+      margin: 0;
       font-size: 1rem;
-      color: #666;
-      margin: 4px 0 0;
-      line-height: 1.2;
-    }
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-    form.card {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      width: 100%;
-      max-width: 400px;
-      box-sizing: border-box;
-    }
-    form.card h2 {
-      font-size: 1.6rem;
-      margin-bottom: 0.75rem;
-    }
-    form.card p {
-      font-size: 1rem;
-      margin-bottom: 1.75rem;
       color: #555;
+      text-align: left;
+    }
+
+    main {
+      width: 100%;
+      max-width: 420px;
+    }
+    form {
+      background-color: #fff;
+      padding: 2rem 2.5rem;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    form h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #000;
+    }
+    form p {
+      margin: 0;
+      font-size: 1rem;
     }
     label {
       font-weight: 600;
-      font-size: 1rem;
-      margin-bottom: 0.4rem;
-      display: block;
-    }
-    /* Container input with icon */
-    .input-wrapper {
-      position: relative;
-      margin-top: 1rem;
-      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
     }
     input[type="text"],
     input[type="password"] {
-      width: 100%;
-      padding: 0.6rem 3.2rem 0.6rem 0.75rem; /* space right for icon */
+      padding: 0.75rem 1rem;
       font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      outline-offset: 2px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
       transition: border-color 0.3s ease;
-      box-sizing: border-box;
+      font-weight: 500;
+      width: 100%;
     }
-    input[type="text"]:focus,
-    input[type="password"]:focus {
-      border-color: #1e40af;
+    input:focus {
+      border-color: #4caf50;
       outline: none;
+      box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
     }
-    /* Eye toggle button inside input */
+
+    .input-wrapper {
+      position: relative;
+    }
     .toggle-password {
       position: absolute;
       top: 50%;
-      right: 8px;
+      right: 10px;
       transform: translateY(-50%);
-      background: transparent;
+      background: none;
       border: none;
-      padding: 0;
-      margin: 0;
       cursor: pointer;
       color: #666;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 32px;
-      height: 32px;
-      transition: color 0.2s ease;
-      border-radius: 4px;
     }
-    .toggle-password:hover,
-    .toggle-password:focus {
-      color: #333;
-      outline: none;
-      background: #e2e8f0;
+    .toggle-password:hover {
+      color: #000000;
     }
     .toggle-password svg {
-      width: 22px;
-      height: 22px;
-      stroke-width: 2;
-      stroke-linejoin: round;
-      stroke-linecap: round;
+      width: 20px;
+      height: 20px;
     }
-    button {
-      display: block;
-      width: 100%;
-      padding: 0.7rem;
-      border: none;
+
+    .login-btn, .subscribe-btn {
+      padding: 0.9rem 1rem;
       font-size: 1.1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 1.5rem;
       font-weight: 600;
-      transition: background-color 0.3s ease;
-      box-sizing: border-box;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      border: none;
     }
     .login-btn {
-      background-color: #111827;
+      background-color: #000;
       color: white;
     }
-    .login-btn:hover,
-    .login-btn:focus {
-      background-color: #1f2937;
-      outline: none;
+    .login-btn:hover {
+      background-color: #222;
     }
     .subscribe-btn {
       background-color: #f97316;
       color: white;
-      margin-top: 0.75rem;
     }
-    .subscribe-btn:hover,
-    .subscribe-btn:focus {
+    .subscribe-btn:hover {
       background-color: #ea580c;
-      outline: none;
     }
+
     footer {
+      margin-top: 3rem;
       text-align: center;
-      padding: 1rem;
-      font-size: 0.85rem;
-      color: #888;
+      color: #999;
+      font-size: 0.9rem;
     }
+
     .help-button {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: #22c55e;
-      color: white;
-      border: none;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      font-size: 1.25rem;
+      background-color: #4caf50;
+      color: white;
+      font-size: 1.8rem;
+      border: none;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      user-select: none;
     }
-    /* Responsive adjustments */
+    .help-button:hover {
+      background-color: #388e3c;
+    }
+
     @media (max-width: 480px) {
-      form.card {
-        padding: 1.5rem 1.25rem;
-        max-width: 100%;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-      }
       header {
-        flex-direction: column;
+        justify-content: center;
+      }
+      .header-title {
         align-items: center;
-        gap: 0.4rem;
-        padding: 1rem;
+        text-align: center;
       }
       .header-title h1 {
-        font-size: 1.3rem;
-        text-align: center;
+        font-size: 1.4rem;
       }
       .header-title p {
-        font-size: 0.9rem;
-        text-align: center;
-        margin-bottom: 0;
-      }
-      main {
-        padding: 1.5rem 0.75rem;
-      }
-      input[type="text"],
-      input[type="password"] {
-        font-size: 1rem;
-        padding: 0.6rem 3.5rem 0.6rem 0.75rem;
-      }
-      .toggle-password {
-        width: 36px;
-        height: 36px;
-        right: 6px;
-      }
-      button {
-        font-size: 1.15rem;
-        padding: 0.8rem;
+        font-size: 0.85rem;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio">
     <div class="header-title">
       <h1>Pavio</h1>
       <p>Paste & View — That’s All It Takes.</p>
@@ -246,82 +203,34 @@
   </header>
 
   <main>
-    <form class="card" onsubmit="return validateForm(event)" novalidate>
+    <form onsubmit="return validateForm(event)" novalidate>
       <h2>Masuk ke Pavio</h2>
       <p>Silakan masukkan email dan kode akses Anda.</p>
 
       <label for="email">Email</label>
-      <input
-        type="text"
-        id="email"
-        name="email"
-        placeholder="nama@email.com"
-        required
-        autocomplete="username"
-      />
+      <input type="text" id="email" name="email" placeholder="nama@email.com" required autocomplete="username">
 
       <label for="kode">Kode Akses</label>
       <div class="input-wrapper">
-        <input
-          type="password"
-          id="kode"
-          name="kode"
-          maxlength="11"
-          placeholder="11 digit angka"
-          required
-          autocomplete="current-password"
-          aria-describedby="togglePasswordHelp"
-        />
-        <button
-          type="button"
-          class="toggle-password"
-          onclick="togglePassword()"
-          aria-label="Tampilkan atau sembunyikan kode akses"
-          tabindex="0"
-          id="togglePasswordHelp"
-        >
-          <svg
-            id="eye-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M2.458 12C3.732 7.943 7.52 5 12 5s8.268 2.943 9.542 7
-                 -3.732 7-9.542 7S3.732 16.057 2.458 12z"
-            />
+        <input type="password" id="kode" name="kode" maxlength="11" placeholder="11 digit angka" required autocomplete="current-password">
+        <button type="button" class="toggle-password" onclick="togglePassword()" aria-label="Tampilkan/Sembunyikan kode akses">
+          <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path d="M2.458 12C3.732 7.943 7.52 5 12 5s8.268 2.943 9.542 7-3.732 7-9.542 7S3.732 16.057 2.458 12z" />
           </svg>
         </button>
       </div>
 
       <button type="submit" class="login-btn">Masuk</button>
-      <button
-        type="button"
-        class="subscribe-btn"
-        onclick="window.location.href='subscribe.html'"
-      >
-        Berlangganan
-      </button>
+      <button type="button" class="subscribe-btn" onclick="window.location.href='subscribe.html'">Berlangganan</button>
     </form>
   </main>
 
-  <footer>&copy; 2025 Pavio. Seluruh hak cipta dilindungi.</footer>
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
+  </footer>
 
-  <button
-    class="help-button"
-    onclick="window.location.href='https://wa.me/6285935201571'"
-    aria-label="Bantuan"
-  >
-    ?
-  </button>
+  <button class="help-button" onclick="window.location.href='https://wa.me/6285935201571'" aria-label="Bantuan">?</button>
 
   <script>
     function validateForm(event) {
@@ -351,19 +260,12 @@
 
       if (input.type === "password") {
         input.type = "text";
-        icon.innerHTML = `
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7
-                   a10.05 10.05 0 012.355-3.943M3 3l18 18"/>
-        `;
+        icon.innerHTML = `<path d='M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a10.05 10.05 0 012.355-3.943M3 3l18 18' />`;
       } else {
         input.type = "password";
         icon.innerHTML = `
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M2.458 12C3.732 7.943 7.52 5 12 5s8.268 2.943 9.542 7
-                   -3.732 7-9.542 7S3.732 16.057 2.458 12z"/>
+          <path d='M15 12a3 3 0 11-6 0 3 3 0 016 0z' />
+          <path d='M2.458 12C3.732 7.943 7.52 5 12 5s8.268 2.943 9.542 7-3.732 7-9.542 7S3.732 16.057 2.458 12z' />
         `;
       }
     }
