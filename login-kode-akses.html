@@ -2,49 +2,43 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pavio — Masuk</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
-
     body {
+      margin: 0;
       font-family: 'Inter', sans-serif;
       background-color: #f4f4f7;
       color: #333;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
-
     header {
-      background-color: #fff;
+      background: #fff;
       padding: 1rem 1.5rem;
       display: flex;
       align-items: center;
       gap: 1rem;
       border-bottom: 1px solid #ddd;
     }
-
     header img {
       width: 48px;
       height: 48px;
     }
-
     .header-title h1 {
       font-size: 1.25rem;
       font-weight: 700;
     }
-
     .header-title p {
       font-size: 0.9rem;
       color: #666;
+      margin-top: 4px;
     }
-
     main {
       flex: 1;
       display: flex;
@@ -52,8 +46,7 @@
       align-items: center;
       padding: 2rem 1rem;
     }
-
-    .card {
+    form.card {
       background: #fff;
       padding: 2rem;
       border-radius: 12px;
@@ -61,55 +54,71 @@
       width: 100%;
       max-width: 400px;
     }
-
-    .card h2 {
+    form.card h2 {
       font-size: 1.4rem;
       margin-bottom: 0.5rem;
     }
-
-    .card p {
+    form.card p {
       font-size: 0.95rem;
       margin-bottom: 1.5rem;
       color: #555;
     }
-
     label {
-      display: block;
-      margin-top: 1rem;
       font-weight: 600;
       font-size: 0.95rem;
+      margin-bottom: 0.3rem;
+      display: block;
     }
-
-    .input-group {
+    /* Container input with icon */
+    .input-wrapper {
       position: relative;
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
     }
-
-    .input-group input {
+    input[type="text"],
+    input[type="password"] {
       width: 100%;
-      padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+      padding: 0.5rem 2.8rem 0.5rem 0.75rem; /* space right for icon */
       font-size: 0.95rem;
       border: 1px solid #ccc;
       border-radius: 6px;
-      margin-top: 0.3rem;
+      outline-offset: 2px;
+      transition: border-color 0.3s ease;
     }
-
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #1e40af;
+      outline: none;
+    }
+    /* Eye toggle button inside input */
     .toggle-password {
       position: absolute;
       top: 50%;
-      right: 0.75rem;
+      right: 8px;
       transform: translateY(-50%);
-      background: none;
+      background: transparent;
       border: none;
-      cursor: pointer;
       padding: 0;
+      margin: 0;
+      cursor: pointer;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      transition: color 0.2s ease;
     }
-
+    .toggle-password:hover {
+      color: #333;
+    }
     .toggle-password svg {
       width: 20px;
       height: 20px;
-      stroke: #666;
+      stroke-width: 2;
+      stroke-linejoin: round;
+      stroke-linecap: round;
     }
-
     button {
       display: block;
       width: 100%;
@@ -119,34 +128,30 @@
       border-radius: 6px;
       cursor: pointer;
       margin-top: 1.5rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
     }
-
     .login-btn {
       background-color: #111827;
       color: white;
     }
-
     .login-btn:hover {
       background-color: #1f2937;
     }
-
     .subscribe-btn {
       background-color: #f97316;
       color: white;
       margin-top: 0.75rem;
     }
-
     .subscribe-btn:hover {
       background-color: #ea580c;
     }
-
     footer {
       text-align: center;
       padding: 1rem;
       font-size: 0.85rem;
       color: #888;
     }
-
     .help-button {
       position: fixed;
       bottom: 20px;
@@ -161,21 +166,18 @@
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
-
     @media (max-width: 480px) {
-      .card {
+      form.card {
         padding: 1.5rem;
       }
-
       header {
         flex-direction: column;
         align-items: flex-start;
+        gap: 0.5rem;
       }
-
       .header-title h1 {
         font-size: 1.1rem;
       }
-
       .header-title p {
         font-size: 0.85rem;
       }
@@ -184,7 +186,7 @@
 </head>
 <body>
   <header>
-    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio">
+    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
     <div class="header-title">
       <h1>Pavio</h1>
       <p>Paste & View — That’s All It Takes.</p>
@@ -192,53 +194,102 @@
   </header>
 
   <main>
-    <form class="card" onsubmit="return validateForm(event)">
+    <form class="card" onsubmit="return validateForm(event)" novalidate>
       <h2>Masuk ke Pavio</h2>
       <p>Silakan masukkan email dan kode akses Anda.</p>
 
       <label for="email">Email</label>
-      <input type="text" id="email" placeholder="nama@email.com">
+      <input
+        type="text"
+        id="email"
+        name="email"
+        placeholder="nama@email.com"
+        required
+        autocomplete="username"
+      />
 
       <label for="kode">Kode Akses</label>
-      <div class="input-group">
-        <input type="password" id="kode" maxlength="11" placeholder="11 digit angka">
-        <button type="button" class="toggle-password" onclick="togglePassword()">
-          <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      <div class="input-wrapper">
+        <input
+          type="password"
+          id="kode"
+          name="kode"
+          maxlength="11"
+          placeholder="11 digit angka"
+          required
+          autocomplete="current-password"
+          aria-describedby="togglePasswordHelp"
+        />
+        <button
+          type="button"
+          class="toggle-password"
+          onclick="togglePassword()"
+          aria-label="Tampilkan atau sembunyikan kode akses"
+          tabindex="0"
+          id="togglePasswordHelp"
+        >
+          <svg
+            id="eye-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
               d="M2.458 12C3.732 7.943 7.52 5 12 5s8.268 2.943 9.542 7
-              -3.732 7-9.542 7S3.732 16.057 2.458 12z"/>
+                 -3.732 7-9.542 7S3.732 16.057 2.458 12z"
+            />
           </svg>
         </button>
       </div>
 
       <button type="submit" class="login-btn">Masuk</button>
-      <button type="button" class="subscribe-btn" onclick="window.location.href='subscribe.html'">Berlangganan</button>
+      <button
+        type="button"
+        class="subscribe-btn"
+        onclick="window.location.href='subscribe.html'"
+      >
+        Berlangganan
+      </button>
     </form>
   </main>
 
   <footer>&copy; 2025 Pavio. Seluruh hak cipta dilindungi.</footer>
 
-  <button class="help-button" onclick="window.location.href='https://wa.me/6285935201571'">?</button>
+  <button
+    class="help-button"
+    onclick="window.location.href='https://wa.me/6285935201571'"
+    aria-label="Bantuan"
+  >
+    ?
+  </button>
 
   <script>
     function validateForm(event) {
       event.preventDefault();
-      const kode = document.getElementById("kode").value.trim();
+      const kodeInput = document.getElementById("kode");
+      const kode = kodeInput.value.trim();
       const kodeBenar = "11716563980";
 
       if (!/^\d{11}$/.test(kode)) {
         alert("Kode akses harus terdiri dari 11 digit angka.");
+        kodeInput.focus();
         return false;
       }
 
       if (kode === kodeBenar) {
         window.location.href = "home.html";
       } else {
-        alert("Kode salah. Hubungi admin jika perlu bantuan.");
+        alert("Kode akses salah. Silakan hubungi admin untuk reset kode.");
+        kodeInput.focus();
       }
-
       return false;
     }
 
@@ -250,17 +301,17 @@
         input.type = "text";
         icon.innerHTML = `
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7
-               a10.05 10.05 0 012.355-3.943M3 3l18 18"/>
+                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7
+                   a10.05 10.05 0 012.355-3.943M3 3l18 18"/>
         `;
       } else {
         input.type = "password";
         icon.innerHTML = `
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M2.458 12C3.732 7.943 7.52 5 12 5s8.268 2.943 9.542 7
-              -3.732 7-9.542 7S3.732 16.057 2.458 12z"/>
+                d="M2.458 12C3.732 7.943 7.52 5 12 5s8.268 2.943 9.542 7
+                   -3.732 7-9.542 7S3.732 16.057 2.458 12z"/>
         `;
       }
     }
