@@ -26,12 +26,13 @@
       max-width: 960px;
       display: flex;
       align-items: center;
+      justify-content: flex-start;
       padding: 1rem 1.5rem;
       background-color: #fff;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       margin-bottom: 3rem;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 1rem;
     }
     header img {
@@ -39,23 +40,16 @@
       width: 48px;
       object-fit: contain;
     }
-    .header-title {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
     .header-title h1 {
       margin: 0;
       font-size: 1.8rem;
       font-weight: 700;
       color: #222;
-      text-align: left;
     }
     .header-title p {
       margin: 0;
       font-size: 1rem;
       color: #555;
-      text-align: left;
     }
 
     main {
@@ -133,6 +127,7 @@
       cursor: pointer;
       width: 100%;
       border: none;
+      text-transform: uppercase;
     }
     .login-btn {
       background-color: #000;
@@ -178,11 +173,9 @@
 
     @media (max-width: 480px) {
       header {
-        justify-content: center;
-      }
-      .header-title {
+        flex-direction: row;
+        justify-content: flex-start;
         align-items: center;
-        text-align: center;
       }
       .header-title h1 {
         font-size: 1.4rem;
@@ -195,7 +188,7 @@
 </head>
 <body>
   <header>
-    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio">
+    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" title="Logo Pavio">
     <div class="header-title">
       <h1>Pavio</h1>
       <p>Paste & View — That’s All It Takes.</p>
@@ -212,7 +205,7 @@
 
       <label for="kode">Kode Akses</label>
       <div class="input-wrapper">
-        <input type="password" id="kode" name="kode" maxlength="11" placeholder="11 digit angka" required autocomplete="current-password">
+        <input type="password" id="kode" name="kode" maxlength="11" placeholder="11 digit angka" required autocomplete="current-password" inputmode="numeric" pattern="\d*">
         <button type="button" class="toggle-password" onclick="togglePassword()" aria-label="Tampilkan/Sembunyikan kode akses">
           <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -221,8 +214,8 @@
         </button>
       </div>
 
-      <button type="submit" class="login-btn">Masuk</button>
-      <button type="button" class="subscribe-btn" onclick="window.location.href='subscribe.html'">Berlangganan</button>
+      <button type="submit" class="login-btn">MASUK</button>
+      <button type="button" class="subscribe-btn" onclick="window.location.href='subscribe.html'">BERLANGGANAN</button>
     </form>
   </main>
 
