@@ -2,31 +2,47 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pavio — Tempel & Lihat Seketika</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
+    /* Reset dan dasar */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
       background-color: #f9f9fb;
       color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
     }
 
+    /* HEADER */
     header {
+      width: 100%;
+      max-width: 960px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.5rem 2rem;
+      padding: 1rem 1.5rem;
       background-color: #fff;
-      border-bottom: 1px solid #eee;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
+      margin-bottom: 3rem;
       flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .header-brand {
       display: flex;
       align-items: center;
       gap: 1rem;
+      flex-shrink: 0;
     }
 
     .header-brand img {
@@ -36,171 +52,222 @@
     }
 
     .header-text h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
       margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #222;
     }
 
     .header-text p {
       margin: 0;
-      font-size: 0.95rem;
-      color: #777;
-    }
-
-    .access-form-container {
-      max-width: 480px;
-      margin: 5rem auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-      text-align: center;
-      position: relative;
-    }
-
-    .access-form-container h2 {
-      margin-bottom: 1rem;
-      font-size: 1.3rem;
-      font-weight: 600;
-    }
-
-    input#kodeAkses {
-      width: 100%;
-      padding: 0.75rem 1rem;
       font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 0.75rem;
-      box-sizing: border-box;
-      transition: border-color 0.3s ease;
-    }
-
-    input#kodeAkses:focus {
-      border-color: #4caf50;
-      outline: none;
-    }
-
-    .show-code-container {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 8px;
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
       color: #555;
       user-select: none;
     }
 
-    .show-code-container input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      accent-color: #4caf50;
-    }
-
-    .access-form-container button {
+    /* FORM KONTAINER */
+    .access-form-container {
       width: 100%;
-      padding: 0.75rem 1rem;
+      max-width: 420px;
+      background-color: #fff;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgb(0 0 0 / 0.08);
+      padding: 2rem 2.5rem;
+      text-align: center;
+      user-select: none;
+    }
+
+    .access-form-container h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: #000000;
+      user-select: text;
+    }
+
+    /* INPUT WRAPPER */
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    input#kodeAkses {
+      width: 100%;
+      padding: 0.75rem 3rem 0.75rem 1rem; /* ruang kanan utk icon */
+      font-size: 1.1rem;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      transition: border-color 0.25s ease;
+      font-weight: 500;
+    }
+
+    input#kodeAkses:focus {
+      outline: none;
+      border-color: #4caf50;
+      box-shadow: 0 0 6px #4caf5077;
+    }
+
+    /* TOMBOL TOGGLE MATA */
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      background: transparent;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      transition: color 0.2s ease;
+      border-radius: 50%;
     }
 
-    .access-form-container button.try {
-      background-color: #333;
+    .toggle-password:hover,
+    .toggle-password:focus {
+      color: #4caf50;
+      outline: none;
+      background-color: #e6f4ea;
+      box-shadow: 0 0 6px #4caf5077;
+    }
+
+    .toggle-password svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2.2;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    /* BUTTON COBA SEKARANG */
+    button.try {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      background-color: #000000;
       color: white;
-      margin-bottom: 0.75rem;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease, transform 0.15s ease;
+      margin-bottom: 1rem;
     }
 
-    .access-form-container button.try:hover {
-      background-color: #000;
-      transform: scale(1.03);
+    button.try:hover,
+    button.try:focus {
+      background-color: #000000;
+      transform: scale(1.04);
+      outline: none;
     }
 
+    /* TRIAL CONTAINER */
     .trial-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      position: relative;
-      margin-bottom: 1rem;
+      gap: 0.7rem;
       font-size: 1rem;
+      user-select: text;
+      position: relative;
+      padding-bottom: 0.5rem;
+      flex-wrap: wrap;
     }
 
-    /* Link biasa tanpa styling tombol */
     .trial-container a.get {
       color: #4caf50;
       text-decoration: underline;
-      cursor: pointer;
-      user-select: none;
       font-weight: 600;
+      cursor: pointer;
+      transition: color 0.3s ease;
     }
 
-    .trial-container a.get:hover {
-      color: #43a047;
+    .trial-container a.get:hover,
+    .trial-container a.get:focus {
+      color: #388e3c;
       text-decoration: none;
+      outline: none;
     }
 
     .info-icon {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       background-color: #4caf50;
       color: white;
       border-radius: 50%;
       font-weight: 700;
       font-size: 18px;
-      line-height: 24px;
+      line-height: 26px;
       text-align: center;
       cursor: pointer;
       user-select: none;
       flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.18);
       transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .info-icon:hover {
-      background-color: #43a047;
+    .info-icon:hover,
+    .info-icon:focus {
+      background-color: #388e3c;
+      outline: none;
     }
 
+    /* TOOLTIP */
     .tooltip-box {
       position: absolute;
       bottom: -60px;
       left: 50%;
       transform: translateX(-50%);
-      max-width: 280px;
-      padding: 0.75rem 1rem;
+      max-width: 260px;
+      padding: 0.7rem 1rem;
       background-color: #e6f4ea;
       color: #2e7d32;
       border: 1px solid #a5d6a7;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 0.9rem;
-      box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
+      box-shadow: 0 4px 14px rgb(46 125 50 / 0.18);
       text-align: center;
       user-select: none;
       display: none;
-      z-index: 10;
+      z-index: 100;
       pointer-events: auto;
+      line-height: 1.3;
+      word-wrap: break-word;
     }
 
+    /* WARNING BOX */
     .warning-box {
       margin-top: 1rem;
-      padding: 0.75rem;
+      padding: 0.8rem 1rem;
       background-color: #fee2e2;
       color: #b91c1c;
       border: 1px solid #fca5a5;
-      border-radius: 8px;
+      border-radius: 12px;
+      font-weight: 600;
       display: none;
+      user-select: text;
     }
 
+    /* FOOTER */
     footer {
+      margin-top: 3rem;
       text-align: center;
-      padding: 2rem;
-      color: #aaa;
+      color: #999;
       font-size: 0.9rem;
+      user-select: none;
     }
 
+    /* HELP BUTTON */
     .help-button {
       position: fixed;
       bottom: 20px;
@@ -211,17 +278,53 @@
       background-color: #4caf50;
       color: white;
       border: none;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      transition: background-color 0.3s ease;
     }
 
-    .help-button:hover {
-      background-color: #43a047;
+    .help-button:hover,
+    .help-button:focus {
+      background-color: #388e3c;
+      outline: none;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 480px) {
+      header {
+        padding: 1rem 1rem;
+        justify-content: center;
+        gap: 0.8rem;
+      }
+      .header-text h1 {
+        font-size: 1.4rem;
+      }
+      .header-text p {
+        font-size: 0.85rem;
+      }
+      .access-form-container {
+        padding: 1.5rem 1.8rem;
+        max-width: 100%;
+      }
+      input#kodeAkses {
+        font-size: 1rem;
+        padding-right: 2.6rem;
+      }
+      button.try {
+        font-size: 1rem;
+        padding: 0.75rem 1rem;
+      }
+    }
+
+    @media (min-width: 961px) {
+      body {
+        padding: 2rem 0;
+      }
     }
   </style>
 </head>
@@ -236,59 +339,110 @@
     </div>
   </header>
 
-  <section class="access-form-container">
-    <h2>Masukkan Kode Akses</h2>
-    <input type="password" id="kodeAkses" placeholder="6 digit angka" />
-    <div class="show-code-container">
-      <label for="toggleShow">
-        <input type="checkbox" id="toggleShow" /> Tampilkan Kode
-      </label>
+  <section class="access-form-container" role="form" aria-labelledby="formTitle">
+    <h2 id="formTitle">Masukkan Kode Akses</h2>
+    <div class="input-wrapper">
+      <input
+        type="password"
+        id="kodeAkses"
+        name="kodeAkses"
+        placeholder="6 digit angka"
+        maxlength="6"
+        autocomplete="current-password"
+        aria-label="Kode Akses"
+        required
+      />
+      <button
+        type="button"
+        class="toggle-password"
+        aria-label="Tampilkan atau sembunyikan kode akses"
+        onclick="togglePassword()"
+      >
+        <svg
+          id="eye-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+          />
+        </svg>
+      </button>
     </div>
-    <button class="try" onclick="cekKodeAkses()">Coba Sekarang</button>
+
+    <button class="try" type="submit" onclick="cekKodeAkses()">Coba Sekarang</button>
 
     <div class="trial-container">
-      <a href="https://lynk.id/primajanaedu/l314kx5emnky/checkout" class="get" target="_blank" rel="noopener noreferrer">
+      <a href="https://lynk.id/primajanaedu/l314kx5emnky/checkout" class="get" target="_blank" rel="noopener noreferrer" tabindex="0">
         Dapatkan Kode Trial
       </a>
-      <div class="info-icon" id="infoIcon" title="Informasi Kode Trial">i</div>
-      <div class="tooltip-box" id="tooltipInfo">
+      <div class="info-icon" id="infoIcon" tabindex="0" role="button" aria-describedby="tooltipInfo" aria-expanded="false" aria-label="Informasi Kode Trial">i</div>
+      <div class="tooltip-box" id="tooltipInfo" role="tooltip">
         Kode akses akan dikirimkan via email, gratis dan bisa langsung dipakai
       </div>
     </div>
 
-    <div id="peringatan" class="warning-box">Kode akses tidak valid. Silakan coba lagi.</div>
+    <div id="peringatan" class="warning-box" role="alert" aria-live="assertive"></div>
   </section>
 
   <footer>
     &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
   </footer>
 
-  <button class="help-button" onclick="window.open('https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20ingin%20mendapatkan%20kode%20trial.', '_blank')">?</button>
+  <button
+    class="help-button"
+    aria-label="Bantuan via WhatsApp"
+    onclick="window.open('https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20ingin%20mendapatkan%20kode%20trial.', '_blank')"
+  >
+    ?
+  </button>
 
   <script>
-    // Toggle tampilkan kode akses
-    document.getElementById('toggleShow').addEventListener('change', function() {
+    // Toggle show/hide password & ganti ikon
+    function togglePassword() {
       const input = document.getElementById('kodeAkses');
-      if (this.checked) {
+      const eyeIcon = document.getElementById('eye-icon');
+      if (input.type === 'password') {
         input.type = 'text';
+        eyeIcon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.956 9.956 0 012.364-3.431m3.224-2.576a3 3 0 104.243 4.243"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 01-3 3"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18"/>
+        `;
       } else {
         input.type = 'password';
+        eyeIcon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        `;
       }
-    });
+    }
 
-    // Fungsi cek kode akses
+    // Cek kode akses
     function cekKodeAkses() {
-      const input = document.getElementById('kodeAkses').value.trim();
+      const inputElem = document.getElementById('kodeAkses');
+      const input = inputElem.value.trim();
       const peringatan = document.getElementById('peringatan');
       peringatan.style.display = "none";
+      peringatan.textContent = '';
 
       const formatValid = /^\d{6}$/.test(input);
-      const kodeValid = ["052025"]; // Daftar kode sah
+      const kodeValid = ["052025"]; // Kode akses valid
       const halamanRedirect = "trial_home.html";
 
       if (!formatValid) {
         peringatan.textContent = "Kode harus terdiri dari 6 digit angka.";
         peringatan.style.display = "block";
+        inputElem.focus();
         return;
       }
 
@@ -297,34 +451,34 @@
       } else {
         peringatan.textContent = "Kode akses tidak valid. Silakan coba lagi.";
         peringatan.style.display = "block";
+        inputElem.focus();
       }
     }
 
-    // Toggle tooltip info
-    document.getElementById('infoIcon').addEventListener('click', function(event) {
-      event.stopPropagation(); // supaya klik tidak bubble ke body
-      const tooltip = document.getElementById('tooltipInfo');
-      if (tooltip.style.display === 'block') {
-        tooltip.style.display = 'none';
-      } else {
-        tooltip.style.display = 'block';
+    // Tooltip toggle
+    const infoIcon = document.getElementById('infoIcon');
+    const tooltip = document.getElementById('tooltipInfo');
+
+    infoIcon.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const shown = tooltip.style.display === 'block';
+      tooltip.style.display = shown ? 'none' : 'block';
+      infoIcon.setAttribute('aria-expanded', !shown);
+    });
+
+    // Tutup tooltip jika klik di luar
+    document.body.addEventListener('click', () => {
+      tooltip.style.display = 'none';
+      infoIcon.setAttribute('aria-expanded', false);
+    });
+
+    // Keyboard accessibility untuk infoIcon
+    infoIcon.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        infoIcon.click();
       }
     });
-
-    // Klik di luar tooltip dan ikon untuk tutup tooltip
-    document.body.addEventListener('click', function() {
-      const tooltip = document.getElementById('tooltipInfo');
-      tooltip.style.display = 'none';
-    });
-  </script>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TL1GH741HF"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-TL1GH741HF');
   </script>
 </body>
 </html>
