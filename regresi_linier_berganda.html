@@ -68,41 +68,82 @@
     let csvData = {};
 
     function handleCSVUpload(event) {
-      resetOutput();
-      const file = event.target.files[0];
-      if (!file) return;
+  resetOutput();
+  const file = event.target.files[0];
+  if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const lines = e.target.result.split(/\r?\n/).filter(line => line.trim() !== "");
-        const delimiter = detectDelimiter(lines[0]);
-        const headers = lines[0].split(delimiter);
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    let rawText = e.target.result.trim();
+    const delimiter = detectDelimiter(rawText);
+    
+    // Parsing lebih baik menggunakan regex untuk split baris
+    const rows = rawText.split(/\r?\n/).filter(row => row.trim() !== "");
+    
+    // Gunakan regex untuk memisahkan kolom, mendukung nilai dalam tanda kutip
+    const parseRow = (row) => {
+      const pattern = new RegExp(
+        `\\s*(?:\"([^"]*(?:\"\"[^"]*)*)\"|([^${delimiter}]+))\\s*(?:${delimiter}|$)`, "g"
+      );
+      const result = [];
+      let match;
+      while ((match = pattern.exec(row)) !== null) {
+        result.push(match[1] !== undefined ? match[1].replace(/""/g, '"') : match[2]);
+      }
+      return result.filter(v => v !== undefined); // remove trailing undefined from last delimiter
+    };
 
-        csvRawData = lines.slice(1).map(line => line.split(delimiter));
+    const headers = parseRow(rows[0]);
+    const parsedData = rows.slice(1).map(parseRow).filter(row => row.length === headers.length);
 
-        let transformedData = {};
-        headers.forEach(h => transformedData[h] = []);
+    if (parsedData.length === 0) {
+      alert("Data kosong atau format tidak sesuai.");
+      return;
+    }
 
-        for (let row of csvRawData) {
-          headers.forEach((h, i) => {
-            transformedData[h].push(row[i]);
-          });
+    let transformedData = {};
+    headers.forEach(h => transformedData[h] = []);
+
+    for (let row of parsedData) {
+      headers.forEach((h, i) => {
+        transformedData[h].push(row[i]?.trim() ?? "");
+      });
+    }
+
+    csvData = {};
+    for (let h of headers) {
+      const col = transformedData[h];
+      const numericValues = col.map(v => parseFloat(v)).filter(v => !isNaN(v));
+
+      // Jika lebih dari 80% data adalah angka → treat as numeric
+      const isMostlyNumeric = numericValues.length / col.length > 0.8;
+
+      if (isMostlyNumeric) {
+        csvData[h] = col.map(v => parseFloat(v) || 0); // ubah string kosong/NaN ke 0
+      } else {
+        // One-hot encoding untuk kategori
+        const uniqueVals = [...new Set(col)];
+        for (let val of uniqueVals.slice(1)) {
+          const colName = `${h}_${val}`;
+          csvData[colName] = col.map(v => (v === val ? 1 : 0));
         }
+      }
+    }
 
-        csvData = {};
-        for (let h of headers) {
-          const isNumeric = transformedData[h].every(v => !isNaN(parseFloat(v)));
-          if (isNumeric) {
-            csvData[h] = transformedData[h].map(v => parseFloat(v));
-          } else {
-            // one-hot encoding
-            const uniqueVals = [...new Set(transformedData[h])];
-            for (let val of uniqueVals.slice(1)) { // avoid dummy trap
-              const colName = `${h}_${val}`;
-              csvData[colName] = transformedData[h].map(v => (v === val ? 1 : 0));
-            }
-          }
-        }
+    const columnY = document.getElementById("columnY");
+    const csvKeys = Object.keys(csvData);
+    columnY.innerHTML = csvKeys.map(h => `<option value="${h}">${h}</option>`).join('');
+    columnY.disabled = false;
+
+    columnY.onchange = () => populateCheckboxes();
+    populateCheckboxes();
+
+    document.getElementById("prosesBtn").disabled = false;
+  };
+
+  reader.readAsText(file);
+}
+
 
         const columnY = document.getElementById("columnY");
         const csvKeys = Object.keys(csvData);
