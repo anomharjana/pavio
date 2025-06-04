@@ -133,6 +133,57 @@
       background-color: #43a047;
     }
     
+    .dataset-card {
+  background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+  border: 1.5px solid #bbdefb;
+  box-shadow: 0 6px 18px rgba(100, 181, 246, 0.15);
+}
+
+.dataset-card h3 {
+  color: #1565c0;
+  font-weight: 700;
+}
+
+.dataset-card .icon-circle {
+  background-color: #bbdefb;
+  padding: 8px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dataset-card svg {
+  width: 24px;
+  height: 24px;
+  stroke: #1565c0;
+}
+
+.dataset-card a {
+  color: #0d47a1;
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  margin-top: 0.4rem;
+}
+
+.dataset-card a::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  left: 0;
+  bottom: -2px;
+  background-color: #0d47a1;
+  transition: width 0.3s ease;
+}
+
+.dataset-card a:hover::after {
+  width: 100%;
+}
+
+    
   </style>
 </head>
 <body>
@@ -210,24 +261,27 @@
       <button onclick="window.location.href='pemetaan.html'">Lihat Peta</button>
     </div>
     
-        <div class="feature" style="background-color: #e3f2fd; border: 2px dashed #64b5f6;">
-      <h3 style="color: #1565c0;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 7V17C3 18.1 3.9 19 5 19H19C20.1 19 21 18.1 21 17V7" />
-          <polyline points="3 7 12 13 21 7" />
-        </svg>
-        Contoh Dataset
-      </h3>
-      <p>
-        <a href="https://res.cloudinary.com/djexglfns/raw/upload/v1749047695/Contoh_Data_1_-_Deskriptif_to_Multivariat_ssmxda.csv" download target="_blank" style="color: #0d47a1; font-weight: 600; text-decoration: underline;">
-          Dataset 1: Analisis Deskriptif-Multivariat
-        </a>
-        <br />
-        <a href="https://res.cloudinary.com/djexglfns/raw/upload/v1749047696/Contoh_Data_2_-_Pemetaan_rhyn56.csv" download target="_blank" style="color: #0d47a1; font-weight: 600; text-decoration: underline;">
-          Dataset 2: Pemetaan
-        </a>
-      </p>
-    </div>
+       <div class="feature dataset-card">
+  <h3>
+    <span class="icon-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 7V17C3 18.1 3.9 19 5 19H19C20.1 19 21 18.1 21 17V7" />
+        <polyline points="3 7 12 13 21 7" />
+      </svg>
+    </span>
+    Contoh Dataset
+  </h3>
+  <p>
+    <a href="https://res.cloudinary.com/djexglfns/raw/upload/v1749047695/Contoh_Data_1_-_Deskriptif_to_Multivariat_ssmxda.csv" download target="_blank">
+      Dataset 1: Analisis Deskriptif–Multivariat
+    </a>
+    <br />
+    <a href="https://res.cloudinary.com/djexglfns/raw/upload/v1749047696/Contoh_Data_2_-_Pemetaan_rhyn56.csv" download target="_blank">
+      Dataset 2: Pemetaan
+    </a>
+  </p>
+</div>
+
 
     
   </section>
