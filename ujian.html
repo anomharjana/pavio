@@ -75,27 +75,12 @@
     #formContainer {
       display: none;
       margin-top: 20px;
-      position: relative;
     }
 
     #formContainer iframe {
       width: 100%;
       height: 700px;
       border: none;
-    }
-
-    #fullscreenBtn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(0,0,0,0.6);
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-      z-index: 10;
     }
 
     #timeoutMessage {
@@ -159,11 +144,6 @@
         padding: 15px;
       }
 
-      #fullscreenBtn {
-        font-size: 14px;
-        padding: 6px 10px;
-      }
-
       #timer {
         font-size: 16px;
         padding: 8px 12px;
@@ -184,7 +164,6 @@
     <div id="timer" style="display: none;">Sisa Waktu: 60:00</div>
 
     <div id="formContainer">
-      <button id="fullscreenBtn">📺 Layar Penuh</button>
       <iframe id="formFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSdoR2BSxdNMxYCe2K0KfxV89N3gONOi8DAJfabybi2ryoNGdA/viewform?embedded=true">Memuat…</iframe>
     </div>
 
@@ -216,8 +195,6 @@
     const formContainer = document.getElementById('formContainer');
     const timeoutMessage = document.getElementById('timeoutMessage');
     const warningSound = document.getElementById('warningSound');
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
-    const formFrame = document.getElementById('formFrame');
 
     let countdown;
     let violationCount = 0;
@@ -263,7 +240,7 @@
       timerEl.style.display = 'block';
       examStarted = true;
 
-      // Audio autoplay workaround
+      // Autoplay workaround
       warningSound.play().then(() => {
         warningSound.pause();
         warningSound.currentTime = 0;
@@ -278,17 +255,6 @@
         violationCount++;
         warningSound.play().catch(() => {});
         alert(`⚠️ PERINGATAN: Anda telah meninggalkan halaman sebanyak ${violationCount} kali!`);
-      }
-    });
-
-    // Tombol fullscreen
-    fullscreenBtn.addEventListener('click', () => {
-      if (formFrame.requestFullscreen) {
-        formFrame.requestFullscreen();
-      } else if (formFrame.webkitRequestFullscreen) {
-        formFrame.webkitRequestFullscreen();
-      } else if (formFrame.msRequestFullscreen) {
-        formFrame.msRequestFullscreen();
       }
     });
   </script>
