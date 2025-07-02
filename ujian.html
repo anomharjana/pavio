@@ -10,10 +10,6 @@
       background: #f9f9f9;
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
     }
 
     .container {
@@ -46,10 +42,18 @@
     }
 
     #timer {
-      font-size: 24px;
-      margin: 20px 0;
-      font-weight: bold;
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: #fff;
+      border: 2px solid #e74c3c;
       color: #e74c3c;
+      font-weight: bold;
+      font-size: 18px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      z-index: 999;
     }
 
     .blink-slow {
@@ -71,12 +75,27 @@
     #formContainer {
       display: none;
       margin-top: 20px;
+      position: relative;
     }
 
-    iframe {
+    #formContainer iframe {
       width: 100%;
       height: 700px;
       border: none;
+    }
+
+    #fullscreenBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 10;
     }
 
     #timeoutMessage {
@@ -105,7 +124,6 @@
       border-radius: 10px;
       text-align: left;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 0.3s ease;
     }
 
     .modal h3 {
@@ -115,7 +133,6 @@
 
     .modal ul {
       padding-left: 20px;
-      margin-top: 10px;
     }
 
     .modal ul li {
@@ -131,16 +148,30 @@
       font-size: 16px;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
 
     .modal button:hover {
       background-color: #219150;
     }
 
-    @keyframes fadeIn {
-      from {opacity: 0; transform: scale(0.95);}
-      to {opacity: 1; transform: scale(1);}
+    @media screen and (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+
+      #fullscreenBtn {
+        font-size: 14px;
+        padding: 6px 10px;
+      }
+
+      #timer {
+        font-size: 16px;
+        padding: 8px 12px;
+      }
+
+      #formContainer iframe {
+        height: 500px;
+      }
     }
   </style>
 </head>
@@ -150,10 +181,11 @@
     <h2>Dasar Kesehatan Reproduksi dan Keluarga</h2>
     <p>Silakan klik tombol di bawah ini untuk memulai ujian.</p>
     <button id="startBtn">Mulai Ujian</button>
-    <div id="timer"></div>
+    <div id="timer" style="display: none;">Sisa Waktu: 60:00</div>
 
     <div id="formContainer">
-      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdoR2BSxdNMxYCe2K0KfxV89N3gONOi8DAJfabybi2ryoNGdA/viewform?embedded=true">Memuat…</iframe>
+      <button id="fullscreenBtn">📺 Layar Penuh</button>
+      <iframe id="formFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSdoR2BSxdNMxYCe2K0KfxV89N3gONOi8DAJfabybi2ryoNGdA/viewform?embedded=true">Memuat…</iframe>
     </div>
 
     <div id="timeoutMessage">Waktu ujian telah habis. Silakan serahkan perangkat Anda.</div>
@@ -164,32 +196,33 @@
     <div class="modal">
       <h3>Aturan dan Petunjuk Ujian</h3>
       <ul>
-        <li>Tidak diperbolehkan menyontek atau bekerja sama dengan orang lain.</li>
-        <li>Dilarang membuka tab lain, aplikasi lain, atau menggunakan perangkat kedua.</li>
-        <li>Periksa kembali jawaban Anda dan tekan "Kirim" sebelum waktu habis.</li>
-        <li>Jika waktu habis, form akan ditutup secara otomatis dan jawaban yang belum dikirim tidak akan tersimpan.</li>
-        <li>Peserta yang melanggar aturan siap untuk tidak lulus ujian.</li>
+        <li>Dilarang menyontek atau membuka tab/aplikasi lain.</li>
+        <li>Form akan tertutup otomatis jika waktu habis.</li>
+        <li>Pastikan tekan "Kirim" sebelum waktu habis agar jawaban tersimpan.</li>
+        <li>Setiap pelanggaran akan tercatat. Siap tidak lulus jika melanggar.</li>
       </ul>
       <button id="agreeBtn">OK, Saya Mengerti</button>
     </div>
   </div>
 
-  <!-- Audio Warning -->
+  <!-- Suara Peringatan -->
   <audio id="warningSound" src="https://www.soundjay.com/buttons/sounds/beep-07.mp3" preload="auto"></audio>
 
   <script>
     const startBtn = document.getElementById('startBtn');
+    const agreeBtn = document.getElementById('agreeBtn');
+    const rulesModal = document.getElementById('rulesModal');
     const timerEl = document.getElementById('timer');
     const formContainer = document.getElementById('formContainer');
     const timeoutMessage = document.getElementById('timeoutMessage');
-    const rulesModal = document.getElementById('rulesModal');
-    const agreeBtn = document.getElementById('agreeBtn');
     const warningSound = document.getElementById('warningSound');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const formFrame = document.getElementById('formFrame');
 
     let countdown;
-    const duration = 60 * 60; // 60 menit dalam detik
-    let examStarted = false;
     let violationCount = 0;
+    let examStarted = false;
+    const duration = 60 * 60; // 60 menit
 
     function startCountdown(seconds) {
       let remaining = seconds;
@@ -199,7 +232,7 @@
         const secs = remaining % 60;
         timerEl.textContent = `Sisa Waktu: ${minutes}:${secs < 10 ? '0' + secs : secs}`;
 
-        // Efek berkedip
+        // Blink effect
         timerEl.classList.remove('blink-slow', 'blink-fast');
         if (remaining <= 60) {
           timerEl.classList.add('blink-fast');
@@ -227,25 +260,35 @@
       rulesModal.style.display = 'none';
       startBtn.style.display = 'none';
       formContainer.style.display = 'block';
+      timerEl.style.display = 'block';
       examStarted = true;
 
-      // Persiapkan audio agar bisa diputar nanti (autoplay workaround)
+      // Audio autoplay workaround
       warningSound.play().then(() => {
         warningSound.pause();
         warningSound.currentTime = 0;
-      }).catch(() => {
-        // Autoplay mungkin diblokir — tidak masalah
-      });
+      }).catch(() => {});
 
       startCountdown(duration);
     });
 
-    // Deteksi pelanggaran (tab lain / minimize)
+    // Pelanggaran: keluar tab
     window.addEventListener('blur', () => {
       if (examStarted) {
         violationCount++;
         warningSound.play().catch(() => {});
         alert(`⚠️ PERINGATAN: Anda telah meninggalkan halaman sebanyak ${violationCount} kali!`);
+      }
+    });
+
+    // Tombol fullscreen
+    fullscreenBtn.addEventListener('click', () => {
+      if (formFrame.requestFullscreen) {
+        formFrame.requestFullscreen();
+      } else if (formFrame.webkitRequestFullscreen) {
+        formFrame.webkitRequestFullscreen();
+      } else if (formFrame.msRequestFullscreen) {
+        formFrame.msRequestFullscreen();
       }
     });
   </script>
