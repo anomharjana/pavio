@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ujian CBT</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+    }
+
+    #startBtn {
+      padding: 12px 25px;
+      font-size: 18px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #startBtn:hover {
+      background-color: #2980b9;
+    }
+
+    #timer {
+      font-size: 24px;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #e74c3c;
+    }
+
+    .blink-slow {
+      animation: blinkSlow 1s step-start infinite;
+    }
+
+    .blink-fast {
+      animation: blinkFast 0.4s step-start infinite;
+    }
+
+    @keyframes blinkSlow {
+      50% { opacity: 0; }
+    }
+
+    @keyframes blinkFast {
+      50% { opacity: 0; }
+    }
+
+    #formContainer {
+      display: none;
+      margin-top: 20px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
+    }
+
+    #timeoutMessage {
+      display: none;
+      color: red;
+      font-weight: bold;
+      font-size: 20px;
+      margin-top: 20px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      background: white;
+      padding: 30px;
+      max-width: 600px;
+      border-radius: 10px;
+      text-align: left;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal h3 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    .modal ul {
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    .modal ul li {
+      margin-bottom: 10px;
+    }
+
+    .modal button {
+      margin-top: 20px;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .modal button:hover {
+      background-color: #219150;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.95);}
+      to {opacity: 1; transform: scale(1);}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ujian CBT</h1>
+    <h2>Dasar Kesehatan Reproduksi dan Keluarga</h2>
+    <p>Silakan klik tombol di bawah ini untuk memulai ujian.</p>
+    <button id="startBtn">Mulai Ujian</button>
+    <div id="timer"></div>
+
+    <div id="formContainer">
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdoR2BSxdNMxYCe2K0KfxV89N3gONOi8DAJfabybi2ryoNGdA/viewform?embedded=true">Memuat…</iframe>
+    </div>
+
+    <div id="timeoutMessage">Waktu ujian telah habis. Silakan serahkan perangkat Anda.</div>
+  </div>
+
+  <!-- Modal Aturan -->
+  <div id="rulesModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <h3>Aturan dan Petunjuk Ujian</h3>
+      <ul>
+        <li>Tidak diperbolehkan menyontek atau bekerja sama dengan orang lain.</li>
+        <li>Dilarang membuka tab lain, aplikasi lain, atau menggunakan perangkat kedua.</li>
+        <li>Periksa kembali jawaban Anda dan tekan "Kirim" sebelum waktu habis.</li>
+        <li>Jika waktu habis, form akan ditutup secara otomatis dan jawaban yang belum dikirim tidak akan tersimpan.</li>
+        <li>Peserta yang melanggar aturan siap untuk tidak lulus ujian.</li>
+      </ul>
+      <button id="agreeBtn">OK, Saya Mengerti</button>
+    </div>
+  </div>
+
+  <!-- Audio Warning -->
+  <audio id="warningSound" src="https://www.soundjay.com/buttons/sounds/beep-07.mp3" preload="auto"></audio>
+
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const timerEl = document.getElementById('timer');
+    const formContainer = document.getElementById('formContainer');
+    const timeoutMessage = document.getElementById('timeoutMessage');
+    const rulesModal = document.getElementById('rulesModal');
+    const agreeBtn = document.getElementById('agreeBtn');
+    const warningSound = document.getElementById('warningSound');
+
+    let countdown;
+    const duration = 60 * 60; // 60 menit dalam detik
+    let examStarted = false;
+    let violationCount = 0;
+
+    function startCountdown(seconds) {
+      let remaining = seconds;
+
+      countdown = setInterval(() => {
+        const minutes = Math.floor(remaining / 60);
+        const secs = remaining % 60;
+        timerEl.textContent = `Sisa Waktu: ${minutes}:${secs < 10 ? '0' + secs : secs}`;
+
+        // Efek berkedip
+        timerEl.classList.remove('blink-slow', 'blink-fast');
+        if (remaining <= 60) {
+          timerEl.classList.add('blink-fast');
+        } else if (remaining <= 300) {
+          timerEl.classList.add('blink-slow');
+        }
+
+        if (remaining <= 0) {
+          clearInterval(countdown);
+          timerEl.textContent = "Waktu Habis";
+          timerEl.classList.remove('blink-slow', 'blink-fast');
+          formContainer.style.display = 'none';
+          timeoutMessage.style.display = 'block';
+        }
+
+        remaining--;
+      }, 1000);
+    }
+
+    startBtn.addEventListener('click', () => {
+      rulesModal.style.display = 'flex';
+    });
+
+    agreeBtn.addEventListener('click', () => {
+      rulesModal.style.display = 'none';
+      startBtn.style.display = 'none';
+      formContainer.style.display = 'block';
+      examStarted = true;
+
+      // Persiapkan audio agar bisa diputar nanti (autoplay workaround)
+      warningSound.play().then(() => {
+        warningSound.pause();
+        warningSound.currentTime = 0;
+      }).catch(() => {
+        // Autoplay mungkin diblokir — tidak masalah
+      });
+
+      startCountdown(duration);
+    });
+
+    // Deteksi pelanggaran (tab lain / minimize)
+    window.addEventListener('blur', () => {
+      if (examStarted) {
+        violationCount++;
+        warningSound.play().catch(() => {});
+        alert(`⚠️ PERINGATAN: Anda telah meninggalkan halaman sebanyak ${violationCount} kali!`);
+      }
+    });
+  </script>
+</body>
+</html>
