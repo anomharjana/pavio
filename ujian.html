@@ -139,6 +139,43 @@
       background-color: #219150;
     }
 
+    /* Game Styles */
+    #gameContainer {
+      margin-top: 40px;
+    }
+
+    .draggable {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #ecf0f1;
+      border: 2px solid #7f8c8d;
+      border-radius: 8px;
+      margin: 10px;
+      cursor: grab;
+      user-select: none;
+      font-weight: bold;
+    }
+
+    #dropZone {
+      margin-top: 20px;
+      padding: 30px;
+      border: 3px dashed #95a5a6;
+      border-radius: 10px;
+      background: #fefefe;
+      min-height: 80px;
+    }
+
+    #resultCard {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-left: 5px solid #3498db;
+      font-size: 16px;
+      display: none;
+      text-align: left;
+      border-radius: 10px;
+    }
+
     @media screen and (max-width: 600px) {
       .container {
         padding: 15px;
@@ -162,6 +199,18 @@
     <p>Silakan klik tombol di bawah ini untuk memulai ujian.</p>
     <button id="startBtn">Mulai Ujian</button>
     <div id="timer" style="display: none;">Sisa Waktu: 60:00</div>
+
+    <!-- GAME EDUKASI -->
+    <div id="gameContainer">
+      <h3>💌 Pesan Kami (dari para Dosen PSSKM FK Unud): </h3>
+      <div>
+        <div class="draggable" draggable="true" data-value="Kerja Keras">Kerja Keras</div>
+        <div class="draggable" draggable="true" data-value="Jujur">Jujur</div>
+        <div class="draggable" draggable="true" data-value="Curang">Curang</div>
+      </div>
+      <div id="dropZone">Drop di sini dua nilai untuk melihat hasilnya</div>
+      <div id="resultCard"></div>
+    </div>
 
     <div id="formContainer">
       <iframe id="formFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSdoR2BSxdNMxYCe2K0KfxV89N3gONOi8DAJfabybi2ryoNGdA/viewform?embedded=true">Memuat…</iframe>
@@ -209,7 +258,6 @@
         const secs = remaining % 60;
         timerEl.textContent = `Sisa Waktu: ${minutes}:${secs < 10 ? '0' + secs : secs}`;
 
-        // Blink effect
         timerEl.classList.remove('blink-slow', 'blink-fast');
         if (remaining <= 60) {
           timerEl.classList.add('blink-fast');
@@ -240,7 +288,6 @@
       timerEl.style.display = 'block';
       examStarted = true;
 
-      // Autoplay workaround
       warningSound.play().then(() => {
         warningSound.pause();
         warningSound.currentTime = 0;
@@ -249,12 +296,64 @@
       startCountdown(duration);
     });
 
-    // Pelanggaran: keluar tab
     window.addEventListener('blur', () => {
       if (examStarted) {
         violationCount++;
         warningSound.play().catch(() => {});
         alert(`⚠️ PERINGATAN: Anda telah meninggalkan halaman sebanyak ${violationCount} kali!`);
+      }
+    });
+
+    // Game logic
+    const draggables = document.querySelectorAll('.draggable');
+    const dropZone = document.getElementById('dropZone');
+    const resultCard = document.getElementById('resultCard');
+    let selections = [];
+
+    draggables.forEach(el => {
+      el.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', el.dataset.value);
+      });
+    });
+
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropZone.style.backgroundColor = "#ecf0f1";
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.style.backgroundColor = "#fefefe";
+    });
+
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      const value = e.dataTransfer.getData('text/plain');
+      if (!selections.includes(value)) {
+        selections.push(value);
+        dropZone.innerHTML += `<span style="margin:0 10px; font-weight:bold;">${value}</span>`;
+      }
+
+      if (selections.length === 2) {
+        const [a, b] = selections.sort();
+        let message = "";
+
+        if ((a === "Curang" && b === "Jujur") || (a === "Jujur" && b === "Curang")) {
+  message = "Memilih antara Jujur dan Curang bukanlah pilihan yang mudah, tetapi mencampurkan keduanya hanya akan menimbulkan kebingungan dalam hidup. Kejujuran dan kecurangan tidak bisa berjalan seiring karena nilai-nilainya bertolak belakang. Jangan bingung! Tentukan jalan hidup yang jelas dan benar agar masa depanmu lebih baik dan bermakna.";
+} else if ((a === "Curang" && b === "Kerja Keras") || (a === "Kerja Keras" && b === "Curang")) {
+  message = "Kerja keras memang kunci keberhasilan, namun jika dicampur dengan kecurangan, maka semua usaha menjadi sia-sia. Kecurangan merusak hasil dan membuatmu hidup dalam kekhawatiran, ketidakpastian, dan rasa bersalah. Kerja keras dengan cara curang hanya akan membawa masalah dan menjauhkanmu dari kepercayaan dan keberkahan sejati.";
+} else if ((a === "Jujur" && b === "Kerja Keras") || (a === "Kerja Keras" && b === "Jujur")) {
+  message = "Ketika kerja keras dipadukan dengan kejujuran, maka hasilnya adalah kesuksesan yang utuh dan kebahagiaan yang hakiki. Orang yang jujur dan giat akan dihargai, dipercaya, dan mendapatkan hasil yang membawa ketenangan batin. Inilah fondasi kehidupan yang sukses secara lahir dan batin.";
+} else {
+  message = "Kombinasi tidak dikenali. Silakan pilih dua nilai untuk melihat maknanya.";
+}
+
+        resultCard.textContent = message;
+        resultCard.style.display = 'block';
+        selections = [];
+        setTimeout(() => {
+          dropZone.innerHTML = "Drop di sini dua nilai untuk melihat hasilnya";
+          dropZone.style.backgroundColor = "#fefefe";
+        }, 2000);
       }
     });
   </script>
