@@ -7,14 +7,14 @@
     * { box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
-      background-color: #eaeaea;
+      background-color: #e0f2f7; /* Nuansa biru muda untuk background */
       margin: 0;
       padding: 0;
     }
     header {
-      background: #800000;
+      background: #FFFFFF;
       padding: 20px;
-      border-bottom: 4px solid #ff9999;
+      border-bottom: 4px solid #99ccff; /* Nuansa biru untuk border bawah header */
       position: relative;
     }
     header img {
@@ -25,7 +25,7 @@
     header h1 {
       margin: 0;
       font-size: 20px;
-      color: #ffffff;
+      color: #000000;
     }
     .info-bar {
       position: absolute;
@@ -50,14 +50,14 @@
       margin: auto;
     }
     .user-info {
-      background: #f1f5f9;
+      background: #e6f7ff; /* Nuansa biru sangat muda */
       padding: 15px;
-      border: 1px solid #ccc;
+      border: 1px solid #b3e0ff; /* Nuansa biru untuk border */
       margin-bottom: 20px;
     }
     .soal-box {
       background: #fff;
-      border: 1px solid #ccc;
+      border: 1px solid #b3e0ff; /* Nuansa biru untuk border */
       padding: 20px;
       margin-bottom: 20px;
     }
@@ -70,7 +70,7 @@
       border: none;
       margin-right: 10px;
       cursor: pointer;
-      background: #800000;
+      background: #007bff; /* Biru cerah untuk tombol utama */
       color: white;
       border-radius: 5px;
     }
@@ -88,13 +88,13 @@
       cursor: pointer;
       font-weight: bold;
     }
-    .green { background: #16a34a; color: white; }
-    .red { background: #dc2626; color: white; }
+    .green { background: #16a34a; color: white; } /* Tetap hijau untuk dijawab */
+    .red { background: #dc2626; color: white; } /* Tetap merah untuk belum dijawab (atau bisa diganti ke abu-abu/biru gelap jika ingin konsisten) */
     #timer-box {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: black;
+      background: #0056b3; /* Biru gelap untuk timer */
       color: white;
       font-size: 24px;
       padding: 10px 20px;
@@ -107,28 +107,27 @@
     }
     
     #btn-kirim {
-  background-color: #ff8033; /* Ungu */
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-  display: none; /* hanya muncul saat semua soal dijawab */
-}
+      background-color: #007bff; /* Biru cerah untuk tombol kirim */
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      display: none; /* hanya muncul saat semua soal dijawab */
+    }
 
   </style>
 </head>
 <body onload="initApp()">
   <header>
-    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1747277441/WhatsApp_Image_2025-05-15_at_10.49.29_AM-modified_jeccm6.png" alt="BKN Primajana Education">
-    <h1>COMPUTER ASSISTED TEST<br>Primajana Education Center</h1>
+    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="BKN Primajana Education">
+    <h1>COMPUTER ASSISTED TEST<br>Tools Simulasi CPNS</h1>
     <div class="info-bar">
       <div class="info-item"><strong>Batas Waktu</strong>90</div>
       <div class="info-item"><strong>Jumlah Soal</strong>110</div>
       <div class="info-item" style="color: green"><strong>Soal Dijawab</strong><span id="dijawab">0</span></div>
-      <div class="info-item" style="color: red"><strong>Belum Dijawab</strong><span id="belum">110</span></div>
-      <button id="btn-selesai" onclick="konfirmasiSelesai()">Selesai Ujian</button>
+      <div class="info-item" style="color: #dc2626"><strong>Belum Dijawab</strong><span id="belum">110</span></div> <button id="btn-selesai" onclick="konfirmasiSelesai()">Selesai Ujian</button>
     </div>
   </header>
 
@@ -169,7 +168,7 @@
     }
 
     // TWK
- for (let i = 0; i < 30; i++) {
+for (let i = 0; i < 30; i++) {
   soal.push({
     tanya: [
       "Di mana teks Proklamasi Kemerdekaan Indonesia dibacakan?",
