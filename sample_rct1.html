@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RCT Sample Size Calculator</title>
+  <title>Sample Size Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
@@ -35,6 +35,19 @@
       font-size: 14px;
       color: #777;
       display: block;
+    }
+    .case-study {
+      background-color: #f1f5ff;
+      padding: 15px 20px;
+      border-left: 5px solid #007bff;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    .case-study h2 {
+      font-size: 18px;
+      margin-top: 0;
+      color: #0056b3;
     }
     label {
       display: block;
@@ -121,6 +134,14 @@
     <div class="card" id="outputArea">
       <h1>Perhitungan Besar Sampel <span>Untuk Penelitian Eksperimental (RCT)</span></h1>
 
+      <!-- Studi Kasus -->
+      <div class="case-study">
+        <h2>📚 Contoh Studi Kasus</h2>
+        <p>Seorang peneliti ingin mengevaluasi efektivitas program edukasi kesehatan terhadap peningkatan perilaku mencuci tangan di sekolah dasar. Dalam studi sebelumnya, sekitar 40% siswa rutin mencuci tangan (grup kontrol). Peneliti memperkirakan intervensi edukasi dapat meningkatkan proporsi tersebut menjadi 60% (grup perlakuan).</p>
+        <p>Gunakan informasi ini untuk menghitung jumlah minimal responden yang dibutuhkan pada masing-masing grup.</p>
+      </div>
+
+      <!-- Formulir Perhitungan -->
       <form id="rctForm">
         <label for="p1">Proporsi Keberhasilan Grup 1 (p1):</label>
         <input type="text" id="p1" required />
