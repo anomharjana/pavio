@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Perhitungan Sampel untuk Uji Chi-Square</title>
+  <title>Sample Size Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
@@ -113,6 +113,18 @@
       font-size: 16px;
       width: 100%;
     }
+    .case-study {
+      background-color: #eef6ff;
+      padding: 15px 20px;
+      border-left: 4px solid #007bff;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+    .case-study h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #007bff;
+    }
     @media (max-width: 600px) {
       .card {
         padding: 20px;
@@ -123,8 +135,6 @@
         display: none !important;
       }
     }
-
-    /* Footer adjusted to be part of normal flow */
     footer {
       width: 100%;
       text-align: center;
@@ -134,8 +144,6 @@
       padding: 10px 0;
       background-color: #f2f4f8;
     }
-
-    /* Wrapper to capture full area including footer */
     #captureArea {
       padding-bottom: 40px;
     }
@@ -146,6 +154,14 @@
     <div class="container">
       <div class="card" id="outputArea">
         <h1>Perhitungan Sampel untuk Uji Chi-Square <span>(Goodness of Fit atau Homogeneity)</span></h1>
+
+        <div class="case-study">
+          <h2>🧪 Contoh Studi Kasus</h2>
+          <p>
+            Seorang peneliti ingin mengetahui apakah preferensi rasa es krim (vanila, cokelat, stroberi) dari 500 responden sesuai dengan proporsi yang diharapkan yaitu 40% vanila, 40% cokelat, dan 20% stroberi. 
+            Untuk itu, peneliti perlu menentukan ukuran sampel yang cukup agar uji chi-square valid dengan tingkat kepercayaan 95% dan margin of error 5%.
+          </p>
+        </div>
 
         <form id="chiSquareForm">
           <label for="p">Proporsi yang Diharapkan (p):</label>
