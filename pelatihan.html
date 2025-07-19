@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Pelatihan & Konsultasi</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    /* -------------------- GLOBAL RESET & BASE STYLES -------------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      line-height: 1.6;
+      font-size: 16px;
+      min-height: 100vh; /* Memastikan body mengisi seluruh viewport */
+      display: flex;
+      flex-direction: column;
+    }
+
+    strong {
+        font-weight: 700 !important; 
+    }
+
+    /* -------------------- HEADER STYLING -------------------- */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .header-brand img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin: 0;
+    }
+
+    .header-text p {
+      font-size: 0.85rem;
+      color: #555;
+      margin: 0;
+    }
+
+    /* -------------------- MAIN CONTENT LAYOUT -------------------- */
+    .module-content {
+      flex-grow: 1; /* Agar konten mengisi ruang kosong */
+      max-width: 900px; /* Lebar yang sedikit lebih besar untuk kartu */
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column; /* Mengubah ini agar card bisa di-stack jika kecil */
+      gap: 1.5rem; /* Jarak antar kartu */
+    }
+
+    /* -------------------- CARD STYLING (General) -------------------- */
+    .card {
+      background: #ffffff;
+      padding: 1.8rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s ease;
+      display: flex; /* Untuk layout internal card */
+      flex-direction: column;
+      flex: 1; /* Agar kartu bisa membesar mengisi ruang di flex-container */
+    }
+
+    /* Specific Card Styling */
+    .service-card {
+        background: linear-gradient(145deg, #f8faff, #eff3f7);
+        border: 1px solid #c9e6ff;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        text-align: center; /* Untuk menengahkan icon dan judul */
+        cursor: pointer; /* Menunjukkan bahwa ini clickable */
+        position: relative;
+        overflow: hidden;
+        justify-content: space-between; /* Untuk mendorong button ke bawah */
+        min-height: 250px; /* Agar tinggi kartu konsisten */
+    }
+
+    .service-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(240, 248, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+        opacity: 0;
+        transform: scale(0);
+        border-radius: 50%;
+        transition: all 0.6s ease-out;
+        z-index: 0;
+    }
+
+    .service-card:hover::before {
+        opacity: 1;
+        transform: scale(1);
+        top: -10%;
+        left: -10%;
+    }
+
+    .service-card h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-card .icon-wrapper {
+        font-size: 4rem; /* Ukuran icon */
+        color: #2196f3; /* Warna default icon */
+        margin-bottom: 1.5rem;
+        position: relative;
+        z-index: 1;
+        transition: transform 0.3s ease;
+    }
+    
+    .service-card:hover .icon-wrapper {
+        transform: translateY(-5px);
+    }
+
+    /* Specific icon colors */
+    .service-card.pelatihan .icon-wrapper { color: #4CAF50; } /* Hijau untuk pelatihan */
+    .service-card.konsultasi .icon-wrapper { color: #FFC107; } /* Kuning/Orange untuk konsultasi */
+
+    .service-card p {
+      font-size: 0.95rem;
+      color: #444;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+      text-align: justify;
+    }
+
+    /* -------------------- BUTTON STYLES -------------------- */
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: auto; /* Mendorong tombol ke bawah kartu */
+        position: relative;
+        z-index: 1;
+    }
+
+    .action-button {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      text-decoration: none; /* Untuk anchor tag */
+    }
+
+    .action-button:hover {
+      background-color: #1976d2;
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    }
+
+    /* Specific button colors */
+    .action-button.pelatihan-button {
+        background-color: #4CAF50; /* Hijau */
+    }
+    .action-button.pelatihan-button:hover {
+        background-color: #43a047;
+    }
+
+    .action-button.konsultasi-button {
+        background-color: #FFC107; /* Kuning */
+        color: #333; /* Teks gelap agar terbaca */
+    }
+    .action-button.konsultasi-button:hover {
+        background-color: #FFB300;
+    }
+
+    .action-button.back-button {
+      background-color: #6c757d;
+    }
+
+    .action-button.back-button:hover {
+      background-color: #5a6268;
+    }
+
+    /* -------------------- FOOTER & HELP BUTTON -------------------- */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #999;
+      font-size: 0.8rem;
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 2rem;
+    }
+
+    .help-button {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .help-button:hover {
+      background-color: #43a047;
+      transform: scale(1.05);
+    }
+
+    /* -------------------- RESPONSIVE ADJUSTMENTS -------------------- */
+    @media (min-width: 768px) {
+        .module-content {
+            flex-direction: row; /* Kartu berdampingan di layar lebar */
+            align-items: stretch; /* Agar tinggi kartu sama */
+        }
+    }
+
+    @media (max-width: 767px) {
+        header {
+            padding: 0.8rem 1rem;
+        }
+        .header-brand img {
+            height: 40px;
+            width: 40px;
+        }
+        .header-text h1 {
+            font-size: 1.3rem;
+        }
+        .header-text p {
+            font-size: 0.75rem;
+        }
+        .module-content {
+            margin: 1.5rem auto;
+            padding: 0 0.8rem;
+            flex-direction: column; /* Kartu tetap bertumpuk di layar kecil */
+        }
+        .card, .service-card {
+            padding: 1.2rem;
+            min-height: unset; /* Hapus min-height agar lebih fleksibel di mobile */
+        }
+        .service-card h2 {
+            font-size: 1.5rem;
+        }
+        .service-card .icon-wrapper {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .service-card p {
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        .action-button {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.85rem;
+        }
+        .help-button {
+            width: 45px;
+            height: 45px;
+            font-size: 1.3rem;
+        }
+        footer {
+            padding: 1rem;
+            font-size: 0.7rem;
+        }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>E-Learning Analisis Data Kuantitatif</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="module-content">
+    <div class="card service-card pelatihan" onclick="window.location.href='https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20tertarik%20dengan%20Pelatihan%20Rutin.'">
+        <div class="icon-wrapper">
+            <i class="fas fa-chalkboard-teacher"></i>
+        </div>
+        <h2>Pelatihan Rutin</h2>
+        <p>Tingkatkan keahlian analisis data Anda dengan jadwal pelatihan yang teratur dan terstruktur. Dapatkan materi mendalam, sesi interaktif, dan latihan praktis dari para ahli di bidangnya. Cocok untuk Anda yang ingin menguasai teknik analisis data secara konsisten.</p>
+        <div class="button-group">
+            <a href="https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20tertarik%20dengan%20Pelatihan%20Rutin." class="action-button pelatihan-button">
+                <i class="fab fa-whatsapp"></i> Detail & Daftar
+            </a>
+        </div>
+    </div>
+
+    <div class="card service-card konsultasi" onclick="window.location.href='https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20ingin%20Konsultasi%20Live%20tentang%20analisis%20data.'">
+        <div class="icon-wrapper">
+            <i class="fas fa-comments"></i>
+        </div>
+        <h2>Konsultasi Live</h2>
+        <p>Dapatkan bimbingan personal dan solusi langsung untuk tantangan analisis data Anda melalui sesi konsultasi live bersama mentor kami. Diskusikan proyek spesifik, dapatkan *feedback* instan, dan percepat pemahaman Anda dengan dukungan ahli.</p>
+        <div class="button-group">
+            <a href="https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20ingin%20Konsultasi%20Live%20tentang%20analisis%20data." class="action-button konsultasi-button">
+                <i class="fab fa-whatsapp"></i> Jadwalkan Sesi
+            </a>
+        </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
+  </footer>
+
+  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">
+    <i class="fa-brands fa-whatsapp"></i>
+  </button>
+
+  <script>
+    // Helper function to parse markdown-like bold (**) to <strong> tags
+    function parseBoldMarkdown(element) {
+        if (!element || typeof element.innerHTML === 'undefined') {
+            return; 
+        }
+        const originalHtml = element.innerHTML;
+        const newHtml = originalHtml.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        if (originalHtml !== newHtml) {
+            element.innerHTML = newHtml;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Parse markdown bold for paragraph elements within service cards
+        const serviceCardParagraphs = document.querySelectorAll('.service-card p');
+        serviceCardParagraphs.forEach(el => parseBoldMarkdown(el));
+
+        // Parse markdown bold for heading elements within service cards
+        const serviceCardHeadings = document.querySelectorAll('.service-card h2');
+        serviceCardHeadings.forEach(el => parseBoldMarkdown(el));
+
+        // You can add more JavaScript here if you need any dynamic behavior
+        // related to these new cards, e.g., animations or specific redirects.
+    });
+  </script>
+</body>
+</html>
