@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrasi Ujian</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #eaeaea, #eaeaea);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #800000;
+      padding: 15px;
+      border-bottom: 4px solid #ff9999;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 15px;
+    }
+
+    header img {
+      height: 60px;
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      font-size: 18px;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .form-box {
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      background-color: #800000;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #172554;
+    }
+
+    @media (max-width: 500px) {
+      header {
+        flex-wrap: nowrap;
+        align-items: flex-start;
+      }
+
+      header img {
+        height: 50px;
+      }
+
+      header h1 {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1747277441/WhatsApp_Image_2025-05-15_at_10.49.29_AM-modified_jeccm6.png" alt="Logo Primajana Education">
+    <h1>COMPUTER ASSISTED TEST<br>Primajana Education Center</h1>
+  </header>
+
+  <div class="form-box">
+    <h2>Registrasi Ujian</h2>
+    <form onsubmit="simpanData(event)">
+      <label for="nama">Nama Lengkap</label>
+      <input type="text" id="nama" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+
+      <button type="submit">Registrasi</button>
+    </form>
+  </div>
+
+  <script>
+    function simpanData(e) {
+      e.preventDefault();
+      const nama = document.getElementById("nama").value.trim();
+      const email = document.getElementById("email").value.trim();
+      if (nama === "" || email === "") {
+        alert("Harap isi semua data dengan benar.");
+        return;
+      }
+      localStorage.setItem("dataPeserta", JSON.stringify({ nama, email }));
+      window.location.href = "kode-test.html";
+    }
+  </script>
+</body>
+</html>
