@@ -36,6 +36,23 @@
       color: #777;
       display: block;
     }
+    .case-study {
+      background-color: #eef5ff;
+      padding: 20px;
+      border-left: 4px solid #007bff;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+    .case-study h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #007bff;
+    }
+    .case-study p {
+      font-size: 15px;
+      color: #333;
+      margin: 0;
+    }
     label {
       display: block;
       margin-top: 20px;
@@ -120,6 +137,16 @@
   <div class="container">
     <div class="card" id="outputArea">
       <h1>Perhitungan Besar Sampel <span>Metode Krejcie & Morgan</span></h1>
+
+      <!-- Tambahan Studi Kasus -->
+      <div class="case-study">
+        <h2>🧪 Contoh Studi Kasus</h2>
+        <p>
+          Seorang peneliti ingin mengetahui tingkat kepuasan mahasiswa terhadap layanan akademik di sebuah universitas dengan total populasi mahasiswa sebanyak 12.000 orang. 
+          Peneliti ingin menggunakan tingkat kepercayaan 95%, proporsi populasi 0.5, dan margin of error sebesar 5%. 
+          Dengan menggunakan kalkulator ini, peneliti dapat menentukan jumlah responden minimum yang diperlukan untuk mewakili seluruh populasi mahasiswa secara statistik.
+        </p>
+      </div>
 
       <form id="kmForm">
         <label for="population">Ukuran Populasi (N):</label>
@@ -239,4 +266,3 @@
   </script>
 </body>
 </html>
-
