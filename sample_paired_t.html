@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Slovin Sample Size Calculator</title>
+  <title>Sample Size Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
@@ -98,15 +98,29 @@
       gap: 10px;
       margin-top: 20px;
     }
-
-    /* Styling footer */
+    .case-study {
+      background-color: #f0f8ff;
+      border-left: 4px solid #00aaff;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+    .case-study h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #0077cc;
+    }
+    .case-study p {
+      margin: 10px 0 0;
+      font-size: 15px;
+      color: #333;
+    }
     footer {
       text-align: center;
       font-size: 14px;
       margin-top: 40px;
       color: #555;
     }
-
     @media (max-width: 600px) {
       .card {
         padding: 20px;
@@ -116,7 +130,6 @@
       button, .tooltip, #downloadButtons {
         display: none !important;
       }
-
       footer {
         display: block !important;
       }
@@ -127,6 +140,16 @@
   <div class="container">
     <div class="card" id="outputArea">
       <h1>Perhitungan Besar Sampel untuk Uji Paired T-Test</h1>
+
+      <div class="case-study">
+        <h2>🧪 Contoh Studi Kasus</h2>
+        <p>
+          Seorang peneliti ingin mengetahui apakah program pelatihan meningkatkan nilai ujian pegawai.
+          Nilai rata-rata sebelum pelatihan adalah 70, dan setelah pelatihan meningkat menjadi 75.
+          Dari sampel awal, varians perbedaan nilai diketahui sebesar 25.
+          Peneliti ingin mengetahui berapa besar sampel minimal yang dibutuhkan untuk mendeteksi perbedaan rata-rata sebesar 5 poin dengan tingkat kepercayaan 95% dan power 80%.
+        </p>
+      </div>
 
       <form id="pairedTForm">
         <label for="variance">Varians Perbedaan (σ²):</label>
