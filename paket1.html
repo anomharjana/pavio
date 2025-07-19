@@ -7,14 +7,14 @@
     * { box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
-      background-color: #e0f2f7; /* Nuansa biru muda */
+      background-color: #e0f2f7; /* Nuansa biru muda untuk background */
       margin: 0;
       padding: 0;
     }
     header {
       background: #FFFFFF;
       padding: 20px;
-      border-bottom: 4px solid #99ccff; /* Nuansa biru */
+      border-bottom: 4px solid #99ccff; /* Nuansa biru untuk border bawah header */
       position: relative;
     }
     header img {
@@ -52,12 +52,12 @@
     .user-info {
       background: #e6f7ff; /* Nuansa biru sangat muda */
       padding: 15px;
-      border: 1px solid #b3e0ff; /* Nuansa biru muda */
+      border: 1px solid #b3e0ff; /* Nuansa biru untuk border */
       margin-bottom: 20px;
     }
     .soal-box {
       background: #fff;
-      border: 1px solid #b3e0ff; /* Nuansa biru muda */
+      border: 1px solid #b3e0ff; /* Nuansa biru untuk border */
       padding: 20px;
       margin-bottom: 20px;
     }
@@ -70,7 +70,7 @@
       border: none;
       margin-right: 10px;
       cursor: pointer;
-      background: #0056b3; /* Biru tua */
+      background: #007bff; /* Biru cerah untuk tombol utama */
       color: white;
       border-radius: 5px;
     }
@@ -88,13 +88,14 @@
       cursor: pointer;
       font-weight: bold;
     }
-    .green { background: #16a34a; color: white; } /* Tetap hijau untuk soal dijawab */
-    .red { background: #3399ff; color: white; } /* Biru untuk soal belum dijawab */
+    .green { background: #16a34a; color: white; } /* Tetap hijau untuk dijawab */
+    /* Mengubah warna merah menjadi nuansa biru untuk tombol "belum dijawab" */
+    .red { background: #5a82b0; color: white; } /* Nuansa biru gelap untuk belum dijawab */
     #timer-box {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: black;
+      background: #0056b3; /* Biru gelap untuk timer */
       color: white;
       font-size: 24px;
       padding: 10px 20px;
@@ -107,7 +108,7 @@
     }
     
     #btn-kirim {
-      background-color: #007bff; /* Biru cerah */
+      background-color: #007bff; /* Biru cerah untuk tombol kirim */
       color: white;
       padding: 10px 15px;
       border: none;
@@ -115,6 +116,11 @@
       font-weight: bold;
       cursor: pointer;
       display: none; /* hanya muncul saat semua soal dijawab */
+    }
+
+    /* Mengubah warna teks "Belum Dijawab" menjadi nuansa biru gelap */
+    .info-item.belum-dijawab {
+        color: #0056b3 !important; /* Biru gelap yang sama dengan timer */
     }
 
   </style>
