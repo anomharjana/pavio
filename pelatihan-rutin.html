@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Pelatihan Analisis Data R-Studio</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    /* -------------------- GLOBAL RESET & BASE STYLES -------------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      line-height: 1.6;
+      font-size: 16px;
+      min-height: 100vh; /* Memastikan body mengisi seluruh viewport */
+      display: flex;
+      flex-direction: column;
+    }
+
+    strong {
+        font-weight: 700 !important; 
+    }
+
+    /* -------------------- HEADER STYLING -------------------- */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .header-brand img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin: 0;
+    }
+
+    .header-text p {
+      font-size: 0.85rem;
+      color: #555;
+      margin: 0;
+    }
+
+    /* -------------------- MAIN CONTENT LAYOUT -------------------- */
+    .module-content {
+      flex-grow: 1; /* Agar konten mengisi ruang kosong */
+      max-width: 800px; /* Lebar yang sedikit lebih besar untuk konten lebih banyak */
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* -------------------- CARD STYLING (General) -------------------- */
+    .card {
+      background: #ffffff;
+      padding: 1.8rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Pelatihan R-Studio Card Specific Styling */
+    .rstudio-training-card {
+        background: linear-gradient(145deg, #e3f2fd, #bbdefb); /* Warna biru muda */
+        border: 1px solid #90caf9;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        padding: 2.5rem; /* Lebih banyak padding */
+    }
+
+    .rstudio-training-card .icon-wrapper {
+        font-size: 5rem; /* Icon lebih besar */
+        color: #1565c0; /* Biru gelap untuk icon */
+        margin-bottom: 1.5rem;
+    }
+    
+    .rstudio-training-card h2 {
+      font-size: 2.2rem; /* Judul lebih besar */
+      font-weight: 700;
+      color: #1a237e;
+      margin-bottom: 0.8rem;
+    }
+
+    .rstudio-training-card h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #3f51b5;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .rstudio-training-card p {
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 1.2rem;
+      text-align: justify;
+    }
+
+    .rstudio-training-card ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 1.5rem;
+        text-align: left; /* List item ke kiri */
+    }
+
+    .rstudio-training-card ul li {
+        font-size: 0.95rem;
+        color: #555;
+        margin-bottom: 0.6rem;
+        padding-left: 25px; /* Ruang untuk ikon */
+        position: relative;
+    }
+
+    .rstudio-training-card ul li::before {
+        content: '\f00c'; /* Font Awesome check icon */
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #28a745; /* Warna hijau untuk centang */
+    }
+
+    /* New style for mini book cover */
+    .mini-book-cover {
+        width: 120px; /* Ukuran sampul buku mini */
+        height: auto;
+        /* margin-top: 1rem; */ /* Sudah dibungkus a, jadi margin ditaruh di a */
+        margin-bottom: 1rem; 
+        border: 3px solid #fff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        border-radius: 5px;
+        display: block;
+    }
+
+    /* Style for the anchor tag wrapping the mini book cover */
+    .mini-book-cover-wrapper {
+        display: block; /* Agar margin auto bisa bekerja */
+        width: fit-content; /* Sesuai lebar konten anak (gambar) */
+        margin: 1.5rem auto 1rem auto; /* Jarak atas-bawah yang lebih baik */
+        text-decoration: none; /* Hilangkan garis bawah default */
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1a237e;
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        border-bottom: 2px solid #90caf9;
+        padding-bottom: 0.5rem;
+    }
+
+    .training-details {
+        text-align: left;
+        margin-bottom: 2rem;
+    }
+
+    .training-details p {
+        margin-bottom: 0.7rem;
+        font-size: 0.95rem;
+    }
+
+    .training-details .detail-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+        gap: 10px;
+    }
+
+    .training-details .detail-item i {
+        color: #2196f3;
+        font-size: 1.1em;
+        margin-top: 3px;
+    }
+
+    /* Countdown Style */
+    #countdown {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #d32f2f; /* Warna merah untuk menarik perhatian */
+        text-align: center;
+        padding: 0.5rem 1rem;
+        background-color: #ffebee;
+        border-radius: 8px;
+        border: 1px solid #ef9a9a;
+        display: inline-block; /* Agar bisa di-center dan mengikuti konten */
+        margin: 1.5rem auto; /* Penyesuaian margin atas dan bawah */
+    }
+    #countdown.expired {
+        color: #616161;
+        background-color: #e0e0e0;
+        border-color: #bdbdbd;
+    }
+
+
+    .rundown-section {
+        margin-top: 2rem;
+        text-align: left;
+    }
+
+    .rundown-section h4 {
+        font-size: 1.2rem;
+        color: #3f51b5;
+        margin-bottom: 0.8rem;
+    }
+
+    .rundown-section .day-item {
+        background-color: #f7f9fc;
+        border: 1px solid #e0e7f2;
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.03);
+    }
+
+    .rundown-section .day-item strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #1a237e;
+        font-size: 1.1rem;
+    }
+    .rundown-section .day-item ul {
+        list-style: none; /* Change from disc to none to allow custom icons */
+        margin-left: 0;
+        padding: 0;
+    }
+    .rundown-section .day-item ul li {
+        font-size: 0.9em;
+        margin-bottom: 0.6em; /* Increased margin for better spacing with icon */
+        color: #666;
+        padding-left: 25px; /* Space for icon */
+        position: relative; /* For absolute positioning of icon */
+    }
+    .rundown-section .day-item ul li .fa-icon { /* New class for the inserted icons */
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #2196f3; /* Blue color for rundown icons */
+        font-size: 1.1em;
+    }
+
+
+    /* New style for benefit list */
+    .benefits-list {
+        list-style: none;
+        padding: 0;
+        text-align: left;
+        margin-bottom: 1.5rem;
+    }
+    .benefits-list li {
+        font-size: 1rem;
+        color: #444;
+        margin-bottom: 0.8rem;
+        padding-left: 30px;
+        position: relative;
+    }
+    .benefits-list li::before {
+        content: '\f00c'; /* Checkmark icon */
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #1976d2; /* Blue checkmark */
+    }
+
+
+    /* -------------------- BUTTON STYLES -------------------- */
+    .button-group {
+        display: flex;
+        flex-wrap: wrap; /* Izinkan tombol wrap ke baris baru */
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem; /* Jarak atas tombol */
+        margin-bottom: 1.5rem; /* Jarak bawah tombol sebelum paragraf berikutnya */
+    }
+
+    .action-button {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .action-button:hover {
+      background-color: #1976d2;
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
+    }
+
+    .action-button.whatsapp-button {
+        background-color: #28a745; /* Hijau WhatsApp */
+    }
+
+    .action-button.whatsapp-button:hover {
+        background-color: #218838;
+        box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+    }
+
+    .action-button.learn-more-button {
+        background-color: #00bcd4; /* Cyan */
+    }
+
+    .action-button.learn-more-button:hover {
+        background-color: #00838f;
+    }
+
+    /* -------------------- FOOTER & HELP BUTTON -------------------- */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #999;
+      font-size: 0.8rem;
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 2rem;
+    }
+
+    .help-button {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .help-button:hover {
+      background-color: #43a047;
+      transform: scale(1.05);
+    }
+
+    /* -------------------- RESPONSIVE ADJUSTMENTS -------------------- */
+    @media (max-width: 767px) {
+        header {
+            padding: 0.8rem 1rem;
+        }
+        .header-brand img {
+            height: 40px;
+            width: 40px;
+        }
+        .header-text h1 {
+            font-size: 1.3rem;
+        }
+        .header-text p {
+            font-size: 0.75rem;
+        }
+        .module-content {
+            margin: 1.5rem auto;
+            padding: 0 0.8rem;
+        }
+        .card, .rstudio-training-card {
+            padding: 1.5rem;
+        }
+        .rstudio-training-card .icon-wrapper {
+            font-size: 4rem;
+        }
+        .rstudio-training-card h2 {
+            font-size: 1.8rem;
+        }
+        .rstudio-training-card h3 {
+            font-size: 1.2rem;
+        }
+        .rstudio-training-card p, .rstudio-training-card ul li {
+            font-size: 0.9rem;
+        }
+        .action-button {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.85rem;
+        }
+        .help-button {
+            width: 45px;
+            height: 45px;
+            font-size: 1.3rem;
+        }
+        footer {
+            padding: 1rem;
+            font-size: 0.7rem;
+        }
+        .button-group {
+            flex-direction: column; /* Tombol bertumpuk di mobile */
+            gap: 0.8rem;
+        }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>E-Learning Analisis Data Kuantitatif</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="module-content">
+    <div class="card rstudio-training-card">
+        <div class="icon-wrapper">
+            <i class="fas fa-chart-line"></i> 
+        </div>
+        <h2>Pelatihan Analisis Data</h2>
+        <h3>Menggunakan **R-Studio**</h3>
+        <p>Apakah Anda ingin menguasai analisis data dengan cepat dan efisien? Pelatihan intensif **"3 Hari Jago R-Studio"** ini dirancang untuk pemula hingga menengah yang ingin memanfaatkan kekuatan R dan R-Studio untuk pengolahan, analisis, dan visualisasi data.</p>
+        
+        <p>Materi yang akan Anda pelajari meliputi:</p>
+        <ul>
+            <li>Instalasi dan Konfigurasi R & R-Studio</li>
+            <li>Pengenalan Struktur Data (Vektor, Matriks, Data Frame, List)</li>
+            <li>Import dan Eksplorasi Data</li>
+            <li>Manipulasi Data dengan `dplyr`</li>
+            <li>Visualisasi Data dengan `ggplot2`</li>
+            <li>Statistik Deskriptif dan Inferensial Dasar</li>
+            <li>Dasar-dasar Pemodelan Regresi</li>
+        </ul>
+
+        <h4 class="section-title">Pelajari Lebih Lanjut dari Buku Sumber</h4>
+        <a href="https://play.google.com/store/books/details/Ngakan_Putu_Anom_Harjana_3_Hari_Jago_RStudio?id=OAdTEQAAQBAJ" target="_blank" class="mini-book-cover-wrapper">
+            <img src="https://books.google.com/books/content?id=OAdTEQAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api" alt="Cover Buku 3 Hari Jago R-Studio" class="mini-book-cover" />
+        </a>
+        <div class="button-group">
+            <a href="https://play.google.com/store/books/details/Ngakan_Putu_Anom_Harjana_3_Hari_Jago_RStudio?id=OAdTEQAAQBAJ" target="_blank" class="action-button learn-more-button">
+                <i class="fas fa-book-open"></i> Buka Pratinjau Buku
+            </a>
+        </div>
+        <p>Pelatihan ini mengacu pada buku **"3 Hari Jago R-Studio"** sebagai panduan utama, memastikan Anda mendapatkan materi yang komprehensif dan terstruktur.</p>
+
+        <h4 class="section-title">Detail Pelaksanaan Pelatihan</h4>
+        <div class="training-details">
+            <div class="detail-item">
+                <i class="fas fa-calendar-alt"></i>
+                <p><strong>Waktu Pelaksanaan:</strong> 6-8 Agustus 2025</p>
+            </div>
+            <div id="countdown"></div>
+            <div class="detail-item">
+                <i class="fas fa-clock"></i>
+                <p><strong>Durasi:</strong> 2 jam per hari, total 6 jam (Pukul 19.00-21.00 WIB)</p>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-video"></i>
+                <p><strong>Platform:</strong> Via Zoom Meeting, **Interaktif** (Live Coding & Tanya Jawab Intensif)</p>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-users"></i>
+                <p><strong>Kuota Peserta:</strong> Maksimal **30 Peserta**</p>
+            </div>
+        </div>
+
+        <div class="rundown-section">
+            <h4>Rundown Materi Per Hari:</h4>
+            <div class="day-item">
+                <strong>Hari 1: Pengenalan Dasar & Persiapan (6 Agustus 2025)</strong>
+                <ul>
+                    <li><i class="fas fa-desktop fa-icon"></i> Instalasi R & R-Studio, pengenalan antarmuka.</li>
+                    <li><i class="fas fa-cubes fa-icon"></i> Tipe data dan struktur data dasar (vektor, matriks, data frame).</li>
+                    <li><i class="fas fa-file-import fa-icon"></i> Import dan ekspor data (CSV, Excel).</li>
+                </ul>
+            </div>
+            <div class="day-item">
+                <strong>Hari 2: Manipulasi & Visualisasi Data (7 Agustus 2025)</strong>
+                <ul>
+                    <li><i class="fas fa-sliders-h fa-icon"></i> Transformasi data dengan `dplyr` (filter, select, mutate, summarise).</li>
+                    <li><i class="fas fa-chart-pie fa-icon"></i> Dasar-dasar visualisasi data dengan `ggplot2` (histogram, scatter plot, box plot).</li>
+                </ul>
+            </div>
+            <div class="day-item">
+                <strong>Hari 3: Analisis Statistik & Regresi (8 Agustus 2025)</strong>
+                <ul>
+                    <li><i class="fas fa-calculator fa-icon"></i> Statistik deskriptif (mean, median, standar deviasi).</li>
+                    <li><i class="fas fa-flask fa-icon"></i> Konsep uji hipotesis dan uji t dasar.</li>
+                    <li><i class="fas fa-chart-line fa-icon"></i> Pengenalan analisis korelasi dan regresi linear dan logistik sederhana.</li>
+                </ul>
+            </div>
+        </div>
+
+        <h4 class="section-title">Manfaat yang Anda Dapatkan</h4>
+        <p>Dengan mengikuti pelatihan ini, Anda tidak hanya akan menguasai R-Studio, tetapi juga akan mendapatkan fasilitas eksklusif berikut:</p>
+        <ul class="benefits-list">
+            <li><i class="fas fa-file-alt"></i> **Modul Pelatihan** lengkap dalam format digital.</li>
+            <li><i class="fas fa-book"></i> **E-book "3 Hari Jago Analisis Data menggunakan R-Studio"** dan **"Pemodelan Kesehatan"** sebagai referensi utama Anda.</li>
+            <li><i class="fas fa-video"></i> Akses ke **Rekaman Sesi Zoom** selama pelatihan, sehingga Anda bisa mengulang materi kapan saja.</li>
+            <li><i class="fas fa-certificate"></i> **Sertifikat Partisipasi** sebagai bukti keahlian Anda.</li>
+            <li><i class="fas fa-headset"></i> **Dukungan Pasca-Pelatihan** untuk pertanyaan atau kendala yang mungkin Anda hadapi.</li>
+        </ul>
+        <p>Jangan lewatkan kesempatan untuk berinvestasi pada kemampuan analisis data Anda!</p>
+
+        <div class="button-group">
+            <a href="https://lynk.id/anomharjana/2jq9epoljo1r/checkout" class="action-button whatsapp-button">
+                <i class="fas fa-clipboard-check"></i> Daftar Sekarang!
+            </a>
+        </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
+  </footer>
+
+  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">
+    <i class="fa-brands fa-whatsapp"></i>
+  </button>
+
+  <script>
+    // Helper function to parse markdown-like bold (**) to <strong> tags
+    function parseBoldMarkdown(element) {
+        if (!element || typeof element.innerHTML === 'undefined') {
+            return; 
+        }
+        const originalHtml = element.innerHTML;
+        const newHtml = originalHtml.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        if (originalHtml !== newHtml) {
+            element.innerHTML = newHtml;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Parse markdown bold for paragraph and heading elements within the R-Studio training card
+        const rstudioCard = document.querySelector('.rstudio-training-card');
+        if (rstudioCard) {
+            rstudioCard.querySelectorAll('h2, h3, p, li, h4').forEach(el => parseBoldMarkdown(el));
+        }
+
+        // Countdown Timer Logic
+        const countdownElement = document.getElementById('countdown');
+        // Set the event date to August 6, 2025, 19:00:00 WITA (UTC+8)
+        const eventDate = new Date('August 6, 2025 19:00:00 GMT+0800').getTime(); 
+
+        const updateCountdown = () => {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                countdownElement.innerHTML = "<strong>Pelatihan Sedang Berlangsung atau Telah Selesai!</strong>";
+                countdownElement.classList.add('expired'); 
+                clearInterval(countdownInterval); 
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            let countdownText = "Sisa Waktu: ";
+            if (days > 0) {
+                countdownText += `**${days}** hari `;
+            }
+            if (hours > 0 || days > 0) { 
+                countdownText += `**${hours}** jam `;
+            }
+            if (minutes > 0 || hours > 0 || days > 0) { 
+                countdownText += `**${minutes}** menit `;
+            }
+            countdownText += `**${seconds}** detik`;
+
+            countdownElement.innerHTML = parseBoldMarkdownString(countdownText);
+        };
+
+        // Helper function to parse bold markdown in a string
+        function parseBoldMarkdownString(text) {
+            return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        }
+
+        updateCountdown(); 
+        const countdownInterval = setInterval(updateCountdown, 1000); 
+    });
+  </script>
+</body>
+</html>
