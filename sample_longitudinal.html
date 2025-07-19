@@ -36,6 +36,23 @@
       color: #777;
       display: block;
     }
+    .case-study {
+      background-color: #eef4ff;
+      padding: 15px 20px;
+      border-left: 4px solid #007bff;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+    .case-study h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #007bff;
+    }
+    .case-study p {
+      margin: 0;
+      font-size: 15px;
+      color: #444;
+    }
     label {
       display: block;
       margin-top: 20px;
@@ -121,6 +138,11 @@
   <div class="container">
     <div class="card" id="outputArea">
       <h1>Perhitungan Sampel Longitudinal <span>Formula Longitudinal Study</span></h1>
+
+      <div class="case-study">
+        <h2>📘 Contoh Studi Kasus</h2>
+        <p>Seorang peneliti ingin mengetahui efektivitas program intervensi terhadap tingkat stres mahasiswa selama satu semester. Peneliti berencana melakukan pengukuran tingkat stres sebanyak 3 kali (awal, pertengahan, dan akhir semester). Diperlukan perhitungan jumlah sampel yang cukup agar dapat mendeteksi perubahan rata-rata tingkat stres dengan varians pengukuran sebesar 1.5 dan perbedaan yang diharapkan sebesar 0.5 poin.</p>
+      </div>
 
       <form id="longitudinalForm">
         <label for="variance">Varians Pengukuran (σ²):</label>
@@ -224,7 +246,6 @@
     }
 
     pngBtn.addEventListener("click", () => {
-      // Gabungkan outputArea dan footer untuk di-capture
       const clone = outputArea.cloneNode(true);
       const footerClone = footer.cloneNode(true);
       const wrapper = document.createElement("div");
