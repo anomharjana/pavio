@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Perhitungan Sampel untuk Estimasi Varians Tunggal</title>
+  <title>Sample Size Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
@@ -35,6 +35,18 @@
       font-size: 14px;
       color: #777;
       display: block;
+    }
+    .case-study {
+      background-color: #eef5ff;
+      border-left: 4px solid #007bff;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+    .case-study h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #333;
     }
     label {
       display: block;
@@ -121,6 +133,13 @@
     <div class="card" id="outputArea">
       <h1>Perhitungan Besar Sampel untuk Estimasi Varians Tunggal</h1>
 
+      <!-- Studi Kasus -->
+      <div class="case-study">
+        <h2>📚 Studi Kasus:</h2>
+        <p>Sebuah perusahaan ingin mengetahui seberapa bervariasi waktu pengiriman produk mereka dalam satu bulan. Berdasarkan data awal, diperoleh bahwa varians waktu pengiriman adalah sekitar 25 jam². Manajer ingin mengestimasi varians ini dengan margin kesalahan 5% dan tingkat kepercayaan 95%. Berapa banyak sampel (pengiriman) yang perlu diamati agar estimasi tersebut dapat dipercaya?</p>
+      </div>
+
+      <!-- Formulir Perhitungan -->
       <form id="varianceForm">
         <label for="variance">Varians Populasi (𝜎²):</label>
         <input type="text" id="variance" required />
