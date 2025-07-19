@@ -4,120 +4,220 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Masukkan Kode Tes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
+    /* Variabel CSS untuk warna biru, disesuaikan dari kode "Soal dan Pembahasan" */
+    :root {
+      --primary-blue: #2563eb; /* Biru utama yang lebih cerah */
+      --primary-dark-blue: #1d4ed8; /* Biru gelap untuk hover */
+      --light-blue-bg: #eff6ff; /* Latar belakang biru sangat muda */
+      --card-bg: #ffffff; /* Latar belakang card tetap putih */
+      --text-color: #333; /* Warna teks gelap */
+      --light-text: #666; /* Warna teks lebih ringan */
+      --border-color: #e5e7eb; /* Warna border abu-abu muda */
+      --error-color: #ef4444; /* Merah untuk pesan error */
+      --shadow-color: rgba(0, 0, 0, 0.08); /* Warna shadow */
+      --header-bg: #ffffff; /* Latar belakang header lebih gelap, disesuaikan dari contoh sebelumnya */
+    }
+
     * {
       box-sizing: border-box;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #eaeaea, #eaeaea);
+      font-family: 'Inter', sans-serif; /* Menggunakan font Inter */
+      background-color: var(--light-blue-bg); /* Latar belakang biru muda */
       margin: 0;
       padding: 0;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      min-height: 100vh; /* Menggunakan min-height agar footer tetap di bawah */
+      color: var(--text-color);
     }
 
     header {
-      background: #800000;
-      padding: 15px;
-      border-bottom: 4px solid #ff9999;
+      background-color: var(--header-bg); /* Latar belakang header lebih gelap */
+      padding: 1.5rem 2rem; /* Padding lebih besar */
+      border-bottom: 4px solid var(--primary-blue); /* Border bawah biru utama */
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
+      justify-content: flex-start; /* Mengatur konten ke kiri */
+      gap: 1.5rem; /* Jarak antar elemen header */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Bayangan halus */
     }
 
     header img {
-      height: 60px;
-      margin-right: 15px;
+      height: 70px; /* Ukuran logo sedikit lebih besar */
+      flex-shrink: 0; /* Mencegah logo mengecil */
     }
 
     header h1 {
-      font-size: 18px;
-      color: #ffffff;
+      font-size: 1.8rem; /* Ukuran font judul lebih besar */
+      color: #000000; /* Warna teks putih */
       margin: 0;
-      line-height: 1.3;
+      line-height: 1.4;
+      font-weight: 700; /* Tebal */
     }
 
     .form-box {
       margin: auto;
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      background: var(--card-bg); /* Menggunakan variabel card-bg */
+      padding: 35px; /* Padding lebih besar */
+      border-radius: 15px; /* Sudut lebih membulat */
+      box-shadow: 0 8px 25px var(--shadow-color); /* Bayangan lebih tegas */
       width: 90%;
-      max-width: 400px;
+      max-width: 450px; /* Lebar maksimal sedikit lebih besar */
+      border: 1px solid var(--border-color); /* Border ringan */
     }
 
     h2 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 1.8rem; /* Jarak bawah judul */
+      font-size: 2rem; /* Ukuran font h2 lebih besar */
+      color: var(--primary-blue); /* Warna judul biru utama */
+      font-weight: 800; /* Sangat tebal */
     }
 
     label {
       display: block;
-      margin-top: 15px;
-      font-weight: bold;
+      margin-top: 1.2rem; /* Jarak atas label */
+      margin-bottom: 0.5rem;
+      font-weight: 600; /* Tebal */
+      color: var(--text-color);
+      font-size: 1.05rem;
     }
 
     input {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      padding: 0.9rem; /* Padding input lebih besar */
+      margin-top: 0.5rem; /* Menjaga jarak dari label */
+      border: 1px solid var(--border-color); /* Border menggunakan variabel */
+      border-radius: 8px; /* Sudut input lebih membulat */
+      box-sizing: border-box;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary-blue); /* Border biru saat fokus */
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); /* Shadow biru saat fokus */
     }
 
     button {
-      margin-top: 25px;
+      margin-top: 2.2rem; /* Jarak atas tombol lebih besar */
       width: 100%;
-      padding: 12px;
-      background-color: #800000;
+      padding: 1.1rem; /* Padding tombol lebih besar */
+      background-color: var(--primary-blue); /* Warna tombol biru utama */
       color: white;
       border: none;
-      border-radius: 6px;
-      font-size: 16px;
+      border-radius: 8px; /* Sudut tombol lebih membulat */
+      font-size: 1.1rem; /* Ukuran font tombol lebih besar */
+      font-weight: 700; /* Tebal */
       cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Bayangan tombol */
     }
 
     button:hover {
-      background-color: #172554;
+      background-color: var(--primary-dark-blue); /* Warna hover biru gelap */
+      transform: translateY(-2px); /* Efek sedikit terangkat */
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.18); /* Bayangan lebih kuat saat hover */
     }
 
     .error-message {
-      color: red;
+      color: var(--error-color); /* Warna merah untuk error */
       text-align: center;
-      margin-top: 15px;
+      margin-top: 1.2rem; /* Jarak atas lebih besar */
+      font-size: 0.95rem; /* Ukuran font pesan error */
     }
 
     .error-message a {
-      color: #1e3a8a;
+      color: var(--primary-dark-blue); /* Warna link biru gelap */
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 700; /* Tebal */
+      transition: color 0.3s ease;
     }
 
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 16px;
-      }
+    .error-message a:hover {
+      color: var(--primary-blue); /* Warna link saat hover */
+    }
 
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem 1.5rem;
+        gap: 1rem;
+      }
+      header img {
+        height: 60px;
+      }
+      header h1 {
+        font-size: 1.6rem;
+      }
+      .form-box {
+        padding: 25px;
+        max-width: 380px;
+      }
+      h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+      }
+      label {
+        font-size: 1rem;
+        margin-top: 1rem;
+      }
+      input {
+        padding: 0.8rem;
+        font-size: 0.95rem;
+      }
+      button {
+        padding: 1rem;
+        font-size: 1rem;
+        margin-top: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 0.8rem 1rem;
+      }
       header img {
         height: 50px;
-        margin-bottom: 10px;
       }
-
+      header h1 {
+        font-size: 1.4rem;
+      }
+      .form-box {
+        padding: 20px;
+        width: 95%;
+      }
+      h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1.2rem;
+      }
+      label {
+        font-size: 0.95rem;
+        margin-top: 0.8rem;
+      }
+      input {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+      }
       button {
-        font-size: 15px;
+        padding: 0.9rem;
+        font-size: 0.95rem;
+        margin-top: 1.8rem;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://res.cloudinary.com/djexglfns/image/upload/v1747277441/WhatsApp_Image_2025-05-15_at_10.49.29_AM-modified_jeccm6.png" alt="Logo Primajana Education">
-    <h1>COMPUTER ASSISTED TEST<br>Primajana Education Center</h1>
-  </header>
+ <header>
+  <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="BKN Primajana Education">
+    <h1>COMPUTER ASSISTED TEST<br>Tools Simulasi CPNS</h1>
+</header>
 
   <div class="form-box">
     <h2>Masukkan Kode Tes</h2>
@@ -132,7 +232,7 @@
   </div>
 
   <script>
-    const KODE_TES_BENAR = "1234567890"; // Ganti sesuai kebutuhan
+    const KODE_TES_BENAR = "1234567890"; // Ganti sesuai kebutuhan Anda
 
     function cekKodeTes(e) {
       e.preventDefault();
