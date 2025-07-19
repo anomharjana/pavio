@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Modul 1: Dasar-dasar Statistik</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Global Reset & Base Styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      line-height: 1.7;
+      font-size: 16px;
+      overflow-x: hidden; /* Prevent horizontal scroll on some effects */
+    }
+
+    /* Header Styling */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem; /* Adjusted padding */
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: sticky; /* Make header sticky */
+      top: 0;
+      z-index: 1000; /* Ensure it's on top */
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem; /* Slightly reduced gap */
+    }
+
+    .header-brand img {
+      height: 52px; /* Slightly smaller logo */
+      width: 52px;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .header-brand img:hover {
+        transform: scale(1.1);
+    }
+
+    .header-text h1 {
+      font-size: 1.7rem; /* Slightly smaller font */
+      font-weight: 700;
+      margin: 0;
+      color: #1a237e;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 0.9rem; /* Slightly smaller font */
+      color: #555;
+    }
+
+    /* Main Content Layout */
+    .module-content {
+      max-width: 900px; /* Slightly narrower for better line length */
+      margin: 2.5rem auto; /* Adjusted margin */
+      padding: 0 1.5rem; /* Adjusted padding */
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    /* Module Card Styling (Main Introduction) */
+    .module-card {
+      background: linear-gradient(145deg, #f8faff, #eff3f7);
+      padding: 2.2rem; /* Adjusted padding */
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      border: 1px solid #c9e6ff;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem; /* Adjusted margin */
+    }
+
+    .module-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(240, 248, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+        opacity: 0;
+        transform: scale(0);
+        border-radius: 50%;
+        transition: all 0.6s ease-out;
+        z-index: 0;
+    }
+
+    .module-card:hover::before {
+        opacity: 1;
+        transform: scale(1);
+        top: -10%;
+        left: -10%;
+    }
+
+    .module-card h2 {
+      font-size: 2rem; /* Adjusted font size */
+      font-weight: 700;
+      color: #1a237e;
+      margin-top: 0;
+      margin-bottom: 1.2rem; /* Adjusted margin */
+      display: flex;
+      align-items: center;
+      gap: 0.9rem; /* Adjusted gap */
+      line-height: 1.3;
+      text-align: left; /* Ensure left alignment */
+      flex-wrap: wrap; /* Allow wrapping for multi-line titles */
+    }
+
+    .module-card h2 .module-title-primary {
+        display: block; /* Force "MODUL 1" to its own line */
+        font-size: 1.5rem; /* Adjust font size for "MODUL 1" */
+        text-transform: uppercase; /* Ensure uppercase */
+        margin-bottom: 0.2rem; /* Small space between lines */
+        color: #3f51b5; /* Different color for primary title */
+    }
+
+    .module-card h2 .fa-solid {
+        font-size: 2.8rem; /* Adjusted icon size */
+        color: #42a5f5;
+    }
+
+    .module-card h3 {
+      font-size: 1.5rem; /* Adjusted font size */
+      font-weight: 600;
+      color: #3f51b5;
+      margin-top: 1.8rem; /* Adjusted margin */
+      margin-bottom: 0.8rem; /* Adjusted margin */
+      position: relative;
+      z-index: 1;
+      line-height: 1.4;
+      text-align: left; /* Ensure left alignment */
+    }
+
+    .module-card p {
+      font-size: 1rem; /* Adjusted font size */
+      color: #444;
+      margin-bottom: 0.8rem; /* Adjusted margin */
+      position: relative;
+      z-index: 1;
+      text-align: justify; /* Justify for cleaner blocks of text */
+      hyphens: auto;
+    }
+
+    .module-card ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 0.8rem; /* Adjusted margin */
+      position: relative;
+      z-index: 1;
+    }
+
+    .module-card ul li {
+      font-size: 0.95rem; /* Adjusted font size */
+      color: #555;
+      margin-bottom: 0.6rem; /* Adjusted margin */
+      padding-left: 1.8rem; /* Adjusted padding */
+      position: relative;
+      text-align: left; /* Ensure left alignment */
+    }
+
+    .module-card ul li::before {
+      content: '✔';
+      font-size: 1.1em; /* Adjusted icon size */
+      color: #4CAF50;
+      position: absolute;
+      left: 0;
+      top: 0;
+      line-height: inherit;
+    }
+
+    /* Detailed Content Sections */
+    .content-section {
+        background-color: #ffffff;
+        padding: 2.2rem; /* Adjusted padding */
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        margin-top: 2.2rem; /* Adjusted margin */
+        border: 1px solid #e8e8e8;
+        animation: fadeIn 0.8s ease-out;
+        animation-fill-mode: backwards;
+    }
+
+    /* Staggered animation delays for sections */
+    .module-card { animation-delay: 0s; }
+    .content-section:nth-of-type(1) { animation-delay: 0.2s; }
+    .content-section:nth-of-type(2) { animation-delay: 0.4s; }
+    .content-section:nth-of-type(3) { animation-delay: 0.6s; }
+    .content-section:nth-of-type(4) { animation-delay: 0.8s; }
+    .content-section:nth-of-type(5) { animation-delay: 1.0s; }
+    .module-actions-bottom { animation-delay: 1.2s; }
+
+    .content-section h3 {
+        font-size: 1.7rem; /* Adjusted font size */
+        color: #1a237e;
+        margin-top: 0;
+        margin-bottom: 1rem; /* Adjusted margin */
+        display: flex;
+        align-items: center;
+        gap: 0.7rem; /* Adjusted gap */
+        line-height: 1.3;
+        text-align: left; /* Ensure left alignment */
+    }
+
+    .content-section h4 {
+      font-size: 1.25rem; /* Adjusted font size */
+      color: #3f51b5;
+      margin-top: 1.6rem; /* Adjusted margin */
+      margin-bottom: 0.7rem; /* Adjusted margin */
+      display: flex;
+      align-items: center;
+      gap: 0.4rem; /* Adjusted gap */
+      line-height: 1.4;
+      text-align: left; /* Ensure left alignment */
+    }
+
+    .content-section p {
+        font-size: 0.95rem; /* Adjusted font size */
+        color: #444;
+        margin-bottom: 0.8rem; /* Adjusted margin */
+        text-align: justify; /* Justify for cleaner blocks of text */
+        hyphens: auto;
+    }
+
+    .content-section ul {
+        padding-left: 1.2rem; /* Ensure default list indent */
+    }
+
+    .content-section ul li {
+        font-size: 0.95rem; /* Adjusted font size */
+        color: #555;
+        margin-bottom: 0.4rem; /* Adjusted margin */
+        padding-left: 1.2rem; /* Adjusted padding */
+        position: relative; /* Keep relative for custom bullet */
+        text-align: left; /* Ensure left alignment */
+    }
+
+    .content-section ul li::before {
+      content: '•';
+      font-size: 1.3em; /* Adjusted bullet size */
+      color: #64b5f6;
+      position: absolute;
+      left: 0;
+      top: 0;
+      line-height: inherit;
+    }
+
+    .visual-example {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin: 1.8rem auto; /* Adjusted margin */
+        max-width: 85%; /* Slightly wider */
+        padding: 1.6rem; /* Adjusted padding */
+        background-color: #f6f8fa;
+        border-radius: 12px;
+        border: 1px dashed #d0e0ed;
+    }
+
+    .visual-example .fa-solid, .visual-example .fa-chart-bar, .visual-example .fa-table {
+        font-size: 3.5rem; /* Adjusted icon size */
+        color: #64b5f6;
+        margin-bottom: 1rem; /* Adjusted margin */
+    }
+
+    .visual-example p {
+        font-size: 0.9rem; /* Adjusted font size */
+        color: #666;
+        margin: 0;
+        text-align: center;
+    }
+
+    /* Interactive Activity Styling */
+    .interactive-activity {
+        background-color: #e8f5e9;
+        padding: 1.8rem; /* Adjusted padding */
+        border-radius: 12px;
+        border: 1px solid #a5d6a7;
+        margin-top: 2.2rem; /* Adjusted margin */
+        text-align: center;
+    }
+
+    .interactive-activity h4 {
+        font-size: 1.3rem; /* Adjusted font size */
+        color: #2e7d32;
+        margin-top: 0;
+        margin-bottom: 0.8rem; /* Adjusted margin */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem; /* Adjusted gap */
+    }
+
+    .interactive-activity p {
+        font-size: 0.95rem; /* Adjusted font size */
+        color: #4caf50;
+        margin-bottom: 1.2rem; /* Adjusted margin */
+        text-align: center;
+    }
+
+    .interactive-activity button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 0.8rem 1.6rem; /* Adjusted padding */
+        font-size: 1rem; /* Adjusted font size */
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 1rem;
+    }
+
+    .interactive-activity button:hover {
+        background-color: #388e3c;
+        transform: translateY(-2px);
+    }
+
+    /* Activity Specific Styles */
+    .activity-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.3rem; /* Adjusted gap */
+        margin-top: 1.3rem; /* Adjusted margin */
+    }
+
+    .question {
+        background-color: #f0f8ff;
+        padding: 1rem; /* Adjusted padding */
+        border-radius: 8px;
+        border: 1px solid #a7d9f7;
+        width: 100%;
+        max-width: 600px; /* Slightly narrower */
+        text-align: left;
+    }
+
+    .question p {
+        margin-top: 0;
+        margin-bottom: 0.8rem; /* Adjusted margin */
+        font-weight: 600;
+        color: #1a237e;
+        text-align: left; /* Ensure left alignment */
+    }
+
+    .options label {
+        display: block;
+        margin-bottom: 0.5rem; /* Adjusted margin */
+        cursor: pointer;
+        padding: 0.5rem 0.7rem; /* Adjusted padding */
+        border-radius: 5px;
+        transition: background-color 0.2s ease;
+        font-size: 0.9rem; /* Adjusted font size */
+    }
+
+    .options label:hover {
+        background-color: #e0f2f7;
+    }
+
+    .options input[type="radio"] {
+        margin-right: 0.7rem; /* Adjusted margin */
+        transform: scale(1.05); /* Slightly smaller scale */
+    }
+
+    .feedback {
+        margin-top: 1.2rem; /* Adjusted margin */
+        font-weight: 700;
+        font-size: 1.1rem; /* Adjusted font size */
+        text-align: center;
+        padding: 0.4rem 0.8rem; /* Adjusted padding */
+        border-radius: 5px;
+        min-height: 2.2rem; /* Slightly smaller min-height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .feedback.correct {
+        color: #2e7d32;
+        background-color: #e6ffe6;
+        border: 1px solid #4CAF50;
+    }
+
+    .feedback.incorrect {
+        color: #d32f2f;
+        background-color: #ffe6e6;
+        border: 1px solid #d32f2f;
+    }
+
+    /* Drag & Drop Specific - Enhanced Visuals and Layout */
+    .drag-drop-zone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 750px; /* Wider for better layout */
+        gap: 1.5rem;
+    }
+
+    .draggable-items-pool {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.8rem; /* Reduced gap */
+        width: 100%;
+        padding: 1.2rem; /* Adjusted padding */
+        background-color: #eef7f0; /* Lighter background */
+        border-radius: 12px;
+        border: 1px dashed #c8e6c9; /* Dashed border */
+        min-height: 90px; /* Increased min-height */
+        align-items: center; /* Center items vertically */
+        box-shadow: inset 0 1px 5px rgba(0,0,0,0.05); /* Inner shadow */
+    }
+
+    .draggable-item {
+        background-color: #bbdefb;
+        color: #1a237e;
+        padding: 0.7rem 1.1rem; /* Adjusted padding */
+        border: 1px solid #64b5f6;
+        border-radius: 6px; /* Slightly smaller border radius */
+        cursor: grab;
+        font-weight: 500;
+        text-align: center;
+        transition: all 0.2s ease;
+        flex-basis: calc(50% - 0.4rem); /* Two items per row with smaller gap */
+        max-width: 180px; /* Adjusted max width */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        font-size: 0.95rem; /* Adjusted font size */
+        white-space: nowrap; /* Prevent text wrapping */
+        overflow: hidden;
+        text-overflow: ellipsis; /* Add ellipsis if text overflows */
+    }
+
+    .draggable-item:hover {
+        background-color: #90caf9;
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .draggable-item.dragging {
+        opacity: 0.6; /* Increased opacity for better visibility */
+        border: 2px dashed #3f51b5;
+        transform: scale(0.95);
+        background-color: #e0e0e0; /* Grey out when dragging */
+        box-shadow: none;
+    }
+
+    .drop-targets-container {
+        display: flex;
+        gap: 1.2rem; /* Reduced gap */
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .drop-target {
+        background-color: #fff3e0;
+        color: #e65100;
+        padding: 1.2rem; /* Adjusted padding */
+        border: 2px dashed #ffb74d;
+        border-radius: 12px;
+        min-height: 150px; /* Slightly taller */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-style: italic;
+        font-size: 1.05rem; /* Adjusted font size */
+        transition: all 0.3s ease;
+        flex: 1;
+        min-width: 280px; /* Increased min width */
+        position: relative;
+        overflow: hidden; /* Ensure dropped item stays within */
+    }
+
+    .drop-target::before {
+        content: attr(data-label);
+        font-weight: 600;
+        font-style: normal;
+        margin-bottom: 0.7rem; /* Increased margin */
+        font-size: 1.2em; /* Slightly larger label */
+        color: #e65100; /* Ensure label color matches */
+    }
+
+    .drop-target.hover {
+        background-color: #ffe0b2;
+        border-color: #ff9800;
+        transform: scale(1.01); /* Slightly less aggressive scale */
+        box-shadow: 0 4px 12px rgba(255,165,0,0.2);
+    }
+
+    .drop-target.correct-drop {
+        background-color: #dcedc8;
+        border-color: #8bc34a;
+        color: #33691e;
+    }
+
+    .drop-target.incorrect-drop {
+        background-color: #ffcdd2;
+        border-color: #e57373;
+        color: #b71c1c;
+    }
+
+    .drop-target .dropped-item {
+        margin-top: 0.8rem; /* Adjusted margin */
+        background-color: #ffffff;
+        color: #333;
+        padding: 0.6rem 0.9rem; /* Adjusted padding */
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-weight: 500;
+        font-style: normal;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        width: calc(100% - 1.6rem); /* Adjust width based on parent padding */
+        text-align: center;
+        cursor: default;
+        font-size: 0.9rem; /* Adjusted font size */
+        animation: popIn 0.3s ease-out; /* Add pop-in animation */
+    }
+
+    @keyframes popIn {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Matching Activity Specific */
+    .matching-columns-wrapper {
+        position: relative; /* Crucial for SVG positioning */
+        width: 100%;
+        max-width: 700px;
+        margin: auto;
+        padding-bottom: 20px; /* Give some space for lines at the bottom */
+    }
+
+    .matching-columns {
+        display: flex;
+        justify-content: space-between; /* Adjusted to space-between for better line drawing */
+        gap: 2.5rem; /* Reduced gap */
+        flex-wrap: wrap;
+        width: 100%;
+        position: relative; /* Important for children positioning */
+        z-index: 1; /* Ensure items are above SVG */
+    }
+
+    .matching-source, .matching-target {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem; /* Reduced gap */
+        flex: 1;
+        min-width: 180px; /* Adjusted min-width */
+    }
+
+    .matching-item {
+        background-color: #e0f7fa;
+        color: #006064;
+        padding: 1rem 1.4rem; /* Adjusted padding */
+        border: 1px solid #80deea;
+        border-radius: 6px; /* Slightly smaller radius */
+        min-width: 150px; /* Adjusted min-width */
+        text-align: center;
+        font-weight: 500;
+        font-size: 0.95rem; /* Adjusted font size */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative; /* Needed for getBoundingClientRect */
+    }
+
+    .matching-item:hover:not(.selected):not(.matched-correct) {
+        background-color: #b2ebf2;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .matching-item.selected {
+        border: 2px solid #3f51b5;
+        background-color: #d8dee9; /* Softer selected color */
+        box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.3);
+        transform: scale(1.02); /* Slightly less aggressive scale */
+    }
+
+    .matching-item.matched-correct {
+        background-color: #dcedc8;
+        border-color: #8bc34a;
+        color: #33691e;
+        pointer-events: none; /* Make unclickable */
+        opacity: 0.9; /* Slightly less opaque */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Keep a subtle shadow */
+    }
+
+    /* SVG for lines */
+    .matching-lines-svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none; /* Allows clicks to pass through to items */
+        z-index: 0; /* Behind matching items */
+    }
+
+    .matching-lines-svg line {
+        stroke: #3f51b5; /* Default line color */
+        stroke-width: 2.5;
+        transition: stroke 0.3s ease, stroke-width 0.3s ease;
+    }
+
+    .matching-lines-svg line.correct-line {
+        stroke: #4CAF50;
+        stroke-width: 3;
+    }
+
+    /* Action buttons at the bottom */
+    .module-actions-bottom {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.8rem; /* Reduced gap */
+        margin-top: 3rem; /* Adjusted margin */
+        position: relative;
+        z-index: 1;
+        animation: fadeIn 0.8s ease-out;
+        animation-fill-mode: backwards;
+    }
+
+    .module-actions-bottom button {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.6rem; /* Adjusted padding */
+      font-size: 1rem; /* Adjusted font size */
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem; /* Adjusted gap */
+    }
+
+    .module-actions-bottom button:hover {
+      background-color: #1976d2;
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
+    }
+
+    .module-actions-bottom button.back-button {
+      background-color: #607d8b;
+    }
+
+    .module-actions-bottom button.back-button:hover {
+      background-color: #455a64;
+      box-shadow: 0 6mpx 15px rgba(96, 125, 139, 0.4);
+    }
+
+    /* Footer and Help Button */
+    footer {
+      text-align: center;
+      padding: 2rem; /* Adjusted padding */
+      color: #999;
+      font-size: 0.85rem; /* Adjusted font size */
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 3rem; /* Adjusted margin */
+    }
+
+    .help-button {
+      position: fixed;
+      bottom: 20px; /* Adjusted position */
+      right: 20px; /* Adjusted position */
+      width: 55px; /* Slightly smaller */
+      height: 55px; /* Slightly smaller */
+      border-radius: 50%;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      font-size: 1.6rem; /* Adjusted font size */
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .help-button:hover {
+      background-color: #43a047;
+      transform: scale(1.08) rotate(5deg); /* Slightly less aggressive scale */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+      .module-content {
+        max-width: 768px;
+        padding: 0 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem 1.2rem;
+      }
+      .header-text h1 {
+        font-size: 1.4rem;
+      }
+      .header-text p {
+        font-size: 0.8rem;
+      }
+      .module-content {
+        padding: 0 1rem;
+        margin: 1.5rem auto;
+      }
+      .module-card {
+        padding: 1.2rem;
+        margin-bottom: 1.5rem;
+      }
+      .module-card h2 {
+        font-size: 1.6rem;
+        gap: 0.6rem;
+        flex-direction: column; /* Stack elements vertically on small screens */
+        align-items: flex-start; /* Align stacked items to the start */
+      }
+      .module-card h2 .module-title-primary {
+          font-size: 1.3rem; /* Adjust font size for primary title on mobile */
+          margin-bottom: 0.1rem;
+      }
+      .module-card h2 .fa-solid {
+        font-size: 2.2rem;
+      }
+      .module-card h3 {
+        font-size: 1.2rem;
+        margin-top: 1.2rem;
+      }
+      .module-card p, .module-card ul li {
+        font-size: 0.9rem;
+      }
+      .module-card ul li::before {
+        font-size: 1em;
+      }
+
+      .content-section {
+        padding: 1.2rem;
+        margin-top: 1.5rem;
+      }
+      .content-section h3 {
+        font-size: 1.4rem;
+      }
+      .content-section h4 {
+        font-size: 1.1rem;
+      }
+      .content-section p {
+        font-size: 0.9rem;
+      }
+      .content-section ul li {
+        font-size: 0.9rem;
+      }
+      .visual-example {
+        padding: 1rem;
+        margin: 1.2rem auto;
+        max-width: 98%;
+      }
+      .visual-example .fa-solid, .visual-example .fa-chart-bar, .visual-example .fa-table {
+        font-size: 2.8rem;
+        margin-bottom: 0.8rem;
+      }
+      .visual-example p {
+        font-size: 0.85rem;
+      }
+
+      .interactive-activity {
+        padding: 1.2rem;
+        margin-top: 1.5rem;
+      }
+      .interactive-activity h4 {
+        font-size: 1.1rem;
+      }
+      .interactive-activity p {
+        font-size: 0.85rem;
+        margin-bottom: 0.8rem;
+      }
+      .interactive-activity button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+
+      .question {
+        padding: 0.8rem;
+        max-width: 100%;
+      }
+      .options label {
+        padding: 0.4rem;
+        font-size: 0.85rem;
+      }
+      .feedback {
+        font-size: 0.95rem;
+        margin-top: 1rem;
+      }
+
+      .draggable-item {
+        flex-basis: 100%; /* Single item per row on mobile */
+        max-width: 100%;
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+      }
+      .drop-target {
+        min-height: 120px; /* Adjusted min-height */
+        min-width: 100%; /* Take full width on mobile */
+        font-size: 0.95rem;
+        padding: 1rem;
+      }
+      .drop-target::before {
+          font-size: 1.1em;
+      }
+      .drop-target .dropped-item {
+          width: calc(100% - 1.2rem);
+          font-size: 0.85rem;
+      }
+
+      .matching-columns {
+        gap: 1.5rem;
+      }
+      .matching-source, .matching-target {
+        min-width: 140px;
+      }
+      .matching-item {
+        padding: 0.8rem 1.1rem;
+        min-width: 100%; /* Full width for items on mobile */
+        font-size: 0.85rem;
+      }
+
+      .module-actions-bottom {
+        flex-direction: column;
+        gap: 0.6rem;
+        margin-top: 2.5rem;
+      }
+      .module-actions-bottom button {
+        padding: 0.6rem 1.1rem;
+        font-size: 0.9rem;
+      }
+      .help-button {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+        bottom: 15px;
+        right: 15px;
+      }
+      footer {
+        padding: 1.2rem;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>E-Learning Analisis Data Kuantitatif</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="module-content">
+    <div class="module-card">
+      <h2>
+        <i class="fa-solid fa-book"></i>
+        <span class="module-title-primary">MODUL 1</span>
+        <strong>Dasar-dasar Statistik dan Analisis Data</strong>
+      </h2>
+
+      <h3>Tujuan Pembelajaran</h3>
+      <p>Membangun pemahaman dasar statistik yang akan menjadi fondasi bagi <strong>hampir semua jenis analisis data kuantitatif</strong>.</p>
+
+      <h3>Sub-Materi</h3>
+      <ul>
+        <li><strong>Jenis data</strong> (kuantitatif, kualitatif)</li>
+        <li><strong>Skala pengukuran</strong> (nominal, ordinal, interval, rasio)</li>
+        <li><strong>Populasi vs sampel</strong></li>
+        <li><strong>Konsep distribusi normal</strong></li>
+        <li><strong>Penyajian data</strong> (tabel, grafik)</li>
+      </ul>
+
+      <h3>Output Pembelajaran</h3>
+      <p>Setelah menyelesaikan modul ini, Anda akan <strong>mampu mengklasifikasikan jenis data dengan benar</strong> dan <strong>menyajikan data secara efektif</strong> dalam bentuk tabel dan grafik untuk tujuan analisis awal.</p>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-database"></i> 1. Jenis Data: Kuantitatif vs. Kualitatif</h3>
+      <p>Data adalah fondasi dari setiap analisis. Memahami jenis data akan membantu Anda memilih metode statistik yang tepat.</p>
+      <p><strong>Data Kuantitatif</strong> adalah data yang dapat diukur secara numerik, seperti tinggi badan, berat badan, usia, atau jumlah penjualan. Data ini bisa dioperasikan secara matematis.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-chart-line"></i>
+        <p>Contoh: <strong>Usia responden (25 tahun, 30 tahun), Pendapatan Bulanan (Rp 5.000.000)</strong>. Data ini dapat dijumlahkan, dirata-ratakan, dan dianalisis secara statistik dengan metode numerik.</p>
+      </div>
+      <p><strong>Data Kualitatif</strong> (atau Kategorikal) adalah data yang menggambarkan karakteristik atau atribut dan tidak dapat diukur secara numerik. Contohnya adalah jenis kelamin, warna favorit, atau status pernikahan. Data ini sering dianalisis melalui frekuensi atau proporsi.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-tags"></i>
+        <p>Contoh: <strong>Jenis Kelamin (Pria/Wanita), Tingkat Pendidikan (SD/SMP/SMA/Sarjana)</strong>. Data ini tidak bisa dijumlahkan atau dirata-ratakan secara langsung, melainkan dihitung frekuensinya.</p>
+      </div>
+      <div class="interactive-activity">
+        <h4><i class="fa-solid fa-puzzle-piece"></i> Aktivitas Interaktif: Klasifikasikan Data!</h4>
+        <p>Seret dan lepas (Drag & Drop) contoh data ke kategori yang benar.</p>
+        <div class="drag-drop-zone">
+            <div class="draggable-items-pool" id="draggableItemsPool">
+                </div>
+            <div class="drop-targets-container">
+                <div class="drop-target" id="dropKuantitatif" data-accept="kuantitatif" data-label="Data Kuantitatif"></div>
+                <div class="drop-target" id="dropKualitatif" data-accept="kualitatif" data-label="Data Kualitatif"></div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 1.2rem; justify-content: center;">
+                <button onclick="checkDragDrop()">Periksa Jawaban</button>
+                <button onclick="resetDragDrop()" style="background-color: #f44336;">Ulangi</button>
+            </div>
+            <div class="feedback" id="dragDropFeedback"></div>
+        </div>
+      </div>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-ruler-combined"></i> 2. Skala Pengukuran Data</h3>
+      <p>Skala pengukuran menentukan seberapa detail data dapat dianalisis dan metode statistik apa yang dapat diterapkan. Ada empat skala utama:</p>
+
+      <h4><strong>Nominal</strong> <i class="fa-solid fa-tag" style="color:#2196f3;"></i></h4>
+      <p>Mengklasifikasikan data ke dalam kategori <strong>tanpa urutan</strong> atau hierarki yang implisit. Hanya digunakan untuk identifikasi atau label.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-user-tag"></i>
+        <p>Contoh: <strong>Golongan Darah (A, B, AB, O), Warna Favorit (Merah, Biru, Hijau), Kode Pos (12345, 67890)</strong>. Tidak ada satu kategori pun yang "lebih tinggi" atau "lebih rendah" dari yang lain.</p>
+      </div>
+
+      <h4><strong>Ordinal</strong> <i class="fa-solid fa-list-ol" style="color:#ffc107;"></i></h4>
+      <p>Mengklasifikasikan data ke dalam kategori <strong>dengan urutan</strong> atau peringkat, tetapi perbedaan antar kategori (interval) tidak dapat diukur atau tidak seragam.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-sort-numeric-up-alt"></i>
+        <p>Contoh: <strong>Peringkat Lomba (Juara 1, Juara 2, Juara 3), Tingkat Kepuasan (Sangat Tidak Puas, Tidak Puas, Puas, Sangat Puas), Tingkat Pendidikan (SD, SMP, SMA, S1)</strong>. Kita tahu Juara 1 lebih baik dari Juara 2, tetapi kita tidak tahu seberapa besar perbedaannya.</p>
+      </div>
+
+      <h4><strong>Interval</strong> <i class="fa-solid fa-chart-column" style="color:#4caf50;"></i></h4>
+      <p>Memiliki urutan, perbedaan antar nilai dapat diukur dan konsisten (intervalnya seragam), tetapi <strong>tidak memiliki titik nol mutlak</strong> yang berarti ketiadaan atribut. Rasio tidak bermakna.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-temperature-half"></i>
+        <p>Contoh: <strong>Suhu dalam Celcius/Fahrenheit (0°C bukan berarti tidak ada suhu), Skor IQ (skor 0 tidak berarti tidak ada kecerdasan), Tahun (1990, 1995)</strong>. Perbedaan antara 10°C dan 20°C sama dengan perbedaan antara 20°C dan 30°C, tetapi 20°C bukanlah dua kali lipat dari 10°C.</p>
+      </div>
+
+      <h4><strong>Rasio</strong> <i class="fa-solid fa-balance-scale-right" style="color:#9c27b0;"></i></h4>
+      <p>Memiliki semua fitur skala interval, ditambah <strong>titik nol mutlak</strong> yang benar-benar berarti "tidak ada" atau ketiadaan atribut. Rasio bermakna.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-weight-hanging"></i>
+        <p>Contoh: <strong>Berat Badan (0 kg berarti tidak ada berat), Tinggi Badan (0 cm berarti tidak ada tinggi), Pendapatan (Rp 0 berarti tidak ada pendapatan), Usia (0 tahun berarti belum lahir)</strong>. Seseorang dengan berat 100 kg dua kali lebih berat dari seseorang dengan berat 50 kg.</p>
+      </div>
+      <div class="interactive-activity">
+        <h4><i class="fa-solid fa-cubes"></i> Aktivitas Interaktif: Cocokkan Skala!</h4>
+        <p>Klik item di kiri, lalu klik item di kanan untuk mencocokkan pasangan. Garis akan muncul menghubungkan pasangan yang terpilih.</p>
+        <div class="matching-columns-wrapper" id="matchingActivityWrapper">
+          <svg class="matching-lines-svg" id="matchingLinesSvg"></svg>
+          <div class="matching-columns">
+            <div class="matching-source" id="sourceItems">
+              <div class="matching-item" data-value="jenis_kelamin">Jenis Kelamin</div>
+              <div class="matching-item" data-value="tingkat_kepuasan">Tingkat Kepuasan</div>
+              <div class="matching-item" data-value="suhu_celcius">Suhu dalam Celcius</div>
+              <div class="matching-item" data-value="tinggi_badan">Tinggi Badan</div>
+            </div>
+            <div class="matching-target" id="targetItems">
+              <div class="matching-item" data-target="nominal">Nominal</div>
+              <div class="matching-item" data-target="ordinal">Ordinal</div>
+              <div class="matching-item" data-target="interval">Interval</div>
+              <div class="matching-item" data-target="rasio">Rasio</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 1.2rem; justify-content: center;">
+            <button onclick="checkMatching()">Periksa Jawaban</button>
+            <button onclick="resetMatching()" style="background-color: #f44336;">Ulangi</button>
+          </div>
+          <div class="feedback" id="matchingFeedback"></div>
+        </div>
+      </div>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-users"></i> 3. Populasi vs. Sampel</h3>
+      <p>Dalam penelitian, kita seringkali tidak bisa mengumpulkan data dari semua individu atau objek yang relevan. Karena itu, konsep <strong>populasi</strong> dan <strong>sampel</strong> menjadi sangat penting dalam statistik inferensial.</p>
+      <p><strong>Populasi</strong> adalah keseluruhan kelompok individu, objek, atau peristiwa yang memiliki karakteristik tertentu yang menjadi fokus penelitian dan ingin Anda tarik kesimpulannya. Ini adalah kelompok target yang lebih besar.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-earth-americas"></i>
+        <p>Contoh: <strong>Seluruh Penduduk Kota Jakarta</strong> (jika penelitian Anda bertujuan untuk memahami karakteristik semua penduduk di kota tersebut).</p>
+      </div>
+      <p><strong>Sampel</strong> adalah bagian atau subset yang representatif dari populasi yang dipilih untuk diobservasi, diukur, atau dianalisis. Tujuannya adalah untuk menarik kesimpulan yang valid tentang populasi berdasarkan informasi dari sampel, karena mengumpulkan data dari seluruh populasi seringkali tidak praktis atau mustahil.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-user-group"></i>
+        <p>Contoh: <strong>500 Mahasiswa Universitas X yang Diambil Secara Acak</strong> (jika populasi target adalah semua mahasiswa di Universitas X).</p>
+      </div>
+      <div class="interactive-activity">
+        <h4><i class="fa-solid fa-question-circle"></i> Kuis Singkat: Populasi atau Sampel?</h4>
+        <p>Pilih jawaban yang tepat untuk setiap skenario.</p>
+        <div class="activity-container" id="quizActivity">
+          <div class="question">
+            <p>1. Data berat badan <strong>seluruh siswa</strong> di SD Harapan Bangsa.</p>
+            <div class="options">
+              <label><input type="radio" name="q1" value="populasi"> Populasi</label>
+              <label><input type="radio" name="q1" value="sampel"> Sampel</label>
+            </div>
+            <div class="feedback" id="q1Feedback"></div>
+          </div>
+          <div class="question">
+            <p>2. Hasil survei opini dari <strong>1.000 pemilih</strong> yang dipilih acak di suatu provinsi.</p>
+            <div class="options">
+              <label><input type="radio" name="q2" value="populasi"> Populasi</label>
+              <label><input type="radio" name="q2" value="sampel"> Sampel</label>
+            </div>
+            <div class="feedback" id="q2Feedback"></div>
+          </div>
+          <button onclick="checkQuiz()">Periksa Jawaban</button>
+          <div class="feedback" id="quizOverallFeedback"></div>
+        </div>
+      </div>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-bell"></i> 4. Konsep Distribusi Normal</h3>
+      <p>Distribusi normal, sering disebut <strong>kurva lonceng (bell curve)</strong>, adalah salah satu konsep paling fundamental dalam statistik. Ini menggambarkan bagaimana banyak fenomena alami dan sosial terdistribusi, seperti tinggi badan manusia atau skor ujian.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-chart-area" style="color: #ef5350;"></i>
+        <p>Ilustrasi: <strong>Kurva Lonceng Distribusi Normal</strong>. Mayoritas data terpusat di sekitar nilai rata-rata, dengan frekuensi yang menurun secara simetris saat menjauh dari rata-rata.</p>
+      </div>
+      <p>Karakteristik utama distribusi normal:</p>
+      <ul>
+        <li><strong>Simetris</strong>: Kedua sisi kurva adalah cerminan satu sama lain di sekitar titik tengah.</li>
+        <li><strong>Unimodal</strong>: Hanya memiliki satu puncak, yang menunjukkan nilai paling sering muncul.</li>
+        <li><strong>Rata-rata, Median, dan Modus Berhimpit</strong>: Ketiga ukuran pemusatan ini berada di titik yang sama, yaitu di puncak kurva.</li>
+        <li><strong>Asimtotik</strong>: Kurva mendekati sumbu horizontal di kedua ujungnya tetapi tidak pernah menyentuhnya, menunjukkan bahwa ada kemungkinan (meskipun sangat kecil) untuk menemukan nilai ekstrem.</li>
+      </ul>
+      <p>Pentingnya distribusi normal terletak pada fakta bahwa banyak uji statistik inferensial mengasumsikan data terdistribusi normal. Memahami konsep ini sangat penting untuk interpretasi hasil statistik yang akurat dan pemilihan metode analisis yang tepat.</p>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-chart-pie"></i> 5. Penyajian Data: Tabel dan Grafik</h3>
+      <p>Setelah data dikumpulkan, langkah selanjutnya adalah menyajikannya agar mudah dipahami, dianalisis, dan dikomunikasikan. <strong>Tabel</strong> dan <strong>grafik</strong> adalah alat utama untuk visualisasi data.</p>
+
+      <h4><strong>Penyajian dalam Tabel</strong> <i class="fa-solid fa-table" style="color:#00bcd4;"></i></h4>
+      <p>Tabel adalah cara yang terstruktur dan ringkas untuk menampilkan data mentah atau data yang telah diringkas. Mereka sangat berguna untuk menampilkan angka-angka spesifik, perbandingan detail, dan ketika presisi numerik sangat penting.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-table-list"></i>
+        <p>Contoh: <strong>Tabel Frekuensi Tingkat Pendidikan Responden</strong>. Tabel ini menampilkan jumlah atau persentase responden untuk setiap kategori pendidikan (SD, SMP, SMA, S1), memungkinkan pembaca melihat distribusi secara detail.</p>
+      </div>
+
+      <h4><strong>Penyajian dalam Grafik</strong> <i class="fa-solid fa-chart-bar" style="color:#8bc34a;"></i></h4>
+      <p>Grafik (atau *chart*) adalah representasi visual data yang mempermudah identifikasi pola, tren, hubungan, dan perbandingan secara cepat. Pemilihan jenis grafik yang tepat sangat tergantung pada jenis data dan pesan atau wawasan yang ingin disampaikan.</p>
+      <ul>
+        <li><strong>Bar Chart (Diagram Batang)</strong>: Ideal untuk membandingkan kategori data kualitatif atau diskrit.</li>
+        <li><strong>Pie Chart (Diagram Lingkaran)</strong>: Digunakan untuk menunjukkan proporsi bagian dari keseluruhan (persentase).</li>
+        <li><strong>Histogram</strong>: Menampilkan distribusi frekuensi data kuantitatif, di mana batang saling berdempetan untuk menunjukkan kontinuitas.</li>
+        <li><strong>Line Chart (Diagram Garis)</strong>: Bagus untuk menunjukkan tren data dari waktu ke waktu atau hubungan antara dua variabel kontinu.</li>
+        <li><strong>Scatter Plot (Diagram Pencar)</strong>: Digunakan untuk menunjukkan hubungan atau korelasi antara dua variabel kuantitatif.</li>
+      </ul>
+      <div class="visual-example">
+        <i class="fa-solid fa-chart-column"></i>
+        <p>Contoh: <strong>Diagram Batang Jumlah Siswa per Jenjang Kelas</strong>. Visual ini dengan cepat menunjukkan jenjang mana yang memiliki jumlah siswa paling banyak atau paling sedikit, memudahkan perbandingan visual.</p>
+      </div>
+      <div class="interactive-activity">
+        <h4><i class="fa-solid fa-paint-brush"></i> Aktivitas Interaktif: Pilih Grafik yang Tepat!</h4>
+        <p>Diberikan skenario data, pilih jenis grafik yang paling sesuai untuk menyajikannya.</p>
+        <div class="activity-container" id="chartMatchActivity">
+            <div class="question">
+                <p>1. Untuk menampilkan persentase siswa yang memilih ekstrakurikuler yang berbeda?</p>
+                <div class="options">
+                    <label><input type="radio" name="chart_q1" value="bar"> Diagram Batang</label>
+                    <label><input type="radio" name="chart_q1" value="pie"> Diagram Lingkaran</label>
+                    <label><input type="radio" name="chart_q1" value="line"> Diagram Garis</label>
+                </div>
+                <div class="feedback" id="chart_q1Feedback"></div>
+            </div>
+            <div class="question">
+                <p>2. Untuk melihat tren penjualan produk selama 12 bulan terakhir?</p>
+                <div class="options">
+                    <label><input type="radio" name="chart_q2" value="bar"> Diagram Batang</label>
+                    <label><input type="radio" name="chart_q2" value="pie"> Diagram Lingkaran</label>
+                    <label><input type="radio" name="chart_q2" value="line"> Diagram Garis</label>
+                </div>
+                <div class="feedback" id="chart_q2Feedback"></div>
+            </div>
+            <button onclick="checkChartMatch()">Periksa Jawaban</button>
+            <div class="feedback" id="chartMatchOverallFeedback"></div>
+        </div>
+      </div>
+    </div>
+
+    ---
+
+    <div class="module-actions-bottom">
+        <button class="back-button" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i> Kembali ke Modul</button>
+        <button onclick="alert('Selamat! Anda telah menyelesaikan semua materi dan aktivitas di Modul 1. Anda siap untuk melanjutkan ke modul berikutnya atau mendalami latihan lebih lanjut!')"><i class="fa-solid fa-play"></i> Selesaikan & Lanjut Latihan</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
+  </footer>
+
+  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">
+    <i class="fa-brands fa-whatsapp"></i>
+  </button>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TL1GH741HF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TL1GH741HF');
+  </script>
+
+  <script>
+    // --- JavaScript for Interactive Activities ---
+
+    // 1. Drag & Drop Activity (Jenis Data)
+    const draggableItemsData = [
+        { id: 'drag1', text: 'Suhu Ruangan (°C)', type: 'kuantitatif' },
+        { id: 'drag2', text: 'Warna Favorit', type: 'kualitatif' },
+        { id: 'drag3', text: 'Jumlah Anak', type: 'kuantitatif' },
+        { id: 'drag4', text: 'Status Pernikahan', type: 'kualitatif' }
+    ];
+
+    const draggableItemsPool = document.getElementById('draggableItemsPool');
+    const dropTargets = document.querySelectorAll('.drop-target');
+    const dragDropFeedback = document.getElementById('dragDropFeedback');
+
+    function initializeDragDrop() {
+        draggableItemsPool.innerHTML = ''; // Clear existing items
+
+        // Shuffle items for variety each time it's reset
+        const shuffledData = [...draggableItemsData].sort(() => Math.random() - 0.5);
+
+        shuffledData.forEach(data => {
+            const div = document.createElement('div');
+            div.className = 'draggable-item';
+            div.draggable = true;
+            div.id = data.id;
+            div.dataset.type = data.type;
+            div.textContent = data.text;
+            draggableItemsPool.appendChild(div);
+        });
+
+        const currentDraggableItems = document.querySelectorAll('.draggable-item');
+        currentDraggableItems.forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', e.target.id);
+                e.target.classList.add('dragging');
+            });
+
+            item.addEventListener('dragend', (e) => {
+                e.target.classList.remove('dragging');
+            });
+        });
+
+        dropTargets.forEach(target => {
+            // Re-add the initial label and remove any dropped items
+            target.innerHTML = `<span style="font-weight: 600; font-style: normal;">${target.dataset.label}</span>`;
+            target.classList.remove('hover', 'correct-drop', 'incorrect-drop');
+            // Add or re-add event listeners for drop targets (though they are static, good practice for dynamic content)
+            target.removeEventListener('dragover', preventDefault); // Remove previous to avoid duplicates
+            target.removeEventListener('dragleave', removeHover);
+            target.removeEventListener('drop', handleDrop);
+
+            target.addEventListener('dragover', preventDefault);
+            target.addEventListener('dragleave', removeHover);
+            target.addEventListener('drop', handleDrop);
+        });
+        dragDropFeedback.textContent = '';
+        dragDropFeedback.className = 'feedback';
+    }
+
+    // Helper functions for drag and drop events to avoid anonymous functions in loops
+    function preventDefault(e) {
+        e.preventDefault();
+        e.currentTarget.classList.add('hover');
+    }
+
+    function removeHover(e) {
+        e.currentTarget.classList.remove('hover');
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        e.currentTarget.classList.remove('hover');
+        const draggedElementId = e.dataTransfer.getData('text/plain');
+        const draggedElement = document.getElementById(draggedElementId);
+        const target = e.currentTarget;
+
+        if (!draggedElement) return; // If element was already removed (e.g., in a rapid double-drop scenario)
+
+        // Check if the target already has a dropped item
+        if (target.querySelector('.dropped-item')) {
+            dragDropFeedback.textContent = 'Target ini sudah terisi. Pindahkan item yang sudah ada terlebih dahulu.';
+            dragDropFeedback.className = 'feedback incorrect';
+            return;
+        }
+
+        // Check if the dragged item type matches the target's accepted type
+        if (draggedElement.dataset.type === target.dataset.accept) {
+            // Remove existing child elements (the data-label span) before appending the new item
+            target.innerHTML = '';
+
+            // Create a new div to represent the dropped item within the target
+            const droppedVisual = document.createElement('div');
+            droppedVisual.className = 'dropped-item';
+            droppedVisual.textContent = draggedElement.textContent;
+            droppedVisual.dataset.originalId = draggedElement.id; // Keep track of original ID
+
+            target.appendChild(droppedVisual);
+            draggedElement.remove(); // Remove original item from pool
+            dragDropFeedback.textContent = ''; // Clear feedback
+        } else {
+            dragDropFeedback.textContent = 'Oops! Itu bukan kategori yang tepat. Coba lagi.';
+            dragDropFeedback.className = 'feedback incorrect';
+        }
+    }
+
+
+    function checkDragDrop() {
+        let correctCount = 0;
+        let totalItemsInTargets = 0;
+
+        dropTargets.forEach(target => {
+            target.classList.remove('correct-drop', 'incorrect-drop'); // Reset previous feedback
+            const droppedItem = target.querySelector('.dropped-item');
+
+            if (droppedItem) {
+                totalItemsInTargets++;
+                const originalItemId = droppedItem.dataset.originalId;
+                const originalItemData = draggableItemsData.find(d => d.id === originalItemId);
+
+                if (originalItemData && originalItemData.type === target.dataset.accept) {
+                    target.classList.add('correct-drop');
+                    correctCount++;
+                } else {
+                    target.classList.add('incorrect-drop');
+                }
+            } else {
+                // If a target is empty, it's implicitly incorrect for this activity
+                target.classList.add('incorrect-drop');
+            }
+        });
+
+        // The total items we expect to be correctly placed in targets is the number of items in draggableItemsData
+        const expectedTotalItems = draggableItemsData.length;
+
+        // Check if all items that *should* be in targets are correctly placed and no target is empty unnecessarily.
+        // Also ensure that no items are left in the pool if they should all be dragged.
+        const remainingItemsInPool = draggableItemsPool.querySelectorAll('.draggable-item').length;
+
+        if (correctCount === expectedTotalItems && remainingItemsInPool === 0) {
+            dragDropFeedback.textContent = 'Hebat! Semua klasifikasi data Anda benar! 🎉';
+            dragDropFeedback.className = 'feedback correct';
+        } else {
+            dragDropFeedback.textContent = `Ada ${expectedTotalItems - correctCount - remainingItemsInPool} item yang belum tepat atau belum ditempatkan. Coba lagi! 🤔`;
+            dragDropFeedback.className = 'feedback incorrect';
+        }
+    }
+
+    function resetDragDrop() {
+        initializeDragDrop(); // Re-initialize the entire drag & drop area
+    }
+
+
+    // 2. Matching Activity (Skala Pengukuran) - WITH LINES
+    let selectedSource = null;
+    let selectedTarget = null;
+    const correctMatches = {
+        'jenis_kelamin': 'nominal',
+        'tingkat_kepuasan': 'ordinal',
+        'suhu_celcius': 'interval',
+        'tinggi_badan': 'rasio'
+    };
+    let userMatches = {}; // Store current user matches {source_value: target_value}
+    const matchingLinesSvg = document.getElementById('matchingLinesSvg');
+    const matchingActivityWrapper = document.getElementById('matchingActivityWrapper');
+
+    const sourceItems = document.querySelectorAll('#sourceItems .matching-item');
+    const targetItems = document.querySelectorAll('#targetItems .matching-item');
+    const matchingFeedback = document.getElementById('matchingFeedback');
+
+    function initializeMatching() {
+        sourceItems.forEach(item => {
+            item.classList.remove('selected', 'matched-correct');
+            item.style.pointerEvents = 'auto';
+            item.removeEventListener('click', handleSourceClick);
+            item.addEventListener('click', handleSourceClick);
+        });
+        targetItems.forEach(item => {
+            item.classList.remove('selected', 'matched-correct');
+            item.style.pointerEvents = 'auto';
+            item.removeEventListener('click', handleTargetClick);
+            item.addEventListener('click', handleTargetClick);
+        });
+        userMatches = {}; // Reset matches
+        drawAllLines(); // Clear all lines
+        resetSelections();
+        matchingFeedback.textContent = '';
+        matchingFeedback.className = 'feedback';
+    }
+
+    function handleSourceClick() {
+        const sourceVal = this.dataset.value;
+        // If this source item is already part of an incorrect match, allow re-selection by removing existing line
+        if (userMatches[sourceVal] && correctMatches[sourceVal] !== userMatches[sourceVal]) {
+            const oldTargetVal = userMatches[sourceVal];
+            delete userMatches[sourceVal];
+            removeLine(sourceVal); // Remove the old line
+            // Also re-enable the previously incorrectly matched target item
+            const oldTargetItem = document.querySelector(`.matching-item[data-target="${oldTargetVal}"]`);
+            if (oldTargetItem) {
+                oldTargetItem.classList.remove('matched-correct');
+                oldTargetItem.style.pointerEvents = 'auto';
+            }
+        } else if (userMatches[sourceVal] && correctMatches[sourceVal] === userMatches[sourceVal]) {
+            // Already correctly matched, don't do anything
+            matchingFeedback.textContent = 'Item ini sudah cocok dengan benar!';
+            matchingFeedback.className = 'feedback correct';
+            return;
+        }
+
+
+        if (selectedSource) {
+            selectedSource.classList.remove('selected');
+        }
+        selectedSource = this;
+        this.classList.add('selected');
+        checkMatchingSelection();
+    }
+
+    function handleTargetClick() {
+        const targetVal = this.dataset.target;
+        // If this target item is already part of an incorrect match, allow re-selection by removing existing line
+        const currentSourceForTarget = Object.keys(userMatches).find(key => userMatches[key] === targetVal);
+        if (currentSourceForTarget && correctMatches[currentSourceForTarget] !== targetVal) {
+            delete userMatches[currentSourceForTarget];
+            removeLine(currentSourceForTarget); // Remove the old line
+            // Also re-enable the previously incorrectly matched source item
+            const oldSourceItem = document.querySelector(`.matching-item[data-value="${currentSourceForTarget}"]`);
+            if (oldSourceItem) {
+                oldSourceItem.classList.remove('matched-correct');
+                oldSourceItem.style.pointerEvents = 'auto';
+            }
+        } else if (currentSourceForTarget && correctMatches[currentSourceForTarget] === targetVal) {
+            // Already correctly matched, don't do anything
+            matchingFeedback.textContent = 'Item ini sudah cocok dengan benar!';
+            matchingFeedback.className = 'feedback correct';
+            return;
+        }
+
+        if (selectedTarget) {
+            selectedTarget.classList.remove('selected');
+        }
+        selectedTarget = this;
+        this.classList.add('selected');
+        checkMatchingSelection();
+    }
+
+    function checkMatchingSelection() {
+        if (selectedSource && selectedTarget) {
+            const sourceVal = selectedSource.dataset.value;
+            const targetVal = selectedTarget.dataset.target;
+
+            // Remove any existing line for this source before drawing a new one
+            removeLine(sourceVal);
+
+            // Add the new tentative match to userMatches
+            userMatches[sourceVal] = targetVal;
+
+            // Draw the line immediately
+            drawLine(selectedSource, selectedTarget, sourceVal); // Pass sourceVal as line ID
+
+            // Check if this specific match is correct
+            if (correctMatches[sourceVal] === targetVal) {
+                matchingFeedback.textContent = 'Cocok! Pasangan benar! 🎉';
+                matchingFeedback.className = 'feedback correct';
+
+                selectedSource.classList.add('matched-correct');
+                selectedTarget.classList.add('matched-correct');
+                selectedSource.style.pointerEvents = 'none'; // Make unclickable
+                selectedTarget.style.pointerEvents = 'none'; // Make unclickable
+
+                // Change line color to green for correct match
+                const line = document.getElementById(`line-${sourceVal}`);
+                if (line) {
+                    line.classList.add('correct-line');
+                }
+            } else {
+                matchingFeedback.textContent = 'Tidak cocok. Coba lagi! 🤔';
+                matchingFeedback.className = 'feedback incorrect';
+            }
+            resetSelections(); // Always reset selections after an attempt
+        }
+    }
+
+    function resetSelections() {
+        if (selectedSource) {
+            selectedSource.classList.remove('selected');
+            selectedSource = null;
+        }
+        if (selectedTarget) {
+            selectedTarget.classList.remove('selected');
+            selectedTarget = null;
+        }
+    }
+
+    function drawLine(sourceElem, targetElem, lineId) {
+        const wrapperRect = matchingActivityWrapper.getBoundingClientRect();
+        const sourceRect = sourceElem.getBoundingClientRect();
+        const targetRect = targetElem.getBoundingClientRect();
+
+        // Calculate coordinates relative to the SVG container
+        const x1 = sourceRect.right - wrapperRect.left;
+        const y1 = sourceRect.top + sourceRect.height / 2 - wrapperRect.top;
+        const x2 = targetRect.left - wrapperRect.left;
+        const y2 = targetRect.top + targetRect.height / 2 - wrapperRect.top;
+
+        let line = document.getElementById(`line-${lineId}`);
+        if (!line) {
+            line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('id', `line-${lineId}`);
+            matchingLinesSvg.appendChild(line);
+        }
+
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('class', 'matching-line'); // Default class
+        line.classList.remove('correct-line'); // Reset correct class
+    }
+
+    function removeLine(lineId) {
+        const line = document.getElementById(`line-${lineId}`);
+        if (line) {
+            line.remove();
+        }
+    }
+
+    function drawAllLines() {
+        // Clear all existing lines first
+        matchingLinesSvg.innerHTML = '';
+
+        for (const sourceVal in userMatches) {
+            const targetVal = userMatches[sourceVal];
+            const sourceElem = document.querySelector(`.matching-item[data-value="${sourceVal}"]`);
+            const targetElem = document.querySelector(`.matching-item[data-target="${targetVal}"]`);
+            if (sourceElem && targetElem) {
+                drawLine(sourceElem, targetElem, sourceVal);
+                const line = document.getElementById(`line-${sourceVal}`);
+                if (line && correctMatches[sourceVal] === targetVal) {
+                    line.classList.add('correct-line');
+                }
+            }
+        }
+    }
+
+    function checkMatching() {
+        let allCorrect = true;
+        let matchedCorrectCount = 0;
+        let totalPossibleMatches = Object.keys(correctMatches).length;
+
+        // Check each source item
+        sourceItems.forEach(sourceItem => {
+            const sourceVal = sourceItem.dataset.value;
+            const targetVal = userMatches[sourceVal];
+            
+            if (targetVal && correctMatches[sourceVal] === targetVal) {
+                matchedCorrectCount++;
+            } else {
+                allCorrect = false;
+            }
+        });
+
+        // Ensure all correct matches are made and no extra lines for incorrect matches
+        if (matchedCorrectCount === totalPossibleMatches && Object.keys(userMatches).length === totalPossibleMatches) {
+            matchingFeedback.textContent = 'Luar biasa! Semua skala pengukuran Anda cocok. 🏆';
+            matchingFeedback.className = 'feedback correct';
+            // Ensure all correct lines are green
+            sourceItems.forEach(item => {
+                const line = document.getElementById(`line-${item.dataset.value}`);
+                if(line) line.classList.add('correct-line');
+            });
+        } else {
+            matchingFeedback.textContent = `Anda mencocokkan ${matchedCorrectCount} dari ${totalPossibleMatches} pasangan dengan benar. Periksa kembali pasangan yang salah! 🤓`;
+            matchingFeedback.className = 'feedback incorrect';
+            // Highlight incorrect lines if any
+            for (const sourceVal in userMatches) {
+                if (correctMatches[sourceVal] !== userMatches[sourceVal]) {
+                    const line = document.getElementById(`line-${sourceVal}`);
+                    if(line) line.style.stroke = '#f44336'; // Make incorrect lines red
+                }
+            }
+        }
+    }
+
+    function resetMatching() {
+        initializeMatching();
+        // Clear any custom red lines after checkMatching was called
+        matchingLinesSvg.querySelectorAll('line').forEach(line => {
+            line.style.stroke = ''; // Reset to default CSS stroke
+        });
+    }
+
+    // Recalculate line positions on window resize to keep them connected
+    window.addEventListener('resize', drawAllLines);
+
+
+    // 3. Quiz Activity (Populasi vs. Sampel)
+    function checkQuiz() {
+      const q1Radios = document.querySelectorAll('input[name="q1"]');
+      const q2Radios = document.querySelectorAll('input[name="q2"]');
+      const q1Feedback = document.getElementById('q1Feedback');
+      const q2Feedback = document.getElementById('q2Feedback');
+      const quizOverallFeedback = document.getElementById('quizOverallFeedback');
+      let correctCount = 0;
+      let totalQuestions = 2;
+
+      // Question 1
+      let q1Answer = '';
+      q1Radios.forEach(radio => {
+        if (radio.checked) {
+          q1Answer = radio.value;
+        }
+      });
+      if (q1Answer === 'populasi') {
+        q1Feedback.textContent = 'Benar! 👍';
+        q1Feedback.className = 'feedback correct';
+        correctCount++;
+      } else {
+        q1Feedback.textContent = 'Salah. Jawaban yang benar adalah Populasi. 👎';
+        q1Feedback.className = 'feedback incorrect';
+      }
+
+      // Question 2
+      let q2Answer = '';
+      q2Radios.forEach(radio => {
+        if (radio.checked) {
+          q2Answer = radio.value;
+        }
+      });
+      if (q2Answer === 'sampel') {
+        q2Feedback.textContent = 'Benar! 👍';
+        q2Feedback.className = 'feedback correct';
+        correctCount++;
+      } else {
+        q2Feedback.textContent = 'Salah. Jawaban yang benar adalah Sampel. 👎';
+        q2Feedback.className = 'feedback incorrect';
+      }
+
+      if (correctCount === totalQuestions) {
+        quizOverallFeedback.textContent = 'Selamat! Semua jawaban Anda benar! 🎉';
+        quizOverallFeedback.className = 'feedback correct';
+      } else {
+        quizOverallFeedback.textContent = `Anda benar ${correctCount} dari ${totalQuestions} pertanyaan. Coba lagi! 🤔`;
+        quizOverallFeedback.className = 'feedback incorrect';
+      }
+    }
+
+    // 4. Chart Matching Quiz (Penyajian Data)
+    function checkChartMatch() {
+        const chartQ1Radios = document.querySelectorAll('input[name="chart_q1"]');
+        const chartQ2Radios = document.querySelectorAll('input[name="chart_q2"]');
+        const chartQ1Feedback = document.getElementById('chart_q1Feedback');
+        const chartQ2Feedback = document.getElementById('chart_q2Feedback');
+        const chartMatchOverallFeedback = document.getElementById('chartMatchOverallFeedback');
+        let correctCount = 0;
+        let totalQuestions = 2;
+
+        // Question 1
+        let chartQ1Answer = '';
+        chartQ1Radios.forEach(radio => {
+            if (radio.checked) {
+                chartQ1Answer = radio.value;
+            }
+        });
+        if (chartQ1Answer === 'pie') {
+            chartQ1Feedback.textContent = 'Tepat! Diagram lingkaran cocok untuk menunjukkan proporsi dari keseluruhan. 👍';
+            chartQ1Feedback.className = 'feedback correct';
+            correctCount++;
+        } else {
+            chartQ1Feedback.textContent = 'Kurang tepat. Jawaban yang benar adalah Diagram Lingkaran. 👎';
+            chartQ1Feedback.className = 'feedback incorrect';
+        }
+
+        // Question 2
+        let chartQ2Answer = '';
+        chartQ2Radios.forEach(radio => {
+            if (radio.checked) {
+                chartQ2Answer = radio.value;
+            }
+        });
+        if (chartQ2Answer === 'line') {
+            chartQ2Feedback.textContent = 'Benar! Diagram garis ideal untuk menunjukkan tren data sepanjang waktu. 👍';
+            chartQ2Feedback.className = 'feedback correct';
+            correctCount++;
+        } else {
+            chartQ2Feedback.textContent = 'Salah. Jawaban yang benar adalah Diagram Garis. 👎';
+            chartQ2Feedback.className = 'feedback incorrect';
+        }
+
+        if (correctCount === totalQuestions) {
+            chartMatchOverallFeedback.textContent = 'Hebat! Anda memilih grafik dengan benar! 🎉';
+            chartMatchOverallFeedback.className = 'feedback correct';
+        } else {
+            chartMatchOverallFeedback.textContent = `Anda benar ${correctCount} dari ${totalQuestions} pertanyaan. Periksa kembali pilihan Anda. 🤔`;
+            chartMatchOverallFeedback.className = 'feedback incorrect';
+        }
+    }
+
+    // Initialize activities on page load
+    window.addEventListener('load', () => {
+        initializeDragDrop();
+        initializeMatching();
+        console.log("Modul 1 page loaded and interactive scripts are ready!");
+    });
+
+  </script>
+</body>
+</html>
