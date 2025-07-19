@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sample Size - Dua Rata-rata</title>
+  <title>Sample Size Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
@@ -34,6 +34,18 @@
       font-size: 14px;
       color: #777;
       display: block;
+    }
+    .studi-kasus {
+      background-color: #f0f6ff;
+      border-left: 4px solid #007bff;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+      border-radius: 10px;
+    }
+    .studi-kasus h2 {
+      font-size: 18px;
+      margin-top: 0;
+      color: #007bff;
     }
     label {
       display: block;
@@ -114,6 +126,13 @@
   <div class="container">
     <div class="card" id="outputArea">
       <h1>Perhitungan Besar Sampel <span>Perbandingan Dua Rata-rata</span></h1>
+
+      <!-- Studi Kasus -->
+      <div class="studi-kasus">
+        <h2>📚 Studi Kasus</h2>
+        <p>Seorang peneliti ingin mengetahui apakah program diet baru lebih efektif dibandingkan dengan program lama. Rata-rata penurunan berat badan pada program lama adalah 8 kg, dan peneliti mengharapkan program baru dapat menghasilkan penurunan rata-rata sebesar 13 kg. Berdasarkan studi sebelumnya, simpangan baku penurunan berat badan adalah sekitar 10 kg. Peneliti menginginkan tingkat signifikansi 95% dan kekuatan uji 80%.</p>
+        <p><strong>Pertanyaan:</strong> Berapa jumlah responden minimum yang dibutuhkan pada masing-masing grup agar perbedaan rata-rata ini dapat dideteksi secara statistik?</p>
+      </div>
 
       <form id="sampleForm">
         <label for="sigma">Simpangan Baku (σ):</label>
