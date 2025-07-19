@@ -7,14 +7,14 @@
     * { box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
-      background-color: #eaeaea;
+      background-color: #e0f2f7; /* Nuansa biru muda */
       margin: 0;
       padding: 0;
     }
     header {
       background: #FFFFFF;
       padding: 20px;
-      border-bottom: 4px solid #ff9999;
+      border-bottom: 4px solid #99ccff; /* Nuansa biru */
       position: relative;
     }
     header img {
@@ -50,14 +50,14 @@
       margin: auto;
     }
     .user-info {
-      background: #f1f5f9;
+      background: #e6f7ff; /* Nuansa biru sangat muda */
       padding: 15px;
-      border: 1px solid #ccc;
+      border: 1px solid #b3e0ff; /* Nuansa biru muda */
       margin-bottom: 20px;
     }
     .soal-box {
       background: #fff;
-      border: 1px solid #ccc;
+      border: 1px solid #b3e0ff; /* Nuansa biru muda */
       padding: 20px;
       margin-bottom: 20px;
     }
@@ -70,7 +70,7 @@
       border: none;
       margin-right: 10px;
       cursor: pointer;
-      background: #800000;
+      background: #0056b3; /* Biru tua */
       color: white;
       border-radius: 5px;
     }
@@ -88,8 +88,8 @@
       cursor: pointer;
       font-weight: bold;
     }
-    .green { background: #16a34a; color: white; }
-    .red { background: #dc2626; color: white; }
+    .green { background: #16a34a; color: white; } /* Tetap hijau untuk soal dijawab */
+    .red { background: #3399ff; color: white; } /* Biru untuk soal belum dijawab */
     #timer-box {
       position: fixed;
       bottom: 20px;
@@ -107,15 +107,15 @@
     }
     
     #btn-kirim {
-  background-color: #ff8033; /* Ungu */
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-  display: none; /* hanya muncul saat semua soal dijawab */
-}
+      background-color: #007bff; /* Biru cerah */
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      display: none; /* hanya muncul saat semua soal dijawab */
+    }
 
   </style>
 </head>
@@ -127,8 +127,7 @@
       <div class="info-item"><strong>Batas Waktu</strong>90</div>
       <div class="info-item"><strong>Jumlah Soal</strong>110</div>
       <div class="info-item" style="color: green"><strong>Soal Dijawab</strong><span id="dijawab">0</span></div>
-      <div class="info-item" style="color: red"><strong>Belum Dijawab</strong><span id="belum">110</span></div>
-      <button id="btn-selesai" onclick="konfirmasiSelesai()">Selesai Ujian</button>
+      <div class="info-item" style="color: #3399ff"><strong>Belum Dijawab</strong><span id="belum">110</span></div> <button id="btn-selesai" onclick="konfirmasiSelesai()">Selesai Ujian</button>
     </div>
   </header>
 
