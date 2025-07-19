@@ -89,7 +89,8 @@
       font-weight: bold;
     }
     .green { background: #16a34a; color: white; } /* Tetap hijau untuk dijawab */
-    .red { background: #dc2626; color: white; } /* Tetap merah untuk belum dijawab (atau bisa diganti ke abu-abu/biru gelap jika ingin konsisten) */
+    /* Mengubah warna merah menjadi nuansa biru untuk tombol "belum dijawab" */
+    .red { background: #5a82b0; color: white; } /* Nuansa biru gelap untuk belum dijawab */
     #timer-box {
       position: fixed;
       bottom: 20px;
@@ -117,6 +118,11 @@
       display: none; /* hanya muncul saat semua soal dijawab */
     }
 
+    /* Mengubah warna teks "Belum Dijawab" menjadi nuansa biru gelap */
+    .info-item.belum-dijawab {
+        color: #0056b3 !important; /* Biru gelap yang sama dengan timer */
+    }
+
   </style>
 </head>
 <body onload="initApp()">
@@ -127,7 +133,7 @@
       <div class="info-item"><strong>Batas Waktu</strong>90</div>
       <div class="info-item"><strong>Jumlah Soal</strong>110</div>
       <div class="info-item" style="color: green"><strong>Soal Dijawab</strong><span id="dijawab">0</span></div>
-      <div class="info-item" style="color: #dc2626"><strong>Belum Dijawab</strong><span id="belum">110</span></div> <button id="btn-selesai" onclick="konfirmasiSelesai()">Selesai Ujian</button>
+      <div class="info-item belum-dijawab"><strong>Belum Dijawab</strong><span id="belum">110</span></div> <button id="btn-selesai" onclick="konfirmasiSelesai()">Selesai Ujian</button>
     </div>
   </header>
 
