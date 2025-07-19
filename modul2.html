@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Modul 2: Statistik Deskriptif</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <script type="text/x-mathjax-config">
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']] // Enable inline LaTeX with $...$
+      },
+      svg: {
+        fontCache: 'global' // Use global font cache for better performance
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] // Tags MathJax should ignore
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+  <style>
+    /* Global Reset & Base Styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      line-height: 1.7;
+      font-size: 16px;
+      overflow-x: hidden; /* Prevent horizontal scroll on some effects */
+    }
+
+    /* Force strong tag to be bold */
+    strong {
+        font-weight: 700 !important; /* Use !important to override any conflicting styles */
+    }
+
+    /* Header Styling */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-brand img {
+      height: 52px;
+      width: 52px;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .header-brand img:hover {
+        transform: scale(1.1);
+    }
+
+    .header-text h1 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin: 0;
+      color: #1a237e;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    /* Main Content Layout */
+    .module-content {
+      max-width: 900px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    /* Module Card Styling (Main Introduction) */
+    .module-card {
+      background: linear-gradient(145deg, #f8faff, #eff3f7);
+      padding: 2.2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      border: 1px solid #c9e6ff;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .module-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(240, 248, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+        opacity: 0;
+        transform: scale(0);
+        border-radius: 50%;
+        transition: all 0.6s ease-out;
+        z-index: 0;
+    }
+
+    .module-card:hover::before {
+        opacity: 1;
+        transform: scale(1);
+        top: -10%;
+        left: -10%;
+    }
+
+    .module-card h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin-top: 0;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      line-height: 1.3;
+      text-align: left;
+      flex-wrap: wrap;
+    }
+
+    .module-card h2 .module-title-primary {
+        display: block;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        margin-bottom: 0.2rem;
+        color: #3f51b5;
+    }
+
+    .module-card h2 .fa-solid {
+        font-size: 2.8rem;
+        color: #42a5f5;
+    }
+
+    .module-card h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #3f51b5;
+      margin-top: 1.8rem;
+      margin-bottom: 0.8rem;
+      position: relative;
+      z-index: 1;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .module-card p {
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 0.8rem;
+      position: relative;
+      z-index: 1;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .module-card ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 0.8rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .module-card ul li {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 0.6rem;
+      padding-left: 1.8rem;
+      position: relative;
+      text-align: left;
+    }
+
+    .module-card ul li::before {
+      content: '✔';
+      font-size: 1.1em;
+      color: #4CAF50;
+      position: absolute;
+      left: 0;
+      top: 0;
+      line-height: inherit;
+    }
+
+    /* Detailed Content Sections */
+    .content-section {
+        background-color: #ffffff;
+        padding: 2.2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        margin-top: 2.2rem;
+        border: 1px solid #e8e8e8;
+        animation: fadeIn 0.8s ease-out;
+        animation-fill-mode: backwards;
+    }
+
+    /* Staggered animation delays for sections */
+    .module-card { animation-delay: 0s; }
+    .content-section:nth-of-type(1) { animation-delay: 0.2s; }
+    .content-section:nth-of-type(2) { animation-delay: 0.4s; }
+    .content-section:nth-of-type(3) { animation-delay: 0.6s; }
+    .content-section:nth-of-type(4) { animation-delay: 0.8s; }
+    .content-section:nth-of-type(5) { animation-delay: 1.0s; }
+    .module-actions-bottom { animation-delay: 1.2s; }
+
+    .content-section h3 {
+        font-size: 1.7rem;
+        color: #1a237e;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        line-height: 1.3;
+        text-align: left;
+    }
+
+    .content-section h4 {
+      font-size: 1.25rem;
+      color: #3f51b5;
+      margin-top: 1.6rem;
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .content-section p {
+        font-size: 0.95rem;
+        color: #444;
+        margin-bottom: 0.8rem;
+        text-align: justify;
+        hyphens: auto;
+    }
+
+    .content-section ul {
+        padding-left: 1.2rem;
+    }
+
+    .content-section ul li {
+        font-size: 0.95rem;
+        color: #555;
+        margin-bottom: 0.4rem;
+        padding-left: 1.2rem;
+        position: relative;
+        text-align: left;
+    }
+
+    .content-section ul li::before {
+      content: '•';
+      font-size: 1.3em;
+      color: #64b5f6;
+      position: absolute;
+      left: 0;
+      top: 0;
+      line-height: inherit;
+    }
+
+    .visual-example {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin: 1.8rem auto;
+        max-width: 85%;
+        padding: 1.6rem;
+        background-color: #f6f8fa;
+        border-radius: 12px;
+        border: 1px dashed #d0e0ed;
+    }
+
+    .visual-example .fa-solid, .visual-example .fa-chart-bar, .visual-example .fa-table {
+        font-size: 3.5rem;
+        color: #64b5f6;
+        margin-bottom: 1rem;
+    }
+
+    .visual-example p {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
+        text-align: center;
+    }
+
+    /* New: Interactive Box/Container */
+    .interactive-box {
+        background-color: #e0f7fa;
+        padding: 1.8rem;
+        border-radius: 12px;
+        border: 1px solid #80deea;
+        margin-top: 2.2rem;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .interactive-box h4 {
+        font-size: 1.4rem;
+        color: #006064;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+    }
+
+    .interactive-box p {
+        font-size: 0.95rem;
+        color: #00838f;
+        margin-bottom: 1.2rem;
+        text-align: center;
+    }
+
+    /* Activity Specific Styles */
+    .activity-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.3rem;
+        margin-top: 1.3rem;
+    }
+
+    .question {
+        background-color: #f0f8ff;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #a7d9f7;
+        width: 100%;
+        max-width: 600px;
+        text-align: left;
+    }
+
+    .question p {
+        margin-top: 0;
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+        color: #1a237e;
+        text-align: left;
+    }
+
+    .options label {
+        display: block;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        padding: 0.5rem 0.7rem;
+        border-radius: 5px;
+        transition: background-color 0.2s ease;
+        font-size: 0.9rem;
+    }
+
+    .options label:hover {
+        background-color: #e0f2f7;
+    }
+
+    .options input[type="radio"] {
+        margin-right: 0.7rem;
+        transform: scale(1.05);
+    }
+
+    .feedback {
+        margin-top: 1.2rem;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-align: center;
+        padding: 0.4rem 0.8rem;
+        border-radius: 5px;
+        min-height: 2.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .feedback.correct {
+        color: #2e7d32;
+        background-color: #e6ffe6;
+        border: 1px solid #4CAF50;
+    }
+
+    .feedback.incorrect {
+        color: #d32f2f;
+        background-color: #ffe6e6;
+        border: 1px solid #d32f2f;
+    }
+
+    /* Drag & Drop Specific - Enhanced Visuals and Layout */
+    .drag-drop-zone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 750px;
+        gap: 1.5rem;
+    }
+
+    .draggable-items-pool {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.8rem;
+        width: 100%;
+        padding: 1.2rem;
+        background-color: #eef7f0;
+        border-radius: 12px;
+        border: 1px dashed #c8e6c9;
+        min-height: 90px;
+        align-items: center;
+        box-shadow: inset 0 1px 5px rgba(0,0,0,0.05);
+    }
+
+    .draggable-item {
+        background-color: #bbdefb;
+        color: #1a237e;
+        padding: 0.7rem 1.1rem;
+        border: 1px solid #64b5f6;
+        border-radius: 6px;
+        cursor: grab;
+        font-weight: 500;
+        text-align: center;
+        transition: all 0.2s ease;
+        flex-basis: calc(50% - 0.4rem);
+        max-width: 180px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .draggable-item:hover {
+        background-color: #90caf9;
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .draggable-item.dragging {
+        opacity: 0.6;
+        border: 2px dashed #3f51b5;
+        transform: scale(0.95);
+        background-color: #e0e0e0;
+        box-shadow: none;
+    }
+
+    .drop-targets-container {
+        display: flex;
+        gap: 1.2rem;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .drop-target {
+        background-color: #fff3e0;
+        color: #e65100;
+        padding: 1.2rem;
+        border: 2px dashed #ffb74d;
+        border-radius: 12px;
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        font-style: italic;
+        font-size: 1.05rem;
+        transition: all 0.3s ease;
+        flex: 1;
+        min-width: 280px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .drop-target::before {
+        content: attr(data-label);
+        font-weight: 600;
+        font-style: normal;
+        margin-bottom: 0.7rem;
+        font-size: 1.2em;
+        color: #e65100;
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .drop-target.hover {
+        background-color: #ffe0b2;
+        border-color: #ff9800;
+        transform: scale(1.01);
+        box-shadow: 0 4px 12px rgba(255,165,0,0.2);
+    }
+
+    .drop-target.correct-drop {
+        background-color: #dcedc8;
+        border-color: #8bc34a;
+        color: #33691e;
+    }
+
+    .drop-target.incorrect-drop {
+        background-color: #ffcdd2;
+        border-color: #e57373;
+        color: #b71c1c;
+    }
+
+    .drop-target .dropped-items-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6rem;
+        width: 100%;
+        padding: 0.5rem;
+        min-height: 80px;
+        border-top: 1px solid rgba(0,0,0,0.1);
+        margin-top: 0.5rem;
+    }
+
+    .drop-target .dropped-item {
+        background-color: #ffffff;
+        color: #333;
+        padding: 0.6rem 0.9rem;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-weight: 500;
+        font-style: normal;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        width: calc(50% - 0.5rem);
+        text-align: center;
+        cursor: default;
+        font-size: 0.9rem;
+        animation: popIn 0.3s ease-out;
+        flex-shrink: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @keyframes popIn {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Matching Activity Specific */
+    .matching-columns-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 700px;
+        margin: auto;
+        padding-bottom: 20px;
+    }
+
+    .matching-columns {
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        flex-wrap: wrap;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+    }
+
+    .matching-source, .matching-target {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        flex: 1;
+        min-width: 180px;
+    }
+
+    .matching-item {
+        background-color: #e0f7fa;
+        color: #006064;
+        padding: 1rem 1.4rem;
+        border: 1px solid #80deea;
+        border-radius: 6px;
+        min-width: 150px;
+        text-align: center;
+        font-weight: 500;
+        font-size: 0.95rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .matching-item:hover:not(.selected):not(.matched-correct) {
+        background-color: #b2ebf2;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .matching-item.selected {
+        border: 2px solid #3f51b5;
+        background-color: #d8dee9;
+        box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.3);
+        transform: scale(1.02);
+    }
+
+    .matching-item.matched-correct {
+        background-color: #dcedc8;
+        border-color: #8bc34a;
+        color: #33691e;
+        pointer-events: none;
+        opacity: 0.9;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* SVG for lines */
+    .matching-lines-svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .matching-lines-svg line {
+        stroke: #3f51b5;
+        stroke-width: 2.5;
+        transition: stroke 0.3s ease, stroke-width 0.3s ease;
+    }
+
+    .matching-lines-svg line.correct-line {
+        stroke: #4CAF50;
+        stroke-width: 3;
+    }
+
+    /* Expand/Collapse (Accordion) Styling */
+    .accordion-item {
+        background-color: #f7f9fc;
+        border: 1px solid #e0e7f2;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+
+    .accordion-header {
+        background-color: #eaf1f8;
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        color: #1a237e;
+        font-size: 1.1rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .accordion-header:hover {
+        background-color: #dbe4ee;
+    }
+
+    .accordion-header .icon {
+        transition: transform 0.3s ease;
+    }
+
+    .accordion-header.active .icon {
+        transform: rotate(90deg);
+    }
+
+    .accordion-content {
+        padding: 0 1.5rem;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+    }
+
+    .accordion-content.open {
+        max-height: 500px; /* Adjust as needed for content height */
+        padding: 1rem 1.5rem 1.5rem;
+    }
+
+    /* Action buttons at the bottom */
+    .module-actions-bottom {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.8rem;
+        margin-top: 3rem;
+        position: relative;
+        z-index: 1;
+        animation: fadeIn 0.8s ease-out;
+        animation-fill-mode: backwards;
+    }
+
+    .module-actions-bottom button {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.6rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .module-actions-bottom button:hover {
+      background-color: #1976d2;
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
+    }
+
+    .module-actions-bottom button.back-button {
+      background-color: #607d8b;
+    }
+
+    .module-actions-bottom button.back-button:hover {
+      background-color: #455a64;
+      box-shadow: 0 6mpx 15px rgba(96, 125, 139, 0.4);
+    }
+
+    /* Footer and Help Button */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #999;
+      font-size: 0.85rem;
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 3rem;
+    }
+
+    .help-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .help-button:hover {
+      background-color: #43a047;
+      transform: scale(1.08) rotate(5deg);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+      .module-content {
+        max-width: 768px;
+        padding: 0 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem 1.2rem;
+      }
+      .header-text h1 {
+        font-size: 1.4rem;
+      }
+      .header-text p {
+        font-size: 0.8rem;
+      }
+      .module-content {
+        padding: 0 1rem;
+        margin: 1.5rem auto;
+      }
+      .module-card {
+        padding: 1.2rem;
+        margin-bottom: 1.5rem;
+      }
+      .module-card h2 {
+        font-size: 1.6rem;
+        gap: 0.6rem;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .module-card h2 .module-title-primary {
+          font-size: 1.3rem;
+          margin-bottom: 0.1rem;
+      }
+      .module-card h2 .fa-solid {
+        font-size: 2.2rem;
+      }
+      .module-card h3 {
+        font-size: 1.2rem;
+        margin-top: 1.2rem;
+      }
+      .module-card p, .module-card ul li {
+        font-size: 0.9rem;
+      }
+      .module-card ul li::before {
+        font-size: 1em;
+      }
+
+      .content-section {
+        padding: 1.2rem;
+        margin-top: 1.5rem;
+      }
+      .content-section h3 {
+        font-size: 1.4rem;
+      }
+      .content-section h4 {
+        font-size: 1.1rem;
+      }
+      .content-section p {
+        font-size: 0.9rem;
+      }
+      .content-section ul li {
+        font-size: 0.9rem;
+      }
+      .visual-example {
+        padding: 1rem;
+        margin: 1.2rem auto;
+        max-width: 98%;
+      }
+      .visual-example .fa-solid, .visual-example .fa-chart-bar, .visual-example .fa-table {
+        font-size: 2.8rem;
+        margin-bottom: 0.8rem;
+      }
+      .visual-example p {
+        font-size: 0.85rem;
+      }
+
+      .interactive-box {
+        padding: 1.2rem;
+        margin-top: 1.5rem;
+      }
+      .interactive-box h4 {
+        font-size: 1.1rem;
+      }
+      .interactive-box p {
+        font-size: 0.85rem;
+        margin-bottom: 0.8rem;
+      }
+      .interactive-box button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+
+      .draggable-item {
+        flex-basis: 100%;
+        max-width: 100%;
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+      }
+      .drop-target {
+        min-height: 120px;
+        min-width: 100%;
+        font-size: 0.95rem;
+        padding: 1rem;
+      }
+      .drop-target::before {
+          font-size: 1.1em;
+      }
+      .drop-target .dropped-item {
+          width: calc(100% - 1.2rem);
+          font-size: 0.85rem;
+      }
+
+      .matching-columns {
+        gap: 1.5rem;
+      }
+      .matching-source, .matching-target {
+        min-width: 140px;
+      }
+      .matching-item {
+        padding: 0.8rem 1.1rem;
+        min-width: 100%;
+        font-size: 0.85rem;
+      }
+
+      .module-actions-bottom {
+        flex-direction: column;
+        gap: 0.6rem;
+        margin-top: 2.5rem;
+      }
+      .module-actions-bottom button {
+        padding: 0.6rem 1.1rem;
+        font-size: 0.9rem;
+      }
+      .help-button {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+        bottom: 15px;
+        right: 15px;
+      }
+      footer {
+        padding: 1.2rem;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>E-Learning Analisis Data Kuantitatif</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="module-content">
+    <div class="module-card">
+      <h2>
+        <i class="fa-solid fa-book"></i>
+        <span class="module-title-primary">MODUL 2</span>
+        <strong>Statistik Deskriptif</strong>
+      </h2>
+
+      <h3>Tujuan Pembelajaran</h3>
+      <p>Mempelajari cara <strong>merangkum, mengatur, dan menyajikan data</strong> agar mudah dipahami, diinterpretasi, dan dianalisis lebih lanjut. Modul ini berfokus pada visualisasi dan ringkasan data.</p>
+
+      <h3>Sub-Materi</h3>
+      <ul>
+        <li><strong>Ukuran Pemusatan Data</strong> (Mean, Median, Modus)</li>
+        <li><strong>Ukuran Penyebaran Data</strong> (Range, Standar Deviasi, Varians)</li>
+        <li><strong>Identifikasi Outlier</strong> dalam Kumpulan Data</li>
+        <li><strong>Penyajian Data Visual</strong> (Boxplot, Histogram, Pie Chart)</li>
+      </ul>
+
+      <h3>Output Pembelajaran</h3>
+      <p>Setelah menyelesaikan modul ini, Anda akan <strong>mampu menghitung dan menginterpretasi berbagai ukuran statistik deskriptif</strong>, serta <strong>membuat dan menganalisis grafik umum</strong> untuk menyajikan data secara efektif.</p>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-calculator"></i> 1. Ukuran Pemusatan Data</h3>
+      <p>Ukuran pemusatan data memberikan gambaran tentang di mana sebagian besar data terkonsentrasi atau "<strong>pusat</strong>" dari kumpulan data. Ini adalah cara pertama untuk meringkas data.</p>
+      
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Mean (Rata-rata) <i class="fa-solid fa-chevron-right icon"></i>
+        </div>
+        <div class="accordion-content">
+          <p>Jumlah semua nilai dalam kumpulan data dibagi dengan jumlah observasi. Ini adalah ukuran pemusatan yang paling umum dan <strong>sensitif terhadap nilai ekstrem (outlier)</strong>.</p>
+          <div class="visual-example">
+            <i class="fa-solid fa-percent"></i>
+            <p>Contoh: Data nilai ujian: 70, 80, 90. Mean = (70+80+90)/3 = <strong>80</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Median (Nilai Tengah) <i class="fa-solid fa-chevron-right icon"></i>
+        </div>
+        <div class="accordion-content">
+          <p>Nilai tengah dari kumpulan data yang telah diurutkan. Jika jumlah data ganjil, median adalah nilai tengahnya. Jika genap, median adalah rata-rata dari dua nilai tengah. Median <strong>kurang sensitif terhadap outlier</strong>.</p>
+          <div class="visual-example">
+            <i class="fa-solid fa-align-center"></i>
+            <p>Contoh: Data nilai ujian: 70, 80, 90. Median = <strong>80</strong>. Data nilai ujian: 70, 75, 80, 90. Median = (75+80)/2 = <strong>77.5</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Modus (Nilai Paling Sering Muncul) <i class="fa-solid fa-chevron-right icon"></i>
+        </div>
+        <div class="accordion-content">
+          <p>Nilai yang paling sering muncul dalam kumpulan data. Kumpulan data bisa memiliki satu modus (unimodal), beberapa modus (multimodal), atau <strong>tidak memiliki modus sama sekali</strong> (jika semua nilai unik).</p>
+          <div class="visual-example">
+            <i class="fa-solid fa-chart-column"></i>
+            <p>Contoh: Data nilai ujian: 70, 80, 80, 90. Modus = <strong>80</strong>. Data: 1, 2, 2, 3, 3, 4. Modus = <strong>2 dan 3</strong> (bimodal).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    ---
+
+    <div class="interactive-box">
+        <h4><i class="fa-solid fa-puzzle-piece"></i> Aktivitas Interaktif: Hitung Pemusatan!</h4>
+        <p>Berdasarkan data nilai berikut: <strong>60, 70, 70, 80, 90, 100</strong>, hitunglah Mean, Median, dan Modus, lalu seret ke tempat yang tepat.</p>
+        <div class="drag-drop-zone">
+            <div class="draggable-items-pool" id="draggableStatsPool">
+                <div class="draggable-item" data-value="85">85</div>
+                <div class="draggable-item" data-value="75">75</div>
+                <div class="draggable-item" data-value="70">70</div>
+                <div class="draggable-item" data-value="78.33">78.33</div>
+            </div>
+            <div class="drop-targets-container">
+                <div class="drop-target" id="dropMean" data-accept="mean" data-label="Mean">
+                    <div class="dropped-items-container"></div>
+                </div>
+                <div class="drop-target" id="dropMedian" data-accept="median" data-label="Median">
+                    <div class="dropped-items-container"></div>
+                </div>
+                <div class="drop-target" id="dropModus" data-accept="modus" data-label="Modus">
+                    <div class="dropped-items-container"></div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 1.2rem; justify-content: center;">
+                <button onclick="checkStatsDragDrop()">Periksa Jawaban</button>
+                <button onclick="resetStatsDragDrop()" style="background-color: #f44336;">Ulangi</button>
+            </div>
+            <div class="feedback" id="statsDragDropFeedback"></div>
+        </div>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-arrows-left-right"></i> 2. Ukuran Penyebaran Data</h3>
+      <p>Ukuran penyebaran (atau <strong>variabilitas</strong>) menggambarkan seberapa jauh data tersebar dari pusatnya. Ini melengkapi ukuran pemusatan dengan memberikan gambaran tentang <strong>konsistensi data</strong>.</p>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Range (Jangkauan) <i class="fa-solid fa-chevron-right icon"></i>
+        </div>
+        <div class="accordion-content">
+          <p>Perbedaan antara nilai maksimum dan nilai minimum dalam kumpulan data. Ini adalah ukuran penyebaran yang paling sederhana tetapi <strong>sangat sensitif terhadap outlier</strong>.</p>
+          <div class="visual-example">
+            <i class="fa-solid fa-arrow-right-long"></i>
+            <p>Contoh: Data nilai ujian: 70, 80, 90. Range = 90 - 70 = <strong>20</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Varians <i class="fa-solid fa-chevron-right icon"></i>
+        </div>
+        <div class="accordion-content">
+          <p>Ini adalah ukuran penyebaran yang dihitung dengan mengambil <strong>rata-rata dari kuadrat selisih</strong> setiap nilai dari rata-ratanya (mean). Dengan mengkuadratkan selisih, varians memberikan bobot lebih besar pada nilai yang menyimpang jauh dari rata-rata. Untuk <strong>populasi</strong>, kita membagi total kuadrat selisih dengan jumlah data. Sedangkan untuk <strong>sampel</strong>, kita membagi dengan jumlah data dikurangi satu untuk mendapatkan estimasi yang lebih baik.</p>
+          <div class="visual-example">
+            <i class="fa-solid fa-square-root-alt"></i>
+            <p>Varians adalah langkah penting sebelum menghitung standar deviasi dan digunakan untuk memahami seberapa besar "keragaman" dalam data.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Standar Deviasi (Simpangan Baku) <i class="fa-solid fa-chevron-right icon"></i>
+        </div>
+        <div class="accordion-content">
+          <p>Ini adalah <strong>akar kuadrat dari varians</strong>. Standar deviasi adalah ukuran penyebaran yang paling umum dan lebih mudah diinterpretasikan karena unitnya sama dengan data asli. Standar deviasi kecil menunjukkan data cenderung dekat dengan mean (lebih konsisten), sedangkan standar deviasi besar menunjukkan data tersebar luas (kurang konsisten).</p>
+          <div class="visual-example">
+            <i class="fa-solid fa-chart-area"></i>
+            <p>Standar deviasi sering digunakan bersama dengan distribusi normal untuk memahami sebaran data.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    ---
+
+    <div class="interactive-box">
+        <h4><i class="fa-solid fa-question-circle"></i> Kuis Singkat: Pemusatan vs Penyebaran</h4>
+        <p>Pilih jawaban yang paling tepat untuk setiap pertanyaan.</p>
+        <div class="activity-container" id="quizDescriptiveStats">
+          <div class="question">
+            <p>1. Ukuran mana yang paling terpengaruh oleh outlier?</p>
+            <div class="options">
+              <label><input type="radio" name="qs1" value="mean"> Mean</label>
+              <label><input type="radio" name="qs1" value="median"> Median</label>
+              <label><input type="radio" name="qs1" value="modus"> Modus</label>
+            </div>
+            <div class="feedback" id="qs1Feedback"></div>
+          </div>
+          <div class="question">
+            <p>2. Jika Anda ingin mengetahui seberapa jauh data menyebar dari rata-rata dalam unit asli data, ukuran apa yang paling tepat?</p>
+            <div class="options">
+              <label><input type="radio" name="qs2" value="range"> Range</label>
+              <label><input type="radio" name="qs2" value="varians"> Varians</label>
+              <label><input type="radio" name="qs2" value="standar_deviasi"> Standar Deviasi</label>
+            </div>
+            <div class="feedback" id="qs2Feedback"></div>
+          </div>
+          <button onclick="checkDescriptiveQuiz()">Periksa Jawaban</button>
+          <div class="feedback" id="quizDescriptiveOverallFeedback"></div>
+        </div>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-star-of-life"></i> 3. Identifikasi Outlier</h3>
+      <p>Bila ada nilai yang secara signifikan berbeda dari data lainnya, nilai tersebut dapat disebut sebagai <strong>outlier</strong>. Outlier dapat terjadi karena kesalahan pengukuran, kesalahan *input* data, atau memang merupakan kejadian yang sangat langka.</p>
+      <p>Mengidentifikasi dan menangani outlier sangat penting karena mereka dapat secara drastis memengaruhi ukuran statistik deskriptif (terutama <strong>mean</strong> dan <strong>range</strong>) dan bahkan hasil analisis inferensial.</p>
+      
+      <h4>Metode Identifikasi Umum:</h4>
+      <ul>
+        <li><strong>Metode IQR (Interquartile Range)</strong>: Data dianggap outlier jika berada di bawah kuartil pertama dikurangi 1.5 kali IQR atau di atas kuartil ketiga ditambah 1.5 kali IQR.</li>
+        <li><strong>Z-score</strong>: Nilai data diubah menjadi skor standar yang menunjukkan seberapa banyak standar deviasi nilai tersebut dari rata-rata. Nilai Z-score yang melebihi ambang batas tertentu (misalnya, tiga kali standar deviasi) sering dianggap outlier.</li>
+        <li><strong>Visualisasi Data</strong>: <strong>Boxplot</strong> sangat efektif untuk visualisasi outlier.</li>
+      </ul>
+      <div class="visual-example">
+        <i class="fa-solid fa-flask"></i>
+        <p>Outlier penting untuk diinvestigasi. Terkadang mereka adalah data valid yang aneh, terkadang mereka adalah kesalahan yang perlu diperbaiki atau dihapus.</p>
+      </div>
+    </div>
+
+    ---
+
+    <div class="interactive-box">
+        <h4><i class="fa-solid fa-cubes"></i> Aktivitas Interaktif: Pasangkan Istilah</h4>
+        <p>Cocokkan konsep statistik deskriptif dengan deskripsi yang paling sesuai.</p>
+        <div class="matching-columns-wrapper" id="matchingDescriptiveTermsWrapper">
+          <svg class="matching-lines-svg" id="matchingDescriptiveTermsSvg"></svg>
+          <div class="matching-columns">
+            <div class="matching-source" id="sourceDescriptiveItems">
+              <div class="matching-item" data-value="mean">Mean</div>
+              <div class="matching-item" data-value="median">Median</div>
+              <div class="matching-item" data-value="range">Range</div>
+              <div class="matching-item" data-value="sd">Standar Deviasi</div>
+            </div>
+            <div class="matching-target" id="targetDescriptiveItems">
+              <div class="matching-item" data-target="tengah_sensitif">Nilai tengah yang sensitif outlier</div>
+              <div class="matching-item" data-target="tengah_robust">Nilai tengah yang tidak sensitif outlier</div>
+              <div class="matching-item" data-target="selisih_min_max">Selisih antara nilai terbesar dan terkecil</div>
+              <div class="matching-item" data-target="penyebaran_unit_asli">Ukuran penyebaran dalam unit data asli</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 1.2rem; justify-content: center;">
+            <button onclick="checkDescriptiveMatching()">Periksa Jawaban</button>
+            <button onclick="resetDescriptiveMatching()" style="background-color: #f44336;">Ulangi</button>
+          </div>
+          <div class="feedback" id="matchingDescriptiveFeedback"></div>
+        </div>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-chart-pie"></i> 4. Penyajian Data Visual</h3>
+      <p><strong>Visualisasi data</strong> adalah seni dan ilmu untuk menyajikan data dalam format grafis. Grafik yang baik dapat mengungkapkan pola, tren, dan wawasan yang sulit dilihat dalam angka-angka mentah.</p>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Boxplot (Diagram Kotak Garis) <i class="fa-solid fa-chevron-right icon"></i>
+        </div>
+        <div class="accordion-content">
+          <p>Grafik yang ringkas untuk menampilkan distribusi data numerik berdasarkan <strong>lima angka ringkasan</strong>: nilai minimum, kuartil pertama (Q1), median (Q2), kuartil ketiga (Q3), dan nilai maksimum. Sangat efektif untuk <strong>membandingkan distribusi antar kelompok dan mengidentifikasi outlier</strong>.</p>
+          <div class="visual-example">
+            <i class="fa-solid fa-box-open"></i>
+            <p>Diagram ini menampilkan penyebaran data dan dengan jelas menunjukkan keberadaan outlier sebagai titik-titik di luar "whiskers" (garis jenggot).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Histogram <i class="fa-solid fa-chevron-right icon"></i>
+        </div>
+        <div class="accordion-content">
+          <p>Representasi grafis dari <strong>distribusi frekuensi data numerik</strong>. Mirip dengan diagram batang, tetapi batang-batang (disebut "bins") bersentuhan untuk menunjukkan bahwa data bersifat kontinu. Berguna untuk <strong>memahami bentuk, pemusatan, dan penyebaran data</strong>.</p>
+          <div class="visual-example">
+            <i class="fa-solid fa-chart-column"></i>
+            <p>Histogram menunjukkan bagaimana data Anda terdistribusi, apakah simetris, miring ke kiri/kanan, atau multimodal.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Pie Chart (Diagram Lingkaran) <i class="fa-solid fa-chevron-right icon"></i>
+        </div>
+        <div class="accordion-content">
+          <p>Digunakan untuk menunjukkan <strong>proporsi kategorikal</strong>, di mana setiap "potongan" mewakili proporsi kategori tertentu dari keseluruhan. Paling efektif ketika ada <strong>sedikit kategori</strong> (biasanya tidak lebih dari 5-7).</p>
+          <div class="visual-example">
+            <i class="fa-solid fa-circle-notch"></i>
+            <p>Contoh: Persentase pangsa pasar produk, distribusi jenis kelamin dalam sebuah kelompok. Setiap potongan menunjukkan seberapa besar kontribusi kategori terhadap total.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    ---
+
+    <div class="interactive-box">
+        <h4><i class="fa-solid fa-brush"></i> Aktivitas Interaktif: Pilih Grafik yang Tepat!</h4>
+        <p>Pilih jenis grafik yang paling sesuai untuk menyajikan data pada setiap skenario.</p>
+        <div class="activity-container" id="chartMatchActivity">
+            <div class="question">
+                <p>1. Anda ingin melihat distribusi usia responden dan apakah ada outlier.</p>
+                <div class="options">
+                    <label><input type="radio" name="chart_q1" value="histogram"> Histogram</label>
+                    <label><input type="radio" name="chart_q1" value="boxplot"> Boxplot</label>
+                    <label><input type="radio" name="chart_q1" value="pie"> Pie Chart</label>
+                </div>
+                <div class="feedback" id="chart_q1Feedback"></div>
+            </div>
+            <div class="question">
+                <p>2. Anda ingin menampilkan persentase preferensi warna favorit (Merah, Biru, Hijau, Kuning).</p>
+                <div class="options">
+                    <label><input type="radio" name="chart_q2" value="histogram"> Histogram</label>
+                    <label><input type="radio" name="chart_q2" value="boxplot"> Boxplot</label>
+                    <label><input type="radio" name="chart_q2" value="pie"> Pie Chart</label>
+                </div>
+                <div class="feedback" id="chart_q2Feedback"></div>
+            </div>
+             <div class="question">
+                <p>3. Anda ingin melihat bentuk distribusi skor tes dari 100 siswa.</p>
+                <div class="options">
+                    <label><input type="radio" name="chart_q3" value="histogram"> Histogram</label>
+                    <label><input type="radio" name="chart_q3" value="boxplot"> Boxplot</label>
+                    <label><input type="radio" name="chart_q3" value="pie"> Pie Chart</label>
+                </div>
+                <div class="feedback" id="chart_q3Feedback"></div>
+            </div>
+            <button onclick="checkChartMatch()">Periksa Jawaban</button>
+            <div class="feedback" id="chartMatchOverallFeedback"></div>
+        </div>
+      </div>
+
+    <div class="module-actions-bottom">
+        <button class="back-button" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i> Kembali ke Modul</button>
+        <button onclick="alert('Selamat! Anda telah menyelesaikan semua materi dan aktivitas di Modul 2. Anda siap untuk melanjutkan ke modul berikutnya atau mendalami latihan lebih lanjut!')"><i class="fa-solid fa-play"></i> Selesaikan & Lanjut Latihan</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
+  </footer>
+
+  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">
+    <i class="fa-brands fa-whatsapp"></i>
+  </button>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TL1GH741HF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date()); // Added gtag('js', new Date()) for immediate loading
+    gtag('config', 'G-TL1GH741HF');
+  </script>
+
+  <script>
+    // --- JavaScript for Interactive Activities ---
+
+    // --- Expand/Collapse (Accordion) ---
+    function setupAccordions() {
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.removeEventListener('click', handleAccordionClick); // Prevent duplicate listeners
+            header.addEventListener('click', handleAccordionClick);
+        });
+    }
+
+    function handleAccordionClick(e) {
+        const header = e.currentTarget;
+        const accordionContent = header.nextElementSibling;
+        header.classList.toggle('active');
+        if (accordionContent.classList.contains('open')) {
+            accordionContent.classList.remove('open');
+        } else {
+            // Close other open accordions if desired (uncomment below)
+            // document.querySelectorAll('.accordion-content.open').forEach(content => {
+            //     content.classList.remove('open');
+            //     content.previousElementSibling.classList.remove('active');
+            // });
+            accordionContent.classList.add('open');
+        }
+    }
+
+
+    // --- Drag and Drop (Hitung Pemusatan) ---
+    let draggedItem = null;
+
+    function setupStatsDragDrop() {
+        const draggables = document.querySelectorAll('#draggableStatsPool .draggable-item');
+        const dropTargets = document.querySelectorAll('#dropMean, #dropMedian, #dropModus');
+
+        // Clear existing listeners to prevent duplicates on reset
+        draggables.forEach(item => {
+            item.removeEventListener('dragstart', handleDragStart);
+            item.removeEventListener('dragend', handleDragEnd);
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+        });
+
+        dropTargets.forEach(target => {
+            target.removeEventListener('dragover', handleDragOver);
+            target.removeEventListener('dragleave', handleDragLeave);
+            target.removeEventListener('drop', handleDrop);
+            target.addEventListener('dragover', handleDragOver);
+            target.addEventListener('dragleave', handleDragLeave);
+            target.addEventListener('drop', handleDrop);
+        });
+    }
+
+    function handleDragStart(e) {
+        draggedItem = e.target;
+        e.dataTransfer.setData('text/plain', e.target.dataset.value);
+        e.target.classList.add('dragging');
+    }
+
+    function handleDragEnd(e) {
+        e.target.classList.remove('dragging');
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault(); // Allow drop
+        e.currentTarget.classList.add('hover');
+    }
+
+    function handleDragLeave(e) {
+        e.currentTarget.classList.remove('hover');
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        const target = e.currentTarget;
+        target.classList.remove('hover');
+        const data = e.dataTransfer.getData('text/plain');
+        
+        // Prevent dropping multiple items in one target
+        if (target.querySelector('.dropped-item')) {
+            // Optionally, return the previous item to the pool or allow swapping
+            const existingItem = target.querySelector('.dropped-item');
+            document.getElementById('draggableStatsPool').appendChild(existingItem);
+        }
+
+        const droppedItemHtml = `<div class="draggable-item dropped-item" draggable="true" data-value="${data}">${data}</div>`; // Make dropped item draggable back
+        target.querySelector('.dropped-items-container').innerHTML = droppedItemHtml;
+        
+        // Remove the dragged item from its original pool
+        if (draggedItem && draggedItem.parentNode.id === 'draggableStatsPool') {
+            draggedItem.remove();
+        }
+        
+        // Add listeners to the newly dropped item for dragging it back
+        const newlyDroppedItem = target.querySelector('.dropped-item');
+        if (newlyDroppedItem) {
+            newlyDroppedItem.removeEventListener('dragstart', handleDragStart);
+            newlyDroppedItem.removeEventListener('dragend', handleDragEnd);
+            newlyDroppedItem.addEventListener('dragstart', handleDragStart);
+            newlyDroppedItem.addEventListener('dragend', handleDragEnd);
+        }
+
+        draggedItem = null; // Clear dragged item after drop
+    }
+
+    function checkStatsDragDrop() {
+        const feedbackElement = document.getElementById('statsDragDropFeedback');
+        let allCorrect = true;
+
+        const meanTargetContainer = document.getElementById('dropMean').querySelector('.dropped-items-container');
+        const medianTargetContainer = document.getElementById('dropMedian').querySelector('.dropped-items-container');
+        const modusTargetContainer = document.getElementById('dropModus').querySelector('.dropped-items-container');
+
+        const meanItem = meanTargetContainer.querySelector('.dropped-item');
+        const medianItem = medianTargetContainer.querySelector('.dropped-item');
+        const modusItem = modusTargetContainer.querySelector('.dropped-item');
+
+        const meanVal = meanItem ? parseFloat(meanItem.dataset.value) : NaN;
+        const medianVal = medianItem ? parseFloat(medianItem.dataset.value) : NaN;
+        const modusVal = modusItem ? parseFloat(modusItem.dataset.value) : NaN;
+
+        // Expected values for data: 60, 70, 70, 80, 90, 100
+        // Sorted: 60, 70, 70, 80, 90, 100
+        // Mean = (60+70+70+80+90+100) / 6 = 470 / 6 = 78.333...
+        // Median = (70+80)/2 = 75
+        // Modus = 70
+
+        const expectedMean = 78.33;
+        const expectedMedian = 75;
+        const expectedModus = 70;
+
+        const checkAndApplyFeedback = (targetElem, droppedVal, expected, isFloat = false) => {
+            let isCorrect = false;
+
+            if (isFloat) {
+                isCorrect = !isNaN(droppedVal) && Math.abs(droppedVal - expected) < 0.01;
+            } else {
+                isCorrect = !isNaN(droppedVal) && droppedVal === expected;
+            }
+
+            if (isCorrect) {
+                targetElem.classList.add('correct-drop');
+                targetElem.classList.remove('incorrect-drop');
+            } else {
+                targetElem.classList.add('incorrect-drop');
+                targetElem.classList.remove('correct-drop');
+                allCorrect = false;
+            }
+        };
+
+        checkAndApplyFeedback(document.getElementById('dropMean'), meanVal, expectedMean, true);
+        checkAndApplyFeedback(document.getElementById('dropMedian'), medianVal, expectedMedian);
+        checkAndApplyFeedback(document.getElementById('dropModus'), modusVal, expectedModus);
+        
+        if (allCorrect) {
+            feedbackElement.textContent = "Hebat! Semua jawaban benar!";
+            feedbackElement.className = 'feedback correct';
+        } else {
+            feedbackElement.textContent = "Ada yang belum tepat. Coba lagi!";
+            feedbackElement.className = 'feedback incorrect';
+        }
+    }
+
+    function resetStatsDragDrop() {
+        const pool = document.getElementById('draggableStatsPool');
+        pool.innerHTML = `
+            <div class="draggable-item" data-value="85" draggable="true">85</div>
+            <div class="draggable-item" data-value="75" draggable="true">75</div>
+            <div class="draggable-item" data-value="70" draggable="true">70</div>
+            <div class="draggable-item" data-value="78.33" draggable="true">78.33</div>
+        `;
+        document.querySelectorAll('.drop-target').forEach(target => {
+            target.querySelector('.dropped-items-container').innerHTML = '';
+            target.classList.remove('correct-drop', 'incorrect-drop');
+        });
+        document.getElementById('statsDragDropFeedback').textContent = '';
+        document.getElementById('statsDragDropFeedback').className = 'feedback';
+        setupStatsDragDrop(); // Re-initialize drag & drop listeners
+    }
+
+    // --- Quiz: Pemusatan vs Penyebaran ---
+    const descriptiveQuizAnswers = {
+        qs1: "mean",
+        qs2: "standar_deviasi"
+    };
+
+    function checkDescriptiveQuiz() {
+        let allCorrect = true;
+        for (const qId in descriptiveQuizAnswers) {
+            const selectedOption = document.querySelector(`input[name="${qId}"]:checked`);
+            const feedbackElem = document.getElementById(`${qId}Feedback`);
+            if (selectedOption && selectedOption.value === descriptiveQuizAnswers[qId]) {
+                feedbackElem.textContent = "Benar!";
+                feedbackElem.className = 'feedback correct';
+            } else {
+                feedbackElem.textContent = `Salah. Jawaban yang benar adalah ${descriptiveQuizAnswers[qId].replace('_', ' ')}.`;
+                feedbackElem.className = 'feedback incorrect';
+                allCorrect = false;
+            }
+        }
+
+        const overallFeedback = document.getElementById('quizDescriptiveOverallFeedback');
+        if (allCorrect) {
+            overallFeedback.textContent = "Selamat! Anda menjawab semua pertanyaan dengan benar.";
+            overallFeedback.className = 'feedback correct';
+        } else {
+            overallFeedback.textContent = "Masih ada jawaban yang salah. Coba periksa kembali.";
+            overallFeedback.className = 'feedback incorrect';
+        }
+    }
+
+    // --- Matching Activity (Pasangkan Istilah) ---
+    const matchingDescriptivePairs = {
+        "mean": "tengah_sensitif",
+        "median": "tengah_robust",
+        "range": "selisih_min_max",
+        "sd": "penyebaran_unit_asli"
+    };
+
+    let selectedSourceItem = null;
+    let selectedTargetItem = null;
+    const matchedDescriptivePairs = {}; // To store correct matches {sourceValue: targetValue}
+    const lines = {}; // To store SVG line elements {sourceValue: SVGLineElement}
+
+    function setupDescriptiveMatching() {
+        const sourceItems = document.querySelectorAll('#sourceDescriptiveItems .matching-item');
+        const targetItems = document.querySelectorAll('#targetDescriptiveItems .matching-item');
+        
+        // Remove existing listeners to prevent duplicates on reset
+        sourceItems.forEach(item => {
+            item.removeEventListener('click', handleMatchingSourceClick);
+            item.addEventListener('click', handleMatchingSourceClick);
+        });
+
+        targetItems.forEach(item => {
+            item.removeEventListener('click', handleMatchingTargetClick);
+            item.addEventListener('click', handleMatchingTargetClick);
+        });
+
+        // Ensure lines are redrawn on window resize
+        window.removeEventListener('resize', drawAllLines); // Remove previous listener first
+        window.addEventListener('resize', drawAllLines);
+    }
+
+    function handleMatchingSourceClick(e) {
+        const item = e.currentTarget;
+        if (item.classList.contains('matched-correct')) return;
+
+        if (selectedSourceItem) {
+            selectedSourceItem.classList.remove('selected');
+        }
+        selectedSourceItem = item;
+        item.classList.add('selected');
+
+        if (selectedSourceItem && selectedTargetItem) {
+            checkAndDrawMatch(selectedSourceItem, selectedTargetItem);
+            clearSelections();
+        }
+    }
+
+    function handleMatchingTargetClick(e) {
+        const item = e.currentTarget;
+        if (item.classList.contains('matched-correct')) return;
+
+        if (selectedTargetItem) {
+            selectedTargetItem.classList.remove('selected');
+        }
+        selectedTargetItem = item;
+        item.classList.add('selected');
+
+        if (selectedSourceItem && selectedTargetItem) {
+            checkAndDrawMatch(selectedSourceItem, selectedTargetItem);
+            clearSelections();
+        }
+    }
+
+    function clearSelections() {
+        if (selectedSourceItem) {
+            selectedSourceItem.classList.remove('selected');
+            selectedSourceItem = null;
+        }
+        if (selectedTargetItem) {
+            selectedTargetItem.classList.remove('selected');
+            selectedTargetItem = null;
+        }
+    }
+
+    function checkAndDrawMatch(sourceItem, targetItem) {
+        const sourceValue = sourceItem.dataset.value;
+        const targetValue = targetItem.dataset.target;
+
+        if (sourceItem.classList.contains('matched-correct') || targetItem.classList.contains('matched-correct')) {
+            return;
+        }
+
+        if (matchingDescriptivePairs[sourceValue] === targetValue) {
+            sourceItem.classList.add('matched-correct');
+            targetItem.classList.add('matched-correct');
+            matchedDescriptivePairs[sourceValue] = targetValue;
+            drawSingleLine(sourceItem, targetItem, true);
+        } else {
+            // Incorrect match visual feedback
+            sourceItem.classList.add('incorrect-match');
+            targetItem.classList.add('incorrect-match');
+            setTimeout(() => {
+                sourceItem.classList.remove('incorrect-match');
+                targetItem.classList.remove('incorrect-match');
+            }, 500); // Remove feedback after a short delay
+        }
+    }
+
+    function drawSingleLine(sourceElem, targetElem, isCorrect) {
+        const svg = document.getElementById('matchingDescriptiveTermsSvg');
+        const wrapper = document.getElementById('matchingDescriptiveTermsWrapper');
+        
+        // Ensure SVG exists and elements are attached to DOM for getBoundingClientRect()
+        if (!svg || !sourceElem || !targetElem || !wrapper) {
+            console.error("Missing SVG, source, target, or wrapper element for drawing line.");
+            return;
+        }
+
+        const wrapperRect = wrapper.getBoundingClientRect();
+
+        const sourceRect = sourceElem.getBoundingClientRect();
+        const targetRect = targetElem.getBoundingClientRect();
+
+        // Coordinates adjusted relative to the SVG container's top-left corner
+        const x1 = sourceRect.right - wrapperRect.left;
+        const y1 = sourceRect.top + sourceRect.height / 2 - wrapperRect.top;
+        const x2 = targetRect.left - wrapperRect.left;
+        const y2 = targetRect.top + targetRect.height / 2 - wrapperRect.top;
+
+        if (lines[sourceElem.dataset.value]) {
+            lines[sourceElem.dataset.value].remove(); // Remove existing line if redrawing
+        }
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        if (isCorrect) {
+            line.classList.add('correct-line');
+        }
+        svg.appendChild(line);
+        lines[sourceElem.dataset.value] = line;
+    }
+
+    function drawAllLines() {
+        document.getElementById('matchingDescriptiveTermsSvg').innerHTML = ''; // Clear all lines
+        for (const sourceValue in matchedDescriptivePairs) {
+            const targetValue = matchedDescriptivePairs[sourceValue];
+            const sourceItem = document.querySelector(`#sourceDescriptiveItems .matching-item[data-value="${sourceValue}"]`);
+            const targetItem = document.querySelector(`#targetDescriptiveItems .matching-item[data-target="${targetValue}"]`);
+            if (sourceItem && targetItem) {
+                drawSingleLine(sourceItem, targetItem, true);
+            }
+        }
+    }
+
+    function checkDescriptiveMatching() {
+        const feedbackElement = document.getElementById('matchingDescriptiveFeedback');
+        let allMatchedCorrectly = true;
+
+        if (Object.keys(matchedDescriptivePairs).length !== Object.keys(matchingDescriptivePairs).length) {
+            allMatchedCorrectly = false;
+        } else {
+            for (const sourceValue in matchingDescriptivePairs) {
+                if (matchedDescriptivePairs[sourceValue] !== matchingDescriptivePairs[sourceValue]) {
+                    allMatchedCorrectly = false;
+                    break;
+                }
+            }
+        }
+
+        if (allMatchedCorrectly) {
+            feedbackElement.textContent = "Luar biasa! Semua pasangan benar!";
+            feedbackElement.className = 'feedback correct';
+        } else {
+            feedbackElement.textContent = "Ada yang belum tepat. Periksa lagi pasangan Anda.";
+            feedbackElement.className = 'feedback incorrect';
+        }
+    }
+
+    function resetDescriptiveMatching() {
+        const sourceItems = document.querySelectorAll('#sourceDescriptiveItems .matching-item');
+        const targetItems = document.querySelectorAll('#targetDescriptiveItems .matching-item');
+        const svg = document.getElementById('matchingDescriptiveTermsSvg');
+
+        sourceItems.forEach(item => {
+            item.classList.remove('selected', 'matched-correct', 'incorrect-match');
+        });
+        targetItems.forEach(item => {
+            item.classList.remove('selected', 'matched-correct', 'incorrect-match');
+        });
+
+        svg.innerHTML = ''; // Clear all SVG lines
+        
+        for (const key in matchedDescriptivePairs) {
+            delete matchedDescriptivePairs[key];
+        }
+        for (const key in lines) {
+            delete lines[key];
+        }
+
+        document.getElementById('matchingDescriptiveFeedback').textContent = '';
+        document.getElementById('matchingDescriptiveFeedback').className = 'feedback';
+        clearSelections();
+        setupDescriptiveMatching(); // Re-initialize listeners
+    }
+
+    // --- Chart Matching Quiz ---
+    const chartMatchAnswers = {
+        chart_q1: "boxplot",
+        chart_q2: "pie",
+        chart_q3: "histogram"
+    };
+
+    function checkChartMatch() {
+        let allCorrect = true;
+        for (const qId in chartMatchAnswers) {
+            const selectedOption = document.querySelector(`input[name="${qId}"]:checked`);
+            const feedbackElem = document.getElementById(`${qId}Feedback`);
+            if (selectedOption && selectedOption.value === chartMatchAnswers[qId]) {
+                feedbackElem.textContent = "Benar!";
+                feedbackElem.className = 'feedback correct';
+            } else {
+                feedbackElem.textContent = `Salah. Grafik yang tepat adalah ${chartMatchAnswers[qId]}.`;
+                feedbackElem.className = 'feedback incorrect';
+                allCorrect = false;
+            }
+        }
+
+        const overallFeedback = document.getElementById('chartMatchOverallFeedback');
+        if (allCorrect) {
+            overallFeedback.textContent = "Luar biasa! Anda memahami pemilihan grafik dengan baik.";
+            overallFeedback.className = 'feedback correct';
+        } else {
+            overallFeedback.textContent = "Ada yang perlu diperbaiki. Coba pahami kembali fungsi setiap grafik.";
+            overallFeedback.className = 'feedback incorrect';
+        }
+    }
+
+
+    // --- Initialize all interactive elements on page load ---
+    window.addEventListener('load', () => {
+        setupAccordions();
+        setupStatsDragDrop();
+        setupDescriptiveMatching();
+        
+        // Explicitly tell MathJax to typeset the page after all content is loaded
+        if (typeof MathJax !== 'undefined') {
+            MathJax.typesetPromise(); 
+        } else {
+            console.warn("MathJax is not loaded. Please check network connection and script path.");
+        }
+    });
+
+  </script>
+</body>
+</html>
