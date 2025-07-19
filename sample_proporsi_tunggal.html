@@ -30,11 +30,30 @@
       font-size: 24px;
       color: #333;
       text-align: center;
+      margin-bottom: 25px;
     }
     h1 span {
       font-size: 14px;
       color: #777;
       display: block;
+    }
+    /* Style untuk Studi Kasus */
+    .case-study {
+      background-color: #eef7ff;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      border-left: 4px solid #28a745;
+      font-size: 14px;
+    }
+    .case-study h2 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #333;
+    }
+    .case-study p {
+      margin: 5px 0 0 0;
+      line-height: 1.6;
     }
     label {
       display: block;
@@ -110,7 +129,7 @@
       }
     }
     @media print {
-      button, .tooltip, #downloadButtons {
+      button, .tooltip, #downloadButtons, .case-study {
         display: none !important;
       }
     }
@@ -120,22 +139,31 @@
   <div class="container">
     <div class="card" id="outputArea">
       <h1>Perhitungan Besar Sampel <span>Untuk Proporsi Tunggal</span></h1>
-
+      
+      <div class="case-study">
+        <h2>📝 Contoh Studi Kasus</h2>
+        <p>
+          Seorang peneliti ingin mengetahui proporsi mahasiswa di Universitas X yang menggunakan aplikasi e-learning terbaru. Peneliti tersebut menginginkan hasil dengan <strong>tingkat kepercayaan 95%</strong> dan <strong>margin of error sebesar 5%</strong>. Karena proporsi sebenarnya belum diketahui, peneliti menggunakan estimasi paling konservatif yaitu <strong>p = 0.5</strong>.
+        </p>
+        <p>
+          Dengan memasukkan nilai-nilai ini (Z=1.96, p=0.5, E=0.05) ke dalam kalkulator di bawah, peneliti dapat menentukan berapa banyak mahasiswa yang perlu dijadikan sampel.
+        </p>
+      </div>
       <form id="sampleForm">
         <label for="confidenceLevel">Tingkat Kepercayaan (Z):</label>
         <select id="confidenceLevel" required>
           <option value="1.645">90% (Z = 1.645)</option>
-          <option value="1.96">95% (Z = 1.96)</option>
+          <option value="1.96" selected>95% (Z = 1.96)</option>
           <option value="2.576">99% (Z = 2.576)</option>
         </select>
         <div class="tooltip">Pilih tingkat kepercayaan dari dropdown (misalnya: 1.96 untuk 95%)</div>
 
         <label for="proportion">Perkiraan Proporsi (p):</label>
-        <input type="text" id="proportion" required />
+        <input type="text" id="proportion" required value="0.5"/>
         <div class="tooltip">Contoh: p = 0.5 atau 0,5 jika tidak tahu perkiraan proporsi</div>
 
         <label for="marginError">Margin of Error (E):</label>
-        <input type="text" id="marginError" required />
+        <input type="text" id="marginError" required value="0.05"/>
         <div class="tooltip">Contoh: E = 0.05 atau 0,05 untuk margin kesalahan 5%</div>
 
         <button type="submit">🔍 Hitung Sampel</button>
@@ -196,13 +224,13 @@
 
       const explanation = `
         <strong>Hasil Perhitungan:</strong><br/>
-        n = (Z² × p × (1 - p)) / E²<br/>
-        n = (${Z}² × ${p} × (1 - ${p})) / ${E}²<br/>
-        <strong>n = ${n}</strong><br/><br/>
+        Rumus: n = (Z² × p × (1 - p)) / E²<br/>
+        Perhitungan: n = (${Z}² × ${p} × (1 - ${p})) / ${E}²<br/>
+        <strong>Besar Sampel (n) = ${n}</strong><br/><br/>
 
         <strong>Interpretasi:</strong><br/>
-        Minimal ${n} responden diperlukan untuk proporsi p=${p} dengan margin error ${E}.<br/>
-        Disarankan menambahkan 10%: <strong>${nRecommended} responden</strong>.
+        Minimal diperlukan <strong>${n} responden</strong> untuk mendapatkan hasil penelitian dengan tingkat kepercayaan ${document.getElementById('confidenceLevel').options[document.getElementById('confidenceLevel').selectedIndex].text.split(' ')[0]} dan margin error ${E*100}%.<br/><br/>
+        Untuk mengantisipasi drop-out atau non-response, disarankan untuk menambahkan sekitar 10% dari jumlah sampel. Sampel yang direkomendasikan adalah: <strong>${nRecommended} responden</strong>.
       `;
 
       resultDiv.innerHTML = explanation;
@@ -223,11 +251,17 @@
     }
 
     pngBtn.addEventListener("click", () => {
+      // Sembunyikan tombol sebelum screenshot
+      pngBtn.style.display = 'none';
+
       html2canvas(outputArea).then(canvas => {
         const link = document.createElement("a");
         link.download = "hasil-perhitungan-proporsi.png";
         link.href = canvas.toDataURL();
         link.click();
+        
+        // Tampilkan kembali tombol setelah screenshot
+        pngBtn.style.display = 'block';
       });
     });
   </script>
