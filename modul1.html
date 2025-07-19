@@ -480,7 +480,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start; /* Align content to start */
         font-style: italic;
         font-size: 1.05rem; /* Adjusted font size */
         transition: all 0.3s ease;
@@ -497,6 +497,9 @@
         margin-bottom: 0.7rem; /* Increased margin */
         font-size: 1.2em; /* Slightly larger label */
         color: #e65100; /* Ensure label color matches */
+        display: block; /* Ensure label takes its own line */
+        width: 100%; /* Take full width */
+        text-align: center; /* Center the label */
     }
 
     .drop-target.hover {
@@ -518,8 +521,19 @@
         color: #b71c1c;
     }
 
+    .drop-target .dropped-items-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* Center dropped items */
+        gap: 0.6rem; /* Gap between dropped items */
+        width: 100%; /* Take full width */
+        padding: 0.5rem; /* Some padding inside container */
+        min-height: 80px; /* Allow space for items */
+        border-top: 1px solid rgba(0,0,0,0.1); /* Separator from label */
+        margin-top: 0.5rem;
+    }
+
     .drop-target .dropped-item {
-        margin-top: 0.8rem; /* Adjusted margin */
         background-color: #ffffff;
         color: #333;
         padding: 0.6rem 0.9rem; /* Adjusted padding */
@@ -528,11 +542,15 @@
         font-weight: 500;
         font-style: normal;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        width: calc(100% - 1.6rem); /* Adjust width based on parent padding */
+        width: calc(50% - 0.5rem); /* Two items per row, minus gap */
         text-align: center;
         cursor: default;
         font-size: 0.9rem; /* Adjusted font size */
         animation: popIn 0.3s ease-out; /* Add pop-in animation */
+        flex-shrink: 0; /* Prevent shrinking */
+        white-space: nowrap; /* Prevent text wrapping */
+        overflow: hidden;
+        text-overflow: ellipsis; /* Add ellipsis if text overflows */
     }
 
     @keyframes popIn {
@@ -938,8 +956,12 @@
             <div class="draggable-items-pool" id="draggableItemsPool">
                 </div>
             <div class="drop-targets-container">
-                <div class="drop-target" id="dropKuantitatif" data-accept="kuantitatif" data-label="Data Kuantitatif"></div>
-                <div class="drop-target" id="dropKualitatif" data-accept="kualitatif" data-label="Data Kualitatif"></div>
+                <div class="drop-target" id="dropKuantitatif" data-accept="kuantitatif" data-label="Data Kuantitatif">
+                    <div class="dropped-items-container"></div>
+                </div>
+                <div class="drop-target" id="dropKualitatif" data-accept="kualitatif" data-label="Data Kualitatif">
+                    <div class="dropped-items-container"></div>
+                </div>
             </div>
             <div style="display: flex; gap: 10px; margin-top: 1.2rem; justify-content: center;">
                 <button onclick="checkDragDrop()">Periksa Jawaban</button>
@@ -1085,7 +1107,7 @@
       </div>
 
       <h4><strong>Penyajian dalam Grafik</strong> <i class="fa-solid fa-chart-bar" style="color:#8bc34a;"></i></h4>
-      <p>Grafik (atau *chart*) adalah representasi visual data yang mempermudah identifikasi pola, tren, hubungan, dan perbandingan secara cepat. Pemilihan jenis grafik yang tepat sangat tergantung pada jenis data dan pesan atau wawasan yang ingin disampaikan.</p>
+      <p>Grafik (atau 'chart') adalah representasi visual data yang mempermudah identifikasi pola, tren, hubungan, dan perbandingan secara cepat. Pemilihan jenis grafik yang tepat sangat tergantung pada jenis data dan pesan atau wawasan yang ingin disampaikan.</p>
       <ul>
         <li><strong>Bar Chart (Diagram Batang)</strong>: Ideal untuk membandingkan kategori data kualitatif atau diskrit.</li>
         <li><strong>Pie Chart (Diagram Lingkaran)</strong>: Digunakan untuk menunjukkan proporsi bagian dari keseluruhan (persentase).</li>
@@ -1154,10 +1176,12 @@
 
     // 1. Drag & Drop Activity (Jenis Data)
     const draggableItemsData = [
-        { id: 'drag1', text: 'Suhu Ruangan (°C)', type: 'kuantitatif' },
+        { id: 'drag1', text: 'Suhu Ruangan', type: 'kuantitatif' },
         { id: 'drag2', text: 'Warna Favorit', type: 'kualitatif' },
         { id: 'drag3', text: 'Jumlah Anak', type: 'kuantitatif' },
-        { id: 'drag4', text: 'Status Pernikahan', type: 'kualitatif' }
+        { id: 'drag4', text: 'Status Pernikahan', type: 'kualitatif' },
+        { id: 'drag5', text: 'Tinggi Badan (cm)', type: 'kuantitatif' },
+        { id: 'drag6', text: 'Jenis Kelamin', type: 'kualitatif' }
     ];
 
     const draggableItemsPool = document.getElementById('draggableItemsPool');
@@ -1167,10 +1191,8 @@
     function initializeDragDrop() {
         draggableItemsPool.innerHTML = ''; // Clear existing items
 
-        // Shuffle items for variety each time it's reset
-        const shuffledData = [...draggableItemsData].sort(() => Math.random() - 0.5);
-
-        shuffledData.forEach(data => {
+        // Re-add all draggable items to the pool
+        draggableItemsData.forEach(data => {
             const div = document.createElement('div');
             div.className = 'draggable-item';
             div.draggable = true;
@@ -1180,6 +1202,16 @@
             draggableItemsPool.appendChild(div);
         });
 
+        // Clear all dropped items from targets and reset classes
+        dropTargets.forEach(target => {
+            const droppedContainer = target.querySelector('.dropped-items-container');
+            if (droppedContainer) {
+                droppedContainer.innerHTML = ''; // Clear all dropped items
+            }
+            target.classList.remove('hover', 'correct-drop', 'incorrect-drop');
+        });
+
+        // Attach dragstart and dragend listeners to newly created items
         const currentDraggableItems = document.querySelectorAll('.draggable-item');
         currentDraggableItems.forEach(item => {
             item.addEventListener('dragstart', (e) => {
@@ -1192,110 +1224,129 @@
             });
         });
 
-        dropTargets.forEach(target => {
-            // Re-add the initial label and remove any dropped items
-            target.innerHTML = `<span style="font-weight: 600; font-style: normal;">${target.dataset.label}</span>`;
-            target.classList.remove('hover', 'correct-drop', 'incorrect-drop');
-            // Add or re-add event listeners for drop targets (though they are static, good practice for dynamic content)
-            target.removeEventListener('dragover', preventDefault); // Remove previous to avoid duplicates
-            target.removeEventListener('dragleave', removeHover);
-            target.removeEventListener('drop', handleDrop);
-
-            target.addEventListener('dragover', preventDefault);
-            target.addEventListener('dragleave', removeHover);
-            target.addEventListener('drop', handleDrop);
-        });
         dragDropFeedback.textContent = '';
         dragDropFeedback.className = 'feedback';
     }
 
-    // Helper functions for drag and drop events to avoid anonymous functions in loops
-    function preventDefault(e) {
-        e.preventDefault();
-        e.currentTarget.classList.add('hover');
-    }
+    // Event listeners for drop targets
+    dropTargets.forEach(target => {
+        target.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.currentTarget.classList.add('hover');
+        });
 
-    function removeHover(e) {
-        e.currentTarget.classList.remove('hover');
-    }
+        target.addEventListener('dragleave', (e) => {
+            e.currentTarget.classList.remove('hover');
+        });
 
-    function handleDrop(e) {
-        e.preventDefault();
-        e.currentTarget.classList.remove('hover');
-        const draggedElementId = e.dataTransfer.getData('text/plain');
-        const draggedElement = document.getElementById(draggedElementId);
-        const target = e.currentTarget;
+        target.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const draggedElementId = e.dataTransfer.getData('text/plain');
+            const draggedElement = document.getElementById(draggedElementId);
+            const target = e.currentTarget;
+            const droppedItemsContainer = target.querySelector('.dropped-items-container');
 
-        if (!draggedElement) return; // If element was already removed (e.g., in a rapid double-drop scenario)
+            if (!draggedElement || !droppedItemsContainer) return;
 
-        // Check if the target already has a dropped item
-        if (target.querySelector('.dropped-item')) {
-            dragDropFeedback.textContent = 'Target ini sudah terisi. Pindahkan item yang sudah ada terlebih dahulu.';
-            dragDropFeedback.className = 'feedback incorrect';
-            return;
-        }
+            const originalItemData = draggableItemsData.find(d => d.id === draggedElementId);
+            if (!originalItemData) return;
 
-        // Check if the dragged item type matches the target's accepted type
-        if (draggedElement.dataset.type === target.dataset.accept) {
-            // Remove existing child elements (the data-label span) before appending the new item
-            target.innerHTML = '';
+            // Remove temporary feedback classes
+            target.classList.remove('correct-drop', 'incorrect-drop');
+            target.classList.remove('hover'); // Always remove hover after drop
 
-            // Create a new div to represent the dropped item within the target
-            const droppedVisual = document.createElement('div');
-            droppedVisual.className = 'dropped-item';
-            droppedVisual.textContent = draggedElement.textContent;
-            droppedVisual.dataset.originalId = draggedElement.id; // Keep track of original ID
+            // Check if the dropped item is correct for this target
+            if (originalItemData.type === target.dataset.accept) {
+                // If correct, move the actual draggable item from the pool to the target
+                const droppedVisual = document.createElement('div');
+                droppedVisual.className = 'dropped-item';
+                droppedVisual.textContent = originalItemData.text;
+                droppedVisual.dataset.originalId = originalItemData.id; // Keep track of original ID
 
-            target.appendChild(droppedVisual);
-            draggedElement.remove(); // Remove original item from pool
-            dragDropFeedback.textContent = ''; // Clear feedback
-        } else {
-            dragDropFeedback.textContent = 'Oops! Itu bukan kategori yang tepat. Coba lagi.';
-            dragDropFeedback.className = 'feedback incorrect';
-        }
-    }
+                droppedItemsContainer.appendChild(droppedVisual);
+                draggedElement.remove(); // Remove original item from pool
+
+                target.classList.add('correct-drop');
+                setTimeout(() => target.classList.remove('correct-drop'), 500); // Remove class after 0.5s
+            } else {
+                // If incorrect, return the item to the pool
+                // The original 'draggedElement' is still in the DOM until it's 'dropped' correctly.
+                // We just need to ensure it's not visually removed from the pool temporarily.
+                // Since `draggedElement.remove()` is only called if correct, here it means
+                // the element is still in the pool. We just give feedback.
+                target.classList.add('incorrect-drop');
+                setTimeout(() => target.classList.remove('incorrect-drop'), 500); // Remove class after 0.5s
+                dragDropFeedback.textContent = 'Oops! Itu bukan kategori yang tepat. Coba lagi!';
+                dragDropFeedback.className = 'feedback incorrect';
+                setTimeout(() => { // Clear feedback after a short delay
+                    dragDropFeedback.textContent = '';
+                    dragDropFeedback.className = 'feedback';
+                }, 1500);
+            }
+        });
+    });
 
 
     function checkDragDrop() {
-        let correctCount = 0;
-        let totalItemsInTargets = 0;
+        let allItemsCorrectlyPlaced = true;
+        let correctlyPlacedCount = 0;
+        let totalItemsExpected = draggableItemsData.length;
+        let itemsInTargets = 0;
+
+        // Create a map of expected items per type
+        const expectedItemsMap = {};
+        draggableItemsData.forEach(item => {
+            if (!expectedItemsMap[item.type]) {
+                expectedItemsMap[item.type] = [];
+            }
+            expectedItemsMap[item.type].push(item.id);
+        });
 
         dropTargets.forEach(target => {
-            target.classList.remove('correct-drop', 'incorrect-drop'); // Reset previous feedback
-            const droppedItem = target.querySelector('.dropped-item');
+            const targetType = target.dataset.accept;
+            const droppedItems = target.querySelectorAll('.dropped-items-container .dropped-item');
+            const droppedItemIds = Array.from(droppedItems).map(item => item.dataset.originalId);
 
-            if (droppedItem) {
-                totalItemsInTargets++;
-                const originalItemId = droppedItem.dataset.originalId;
-                const originalItemData = draggableItemsData.find(d => d.id === originalItemId);
+            itemsInTargets += droppedItemIds.length;
 
-                if (originalItemData && originalItemData.type === target.dataset.accept) {
-                    target.classList.add('correct-drop');
-                    correctCount++;
-                } else {
-                    target.classList.add('incorrect-drop');
-                }
+            target.classList.remove('correct-drop', 'incorrect-drop'); // Clear previous check visual feedback
+
+            const expectedIdsForThisTarget = expectedItemsMap[targetType] || [];
+            
+            // Check if all expected items for this target are actually in this target
+            const allExpectedInThisTargetArePresent = expectedIdsForThisTarget.every(expectedId => droppedItemIds.includes(expectedId));
+            
+            // Check if there are any *incorrect* items in this target
+            const hasIncorrectItems = droppedItemIds.some(droppedId => {
+                const originalData = draggableItemsData.find(d => d.id === droppedId);
+                return originalData && originalData.type !== targetType;
+            });
+
+            if (allExpectedInThisTargetArePresent && !hasIncorrectItems && droppedItemIds.length === expectedIdsForThisTarget.length) {
+                target.classList.add('correct-drop');
+                correctlyPlacedCount += droppedItemIds.length; // Count items, not just targets
             } else {
-                // If a target is empty, it's implicitly incorrect for this activity
                 target.classList.add('incorrect-drop');
+                allItemsCorrectlyPlaced = false;
             }
         });
 
-        // The total items we expect to be correctly placed in targets is the number of items in draggableItemsData
-        const expectedTotalItems = draggableItemsData.length;
+        // Also check for any items still remaining in the pool
+        const itemsStillInPool = draggableItemsPool.querySelectorAll('.draggable-item').length;
+        if (itemsStillInPool > 0) {
+            allItemsCorrectlyPlaced = false;
+        }
 
-        // Check if all items that *should* be in targets are correctly placed and no target is empty unnecessarily.
-        // Also ensure that no items are left in the pool if they should all be dragged.
-        const remainingItemsInPool = draggableItemsPool.querySelectorAll('.draggable-item').length;
-
-        if (correctCount === expectedTotalItems && remainingItemsInPool === 0) {
+        if (allItemsCorrectlyPlaced && itemsInTargets === totalItemsExpected) {
             dragDropFeedback.textContent = 'Hebat! Semua klasifikasi data Anda benar! 🎉';
             dragDropFeedback.className = 'feedback correct';
         } else {
-            dragDropFeedback.textContent = `Ada ${expectedTotalItems - correctCount - remainingItemsInPool} item yang belum tepat atau belum ditempatkan. Coba lagi! 🤔`;
+            const incorrectOrMissingCount = totalItemsExpected - correctlyPlacedCount;
+            dragDropFeedback.textContent = `Ada ${incorrectOrMissingCount} item yang belum tepat atau belum ditempatkan. Coba lagi! 🤔`;
             dragDropFeedback.className = 'feedback incorrect';
         }
     }
+
 
     function resetDragDrop() {
         initializeDragDrop(); // Re-initialize the entire drag & drop area
