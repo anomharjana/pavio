@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Tes Evaluasi E-Learning</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    /* -------------------- GLOBAL RESET & BASE STYLES -------------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      line-height: 1.6;
+      font-size: 16px;
+      min-height: 100vh; /* Memastikan body mengisi seluruh viewport */
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Memastikan tag strong selalu tebal */
+    strong {
+        font-weight: 700 !important; 
+    }
+
+    /* -------------------- HEADER STYLING -------------------- */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .header-brand img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin: 0;
+    }
+
+    .header-text p {
+      font-size: 0.85rem;
+      color: #555;
+      margin: 0;
+    }
+
+    /* -------------------- MAIN CONTENT LAYOUT -------------------- */
+    .module-content {
+      flex-grow: 1; /* Agar konten mengisi ruang kosong */
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* -------------------- CARD STYLING (General) -------------------- */
+    .card {
+      background: #ffffff;
+      padding: 1.8rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s ease;
+    }
+
+    /* Intro Card Specific */
+    #introCard {
+        background: linear-gradient(145deg, #f8faff, #eff3f7);
+        border: 1px solid #c9e6ff;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    #introCard h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    #introCard h2 .module-title-primary {
+        display: block;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        color: #3f51b5;
+    }
+    
+    #introCard h2 .fa-solid {
+        font-size: 2.5rem;
+        color: #42a5f5;
+    }
+
+    #introCard h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #3f51b5;
+      margin-top: 1.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    #introCard p {
+      font-size: 0.95rem;
+      color: #444;
+      margin-bottom: 0.7rem;
+      text-align: justify;
+    }
+
+    #introCard ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 0.7rem;
+    }
+
+    #introCard ul li {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    #introCard ul li::before {
+      content: '✔';
+      color: #4CAF50;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    /* -------------------- QUIZ SECTION STYLES -------------------- */
+    #quizSection {
+        display: none; /* Hidden by default */
+    }
+
+    .quiz-timer {
+        background-color: #fffde7;
+        color: #ffb300;
+        padding: 0.8rem 1.2rem;
+        border-radius: 8px;
+        border: 1px solid #ffe082;
+        text-align: center;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+    }
+
+    .question-card {
+        background-color: #fefefe;
+        padding: 1.5rem;
+        border-radius: 10px;
+        border: 1px solid #e9eff5;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+        display: none; /* hidden by default, shown by JS */
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    .question-card.active {
+        display: block; /* Shown when active */
+    }
+
+    .question-card h4 {
+        margin-bottom: 1rem;
+        color: #1a237e;
+        font-size: 1.15rem;
+        line-height: 1.4;
+    }
+
+    .options-group label {
+        display: flex;
+        align-items: center;
+        padding: 0.7rem 1rem;
+        background-color: #f8f8f8;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+        font-size: 0.9rem;
+    }
+
+    .options-group label:hover {
+        background-color: #eef4f7;
+        border-color: #cddce6;
+    }
+
+    .options-group input[type="radio"] {
+        transform: scale(1.1);
+        margin-right: 0.8rem; 
+        accent-color: #2196f3; 
+    }
+
+    .feedback {
+        margin-top: 1rem;
+        padding: 0.6rem 1rem;
+        border-radius: 6px;
+        font-weight: 600;
+        display: none; /* Hidden by default */
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .feedback.correct {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #a5d6a7;
+    }
+
+    .feedback.incorrect {
+        background-color: #ffebee;
+        color: #c62828;
+        border: 1px solid #ef9a9a;
+    }
+
+    /* -------------------- QUIZ SUMMARY STYLES -------------------- */
+    #quizSummary {
+        display: none; /* Hidden by default */
+        background-color: #e3f2fd;
+        border: 1px solid #90caf9;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    #quizSummary h3 {
+        color: #1565c0;
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+    }
+
+    #quizSummary p {
+        font-size: 1rem;
+        color: #3f51b5;
+        margin-bottom: 0.6rem;
+    }
+
+    #quizSummary .score {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #2e7d32;
+        margin-top: 0.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .explanation-section {
+        margin-top: 2rem;
+        border-top: 1px solid #c0d8f0;
+        padding-top: 1.5rem;
+        text-align: left;
+    }
+
+    .explanation-section h4 {
+        color: #1a237e;
+        font-size: 1.3rem;
+        margin-bottom: 1.2rem;
+        text-align: center;
+    }
+
+    .explanation-item {
+        background-color: #f7f9fc;
+        border: 1px solid #e0e7f2;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.03);
+    }
+
+    .explanation-item h5 {
+        font-size: 1rem;
+        color: #3f51b5;
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .explanation-item p {
+        font-size: 0.88rem;
+        color: #555;
+        margin-bottom: 0;
+        text-align: justify;
+    }
+
+    /* -------------------- BUTTON STYLES -------------------- */
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .action-button {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      text-decoration: none;
+    }
+
+    .action-button:hover {
+      background-color: #1976d2;
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    }
+
+    .action-button.start-quiz-button {
+        background-color: #28a745; 
+    }
+
+    .action-button.start-quiz-button:hover {
+        background-color: #218838;
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+
+    .action-button.submit-quiz-button {
+        background-color: #dc3545; /* Merah untuk submit akhir */
+        margin-left: auto; /* Pindah ke kanan */
+        display: none; /* Hidden by default */
+    }
+    .action-button.submit-quiz-button:hover {
+        background-color: #c82333;
+    }
+
+    .action-button.next-question-button {
+        background-color: #00bcd4; /* Cyan */
+        margin-left: auto; /* Pindah ke kanan */
+        display: none; /* Hidden by default */
+    }
+    .action-button.next-question-button:hover {
+        background-color: #00838f;
+    }
+
+    .action-button.back-button {
+      background-color: #6c757d;
+    }
+
+    .action-button.back-button:hover {
+      background-color: #5a6268;
+    }
+
+    /* -------------------- FOOTER & HELP BUTTON -------------------- */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #999;
+      font-size: 0.8rem;
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 2rem;
+    }
+
+    .help-button {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .help-button:hover {
+      background-color: #43a047;
+      transform: scale(1.05);
+    }
+
+    /* -------------------- ANIMATIONS -------------------- */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>E-Learning Analisis Data Kuantitatif</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="module-content">
+    <div id="introCard" class="card">
+      <h2>
+        <i class="fa-solid fa-clipboard-check"></i> 
+        <span class="module-title-primary">TES EVALUASI</span>
+        Analisis Data Kuantitatif
+      </h2>
+      <h3>Petunjuk Pengerjaan</h3>
+      <p>Tes evaluasi ini terdiri dari **20 pertanyaan** yang mencakup seluruh materi E-Learning Analisis Data Kuantitatif (Modul 1-6). Anda memiliki waktu **20 menit** untuk menyelesaikan tes ini. Bacalah setiap pertanyaan dengan seksama sebelum memilih jawaban. Setelah memilih jawaban, umpan balik akan segera ditampilkan.</p>
+      <p>Tekan tombol **"Mulai Tes"** di bawah untuk memulai hitungan mundur waktu dan menampilkan pertanyaan pertama.</p>
+      <ul>
+        <li><i class="fa-solid fa-circle-info" style="color: #64b5f6; margin-right: 10px;"></i> Waktu pengerjaan: **20 menit**.</li>
+        <li><i class="fa-solid fa-circle-info" style="color: #64b5f6; margin-right: 10px;"></i> Jumlah soal: **20 pertanyaan**.</li>
+      </ul>
+      <div class="button-group">
+        <button id="startButton" class="action-button start-quiz-button">
+          <i class="fa-solid fa-play" style="margin-right: 8px;"></i> Mulai Tes
+        </button>
+      </div>
+    </div>
+
+    <div id="quizSection">
+      <div class="quiz-timer">Waktu tersisa: <span id="timer">20:00</span></div>
+      
+      <div id="questionsContainer">
+        </div>
+      
+      <div class="button-group" style="justify-content: flex-end;">
+        <button id="nextQuestionButton" class="action-button next-question-button">
+            Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <button id="submitQuizButton" class="action-button submit-quiz-button">
+          <i class="fa-solid fa-paper-plane"></i> Selesai Tes
+        </button>
+      </div>
+    </div>
+
+    <div id="quizSummary" class="card">
+      <h3>Hasil Tes Evaluasi Anda</h3>
+      <p>Waktu pengerjaan: <span id="finalTime"></span></p>
+      <p>Jumlah jawaban benar: <span id="correctCount"></span> dari 20</p>
+      <p>Skor Anda: <span id="finalScore" class="score"></span></p>
+      <div class="button-group">
+        <button class="action-button back-button" onclick="window.location.reload()"><i class="fa-solid fa-redo"></i> Ulangi Tes</button>
+        <button class="action-button" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda</button>
+      </div>
+
+      <div id="explanationSection" class="explanation-section">
+        <h4>Pembahasan Jawaban</h4>
+        </div>
+    </div>
+
+    <div class="module-actions-bottom button-group">
+        <button class="action-button back-button" onclick="window.location.href='elearning.html'"><i class="fa-solid fa-arrow-left"></i> Kembali ke Modul</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
+  </footer>
+
+  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">
+    <i class="fa-brands fa-whatsapp"></i>
+  </button>
+
+  <script>
+    // -------------------- JAVASCRIPT FOR QUIZ FUNCTIONALITY --------------------
+
+    // Helper function to parse markdown-like bold (**) to <strong> tags
+    function parseBoldMarkdown(element) {
+        if (!element || typeof element.innerHTML === 'undefined') {
+            return; 
+        }
+        const originalHtml = element.innerHTML;
+        const newHtml = originalHtml.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        if (originalHtml !== newHtml) {
+            element.innerHTML = newHtml;
+        }
+    }
+
+    // Array of quiz questions (all now have 5 options for consistency)
+    const quizQuestions = [
+        {
+            question: "Variabel yang menggambarkan kategori atau kelompok (misalnya, jenis kelamin, warna favorit) dan tidak memiliki urutan intrinsik termasuk dalam jenis data apa?",
+            options: ["Data Kuantitatif Diskrit", "Data Kualitatif Nominal", "Data Kuantitatif Kontinu", "Data Kualitatif Ordinal", "Data Kuantitatif Rasio"],
+            answer: "Data Kualitatif Nominal",
+            explanation: "**Pembahasan:** Data kualitatif nominal adalah jenis data yang digunakan untuk memberi label variabel tanpa nilai kuantitatif. Contohnya adalah jenis kelamin (laki-laki/perempuan), warna favorit (merah/biru/hijau), atau jenis buah (apel/pisang/jeruk). Data ini tidak memiliki urutan atau hierarki intrinsik."
+        },
+        {
+            question: "Manakah dari skala pengukuran berikut yang memiliki nilai nol mutlak, yang berarti nol menunjukkan ketiadaan atribut?",
+            options: ["Nominal", "Ordinal", "Interval", "Rasio", "Kualitatif"],
+            answer: "Rasio",
+            explanation: "**Pembahasan:** Skala rasio adalah skala pengukuran yang paling tinggi. Selain memiliki semua karakteristik skala interval (urutan, jarak yang sama), skala rasio juga memiliki titik nol mutlak yang mengindikasikan ketiadaan atribut yang diukur. Contohnya adalah tinggi badan (0 cm berarti tidak ada tinggi), berat badan, atau pendapatan."
+        },
+        {
+            question: "Dalam statistik, apa perbedaan utama antara populasi dan sampel?",
+            options: ["Populasi adalah bagian dari sampel, sedangkan sampel adalah keseluruhan kelompok.", "Populasi adalah data kualitatif, sedangkan sampel adalah data kuantitatif.", "Populasi adalah keseluruhan kelompok yang ingin diteliti, sedangkan sampel adalah sebagian kecil dari populasi yang dipilih untuk analisis.", "Populasi digunakan untuk statistik deskriptif, sedangkan sampel untuk statistik inferensial.", "Populasi adalah semua angka, sampel adalah semua teks."],
+            answer: "Populasi adalah keseluruhan kelompok yang ingin diteliti, sedangkan sampel adalah sebagian kecil dari populasi yang dipilih untuk analisis.",
+            explanation: "**Pembahasan:** **Populasi** mengacu pada keseluruhan kelompok individu, objek, atau data yang menjadi perhatian dalam suatu penelitian. **Sampel** adalah bagian yang lebih kecil dan representatif yang diambil dari populasi untuk dianalisis, dengan tujuan untuk menarik kesimpulan tentang populasi secara keseluruhan."
+        },
+        {
+            question: "Dalam distribusi data, apa yang dimaksud dengan 'modus'?",
+            options: ["Nilai tengah dalam kumpulan data yang telah diurutkan.", "Rata-rata aritmatika dari semua nilai dalam kumpulan data.", "Nilai yang paling sering muncul dalam kumpulan data.", "Selisih antara nilai tertinggi dan terendah dalam kumpulan data.", "Jumlah semua nilai dibagi dengan jumlah nilai."],
+            answer: "Nilai yang paling sering muncul dalam kumpulan data.",
+            explanation: "**Pembahasan:** **Modus** adalah ukuran tendensi sentral yang menunjukkan nilai atau kategori yang paling sering muncul dalam suatu kumpulan data. Suatu data bisa memiliki satu modus (unimodal), lebih dari satu modus (multimodal), atau tidak memiliki modus sama sekali."
+        },
+        {
+            question: "Jika standar deviasi suatu data adalah 5 dan rata-ratanya adalah 50, apa artinya ini terkait dengan penyebaran data?",
+            options: ["Data sangat tersebar jauh dari rata-rata.", "Data sangat terkonsentrasi di sekitar rata-rata.", "Data tidak memiliki penyebaran sama sekali.", "Data cenderung bimodal.", "Data memiliki nilai ekstrim yang banyak."],
+            answer: "Data sangat terkonsentrasi di sekitar rata-rata.",
+            explanation: "**Pembahasan:** Standar deviasi adalah ukuran seberapa tersebar data dari nilai rata-ratanya. Standar deviasi 5 pada rata-rata 50 menunjukkan bahwa data relatif terkonsentrasi atau homogen di sekitar rata-rata. Semakin kecil standar deviasi relatif terhadap rata-rata, semakin rapat data berkumpul di sekitar rata-rata."
+        },
+        {
+            question: "Apa yang diwakili oleh kotak (box) dalam boxplot?",
+            options: ["Rentang lengkap data dari minimum ke maksimum.", "50% data tengah (dari kuartil pertama hingga kuartil ketiga).", "Rata-rata data.", "Modus data.", "Nilai outlier." ],
+            answer: "50% data tengah (dari kuartil pertama hingga kuartil ketiga).",
+            explanation: "**Pembahasan:** Dalam boxplot, kotak (box) mewakili Interquartile Range (IQR), yaitu rentang antara kuartil pertama (Q1) dan kuartil ketiga (Q3). Ini mencakup 50% data tengah, menunjukkan penyebaran nilai-nilai di sekitar median."
+        },
+        {
+            question: "Jika kita ingin menghitung ukuran sampel untuk mengestimasi proporsi populasi dengan tingkat kepercayaan 95% dan margin of error 4%, kita memerlukan estimasi awal proporsi populasi. Jika tidak ada, nilai berapa yang paling konservatif untuk digunakan?",
+            options: ["0.10", "0.25", "0.50", "0.90", "1.00"],
+            answer: "0.50",
+            explanation: "**Pembahasan:** Ketika tidak ada informasi awal mengenai proporsi populasi (p), menggunakan nilai **p = 0.50** (atau 50%) adalah pendekatan yang paling konservatif. Ini karena nilai p=0.5 memaksimalkan varians p*(1-p), sehingga menghasilkan ukuran sampel terbesar yang menjamin tingkat kepercayaan dan margin of error yang diinginkan, apapun proporsi populasi sebenarnya."
+        },
+        {
+            question: "Apa perbedaan antara validitas dan reliabilitas instrumen penelitian?",
+            options: ["Validitas mengacu pada konsistensi pengukuran, sedangkan reliabilitas mengacu pada akurasi pengukuran.", "Validitas adalah kemampuan instrumen mengukur apa yang seharusnya diukur, sedangkan reliabilitas adalah konsistensi hasil pengukuran.", "Validitas hanya berlaku untuk data kualitatif, sedangkan reliabilitas untuk data kuantitatif.", "Validitas dan reliabilitas adalah dua konsep yang sama dan dapat digunakan secara bergantian.", "Validitas adalah tentang kecepatan, reliabilitas tentang biaya."],
+            answer: "Validitas adalah kemampuan instrumen mengukur apa yang seharusnya diukur, sedangkan reliabilitas adalah konsistensi hasil pengukuran.",
+            explanation: "**Pembahasan:** **Validitas** berkaitan dengan sejauh mana instrumen penelitian benar-benar mengukur konsep atau variabel yang ingin diukurnya. Sementara itu, **reliabilitas** berkaitan dengan konsistensi atau stabilitas hasil pengukuran; instrumen yang reliable akan memberikan hasil yang serupa jika pengukuran diulang dalam kondisi yang sama."
+        },
+        {
+            question: "Anda ingin menguji apakah ada perbedaan rata-rata nilai ujian antara dua kelompok mahasiswa yang diajar dengan metode yang berbeda. Uji statistik inferensial dasar apa yang paling tepat untuk digunakan?",
+            options: ["Uji Korelasi Pearson", "Uji Chi-square", "Uji t Independen", "Uji ANOVA satu arah", "Uji Regresi Linier"],
+            answer: "Uji t Independen",
+            explanation: "**Pembahasan:** **Uji t Independen** (Independent Samples t-test) adalah uji statistik parametrik yang digunakan untuk membandingkan rata-rata dari dua kelompok independen (tidak berhubungan) untuk menentukan apakah ada perbedaan signifikan antara rata-rata populasi kedua kelompok tersebut."
+        },
+        {
+            question: "Dalam pengujian hipotesis, jika p-value yang dihitung adalah 0.02 dan level signifikansi (alpha) adalah 0.05, apa kesimpulannya?",
+            options: ["Menerima hipotesis nol.", "Menolak hipotesis alternatif.", "Menolak hipotesis nol.", "Tidak dapat mengambil kesimpulan yang pasti.", "Mengumpulkan lebih banyak data."],
+            answer: "Menolak hipotesis nol.",
+            explanation: "**Pembahasan:** Dalam pengujian hipotesis, jika **p-value** (nilai probabilitas) yang dihitung lebih kecil dari **level signifikansi (alpha)** yang ditetapkan (p-value < alpha), maka kita memiliki bukti yang cukup untuk **menolak hipotesis nol (H₀)**. Ini berarti ada bukti signifikan untuk mendukung hipotesis alternatif."
+        },
+        {
+            question: "Uji statistik apa yang paling cocok untuk menguji perbedaan rata-rata antara tiga atau lebih kelompok independen?",
+            options: ["Uji t berpasangan", "Uji Korelasi Spearman", "Uji ANOVA satu arah", "Uji Chi-square", "Uji t Independen"],
+            answer: "Uji ANOVA satu arah",
+            explanation: "**Pembahasan:** **ANOVA (Analysis of Variance) satu arah** adalah uji statistik parametrik yang digunakan untuk membandingkan rata-rata dari tiga atau lebih kelompok independen untuk melihat apakah ada perbedaan signifikan secara statistik di antara rata-rata kelompok tersebut."
+        },
+        {
+            question: "Korelasi Pearson cocok digunakan untuk mengukur hubungan antara dua variabel dengan skala pengukuran apa?",
+            options: ["Nominal dan Ordinal", "Interval dan Rasio", "Kategorikal dan Diskrit", "Hanya Nominal", "Hanya Ordinal"],
+            answer: "Interval dan Rasio",
+            explanation: "**Pembahasan:** **Korelasi Pearson** (Pearson product-moment correlation coefficient) digunakan untuk mengukur kekuatan dan arah hubungan linier antara dua variabel yang berskala **interval atau rasio**. Uji ini mengasumsikan bahwa data terdistribusi normal dan hubungannya linier."
+        },
+        {
+            question: "Jika koefisien korelasi Pearson antara X dan Y adalah -0.85, apa interpretasinya?",
+            options: ["Tidak ada hubungan antara X dan Y.", "Hubungan positif kuat antara X dan Y.", "Hubungan negatif kuat antara X dan Y.", "Hubungan positif lemah antara X dan Y.", "Hubungan negatif lemah antara X dan Y."],
+            answer: "Hubungan negatif kuat antara X dan Y.",
+            explanation: "**Pembahasan:** Koefisien korelasi Pearson berkisar antara -1 hingga +1. Nilai mendekati -1 menunjukkan hubungan negatif yang kuat (ketika satu variabel meningkat, yang lain menurun secara signifikan). Nilai -0.85 menunjukkan hubungan negatif yang sangat kuat."
+        },
+        {
+            question: "Apa tujuan utama dari Uji Chi-square dalam analisis hubungan?",
+            options: ["Mengukur kekuatan hubungan linier antara dua variabel numerik.", "Menguji apakah ada perbedaan rata-rata antara kelompok.", "Menguji apakah ada hubungan signifikan antara dua variabel kategorikal.", "Memprediksi nilai variabel dependen berdasarkan variabel independen.", "Menentukan nilai median."],
+            answer: "Menguji apakah ada hubungan signifikan antara dua variabel kategorikal.",
+            explanation: "**Pembahasan:** **Uji Chi-square** (Chi-squared test of independence) digunakan untuk menentukan apakah ada hubungan statistik yang signifikan antara dua variabel kategorikal (nominal atau ordinal). Uji ini membandingkan frekuensi yang diobservasi dengan frekuensi yang diharapkan."
+        },
+        {
+            question: "Variabel dependen dalam model regresi adalah variabel yang...",
+            options: ["Digunakan untuk memprediksi variabel lain.", "Nilainya diprediksi atau dijelaskan oleh variabel lain.", "Memiliki nilai konstan dalam semua observasi.", "Tidak relevan dalam analisis regresi.", "Selalu memiliki nilai nol."],
+            answer: "Nilainya diprediksi atau dijelaskan oleh variabel lain.",
+            explanation: "**Pembahasan:** Dalam model regresi, **variabel dependen** (juga dikenal sebagai variabel respon atau Y) adalah variabel yang nilainya ingin dijelaskan atau diprediksi oleh variabel lain dalam model. Nilainya diasumsikan bergantung pada variabel independen."
+        },
+        {
+            question: "Dalam persamaan regresi linear sederhana Y = β₀ + β₁X + ε, apa yang diwakili oleh β₁?",
+            options: ["Nilai Y ketika X adalah nol.", "Error atau residu model.", "Perubahan rata-rata pada Y untuk setiap peningkatan satu unit X.", "Proporsi varians Y yang dijelaskan oleh X.", "Nilai minimum X."],
+            answer: "Perubahan rata-rata pada Y untuk setiap peningkatan satu unit X.",
+            explanation: "**Pembahasan:** Dalam persamaan regresi linear sederhana $Y = \beta₀ + \beta₁X + \epsilon$, $\beta₁$ (koefisien regresi) mewakili kemiringan garis regresi. Ini menunjukkan **perubahan rata-rata pada variabel dependen (Y) untuk setiap peningkatan satu unit pada variabel independen (X)**, dengan asumsi semua faktor lain konstan."
+        },
+        {
+            question: "Jika R-squared dari model regresi linear sederhana adalah 0.70, apa artinya ini?",
+            options: ["70% dari perubahan pada variabel dependen tidak dapat dijelaskan oleh model.", "Variabel independen menjelaskan 70% variasi pada variabel dependen.", "Ada hubungan positif yang kuat antara variabel independen dan dependen.", "Model tersebut 70% akurat dalam memprediksi nilai individual.", "Model hanya bisa memprediksi 70% dari waktu."],
+            answer: "Variabel independen menjelaskan 70% variasi pada variabel dependen.",
+            explanation: "**Pembahasan:** **R-squared** (koefisien determinasi) adalah statistik yang menunjukkan proporsi varians dalam variabel dependen yang dapat diprediksi dari variabel independen. R-squared sebesar 0.70 berarti **70% dari total variasi pada variabel dependen dapat dijelaskan oleh variabel independen** yang dimasukkan dalam model regresi."
+        },
+        {
+            question: "Uji statistik apa yang digunakan untuk menguji signifikansi keseluruhan model regresi berganda?",
+            options: ["Uji t", "Uji Chi-square", "Uji F", "Uji Korelasi", "Uji Mann-Whitney"],
+            answer: "Uji F",
+            explanation: "**Pembahasan:** **Uji F** dalam analisis regresi berganda digunakan untuk menguji signifikansi keseluruhan model. Uji F menilai apakah setidaknya satu dari variabel independen dalam model secara signifikan menjelaskan variasi pada variabel dependen."
+        },
+        {
+            question: "Mengapa penting untuk menghindari ekstrapolasi saat menggunakan model regresi untuk prediksi?",
+            options: ["Karena akan membuat model menjadi terlalu kompleks.", "Karena model hanya valid untuk rentang data yang digunakan untuk membangunnya.", "Karena akan selalu menghasilkan nilai R-squared yang lebih rendah.", "Karena akan menyebabkan masalah multikolinearitas.", "Karena akan membuat prediksi menjadi terlalu mudah."],
+            answer: "Karena model hanya valid untuk rentang data yang digunakan untuk membangunnya.",
+            explanation: "**Pembahasan:** **Ekstrapolasi** adalah penggunaan model regresi untuk membuat prediksi di luar rentang nilai variabel independen yang digunakan untuk membangun model tersebut. Ini berbahaya karena **hubungan linier yang diamati dalam rentang data asli mungkin tidak berlaku di luar rentang tersebut**, dan prediksi dapat menjadi sangat tidak akurat atau menyesatkan."
+        },
+        {
+            question: "Anda memiliki data tentang anggaran iklan (X) dan penjualan produk (Y). Jika model regresi Anda adalah Y = 100 + 5X, dan Anda ingin memprediksi penjualan jika anggaran iklan adalah 10 unit, berapa perkiraan penjualan?",
+            options: ["100", "105", "150", "510", "500"],
+            answer: "150",
+            explanation: "**Pembahasan:** Menggunakan persamaan regresi $Y = 100 + 5X$, substitusikan $X = 10$: $Y = 100 + (5 \times 10) = 100 + 50 = 150$. Jadi, perkiraan penjualan adalah 150 unit."
+        }
+    ];
+
+    // Global variables for quiz state
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timerInterval;
+    const QUIZ_DURATION_SECONDS = 20 * 60; // 20 minutes in seconds
+    let timeLeft = QUIZ_DURATION_SECONDS;
+    let quizStartedTime; 
+    let userAnswers = new Array(quizQuestions.length).fill(null); // Stores user's answers
+
+    // DOM element references
+    let introCardElement, startButtonElement, quizSectionElement, 
+        questionsContainerElement, timerDisplayElement, quizSummaryElement,
+        finalTimeElement, correctCountElement, finalScoreElement,
+        explanationSectionElement, nextQuestionButtonElement, submitQuizButtonElement;
+
+    /**
+     * Hides the intro card, shows the quiz section, loads the first question, and starts the timer.
+     */
+    function startQuiz() {
+        console.log("startQuiz: Starting the quiz.");
+        introCardElement.style.display = 'none';
+        quizSectionElement.style.display = 'block';
+        
+        quizStartedTime = new Date(); 
+        loadQuestion(); 
+        startTimer(); 
+        console.log("Quiz started. First question loaded and timer begun.");
+    }
+
+    /**
+     * Loads the current question into the questionsContainer.
+     */
+    function loadQuestion() {
+        console.log(`loadQuestion: Attempting to load question index ${currentQuestionIndex}`);
+
+        // Hide all question cards first, then show the active one
+        document.querySelectorAll('.question-card').forEach(card => card.classList.remove('active'));
+        if (nextQuestionButtonElement) nextQuestionButtonElement.style.display = 'none';
+        if (submitQuizButtonElement) submitQuizButtonElement.style.display = 'none';
+
+        if (currentQuestionIndex < quizQuestions.length) {
+            const qData = quizQuestions[currentQuestionIndex];
+            const questionCardId = `questionCard-${currentQuestionIndex}`;
+            let questionCard = document.getElementById(questionCardId);
+
+            // Create question card if it doesn't exist
+            if (!questionCard) {
+                questionCard = document.createElement('div');
+                questionCard.id = questionCardId;
+                questionCard.classList.add('card', 'question-card');
+                
+                let optionsHtml = qData.options.map((option, idx) => `
+                    <label>
+                        <input type="radio" name="question-${currentQuestionIndex}" value="${option}" data-question-index="${currentQuestionIndex}">
+                        <span>${String.fromCharCode(65 + idx)}. ${option}</span> </label>
+                `).join('');
+
+                questionCard.innerHTML = `
+                    <h4>Soal ${currentQuestionIndex + 1}. ${qData.question}</h4>
+                    <div class="options-group">
+                        ${optionsHtml}
+                    </div>
+                    <div id="feedback-${currentQuestionIndex}" class="feedback"></div>
+                `;
+                questionsContainerElement.appendChild(questionCard);
+                console.log(`Question card ${currentQuestionIndex + 1} created.`);
+            } else {
+                console.log(`Question card ${currentQuestionIndex + 1} already exists.`);
+            }
+            
+            // Activate the current question card
+            questionCard.classList.add('active');
+
+            // Attach change listeners to new/existing radio buttons
+            document.querySelectorAll(`input[name="question-${currentQuestionIndex}"]`).forEach(radio => {
+                // Remove existing listener to prevent duplicates if card was reused
+                radio.removeEventListener('change', handleOptionChange); 
+                radio.addEventListener('change', handleOptionChange);
+                radio.disabled = false; // Ensure enabled for new question
+                radio.checked = false; // Ensure no option is pre-selected
+            });
+
+            // Hide feedback for new questions
+            const currentFeedbackElement = document.getElementById(`feedback-${currentQuestionIndex}`);
+            if (currentFeedbackElement) currentFeedbackElement.style.display = 'none';
+
+            // Scroll to the current question for better UX
+            questionCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            console.log(`Question ${currentQuestionIndex + 1} displayed.`);
+        } else {
+            console.log("All questions displayed. Triggering quiz submission.");
+            submitQuiz(); 
+        }
+    }
+
+    /**
+     * Handles the change event for radio buttons, checks the answer, and shows feedback.
+     * @param {Event} event - The change event from the radio button.
+     */
+    function handleOptionChange(event) {
+        const selectedRadio = event.target;
+        const questionIndex = parseInt(selectedRadio.dataset.questionIndex);
+        const feedbackElement = document.getElementById(`feedback-${questionIndex}`);
+        const qData = quizQuestions[questionIndex];
+
+        if (!selectedRadio || !feedbackElement || userAnswers[questionIndex] !== null) {
+            console.warn(`handleOptionChange: Skipping. Selected radio: ${selectedRadio}, Feedback element: ${feedbackElement}, Already answered: ${userAnswers[questionIndex] !== null}`);
+            return; // Prevent re-checking or if element is missing
+        }
+
+        // Disable all radio buttons for the current question to prevent re-selection
+        document.querySelectorAll(`input[name="question-${questionIndex}"]`).forEach(radio => {
+            radio.disabled = true;
+        });
+
+        // Store user's answer
+        userAnswers[questionIndex] = selectedRadio.value;
+
+        // Provide immediate feedback
+        if (selectedRadio.value === qData.answer) {
+            feedbackElement.textContent = "Jawaban Benar! 👍";
+            feedbackElement.classList.add('correct');
+            feedbackElement.classList.remove('incorrect');
+            score++; 
+            console.log(`Question ${questionIndex + 1}: Correct. Current score: ${score}`);
+        } else {
+            feedbackElement.textContent = `Jawaban Salah. Jawaban yang benar adalah: ${qData.answer} 👎`;
+            feedbackElement.classList.add('incorrect');
+            feedbackElement.classList.remove('correct');
+            console.log(`Question ${questionIndex + 1}: Incorrect. Correct answer was: ${qData.answer}`);
+        }
+        feedbackElement.style.display = 'flex'; 
+
+        // Decide which button to show (Next or Submit)
+        if (currentQuestionIndex < quizQuestions.length - 1) {
+            nextQuestionButtonElement.style.display = 'flex'; // Show 'Next' button
+            console.log("Showing 'Next Question' button.");
+        } else {
+            submitQuizButtonElement.style.display = 'flex'; // Show 'Submit Quiz' button
+            console.log("Last question answered. Showing 'Selesai Tes' button.");
+        }
+    }
+
+    /**
+     * Moves to the next question when the 'Next' button is clicked.
+     */
+    function goToNextQuestion() {
+        console.log("goToNextQuestion: Moving to next question.");
+        currentQuestionIndex++;
+        loadQuestion();
+    }
+
+    /**
+     * Starts the countdown timer. Updates display every second.
+     * Automatically submits the quiz if time runs out.
+     */
+    function startTimer() {
+        if (!timerDisplayElement) {
+            console.error("startTimer: timerDisplayElement is null.");
+            return;
+        }
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplayElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval); 
+                submitQuiz(); 
+                alert("Waktu habis! Tes akan otomatis disubmit.");
+                console.log("Timer ended. Quiz submitted automatically.");
+            }
+        }, 1000); 
+        console.log("Timer started.");
+    }
+
+    /**
+     * Submits the quiz, stops the timer, calculates final score,
+     * and displays the quiz summary and explanations.
+     */
+    function submitQuiz() {
+        clearInterval(timerInterval); 
+        console.log("submitQuiz: Quiz submission initiated.");
+
+        quizSectionElement.style.display = 'none';
+        quizSummaryElement.style.display = 'block';
+        
+        // Calculate time taken
+        const endTime = new Date();
+        const timeTakenMs = endTime - quizStartedTime;
+        const totalMinutes = Math.floor(timeTakenMs / (1000 * 60));
+        const totalSeconds = Math.floor((timeTakenMs % (1000 * 60)) / 1000);
+
+        // Update summary display
+        finalTimeElement.textContent = `${totalMinutes} menit ${totalSeconds} detik`;
+        correctCountElement.textContent = score;
+        finalScoreElement.textContent = `${((score / quizQuestions.length) * 100).toFixed(0)}%`; 
+        
+        // Display explanations
+        displayExplanations();
+        
+        console.log(`Quiz submitted. Score: ${score}/${quizQuestions.length}. Time taken: ${totalMinutes}m ${totalSeconds}s`);
+        quizSummaryElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /**
+     * Populates the explanation section with details for each question.
+     */
+    function displayExplanations() {
+        if (!explanationSectionElement) {
+            console.error("displayExplanations: Explanation section element not found!");
+            return;
+        }
+        explanationSectionElement.innerHTML = '<h4>Pembahasan Jawaban</h4>'; // Reset
+        
+        quizQuestions.forEach((qData, index) => {
+            const explanationItem = document.createElement('div');
+            explanationItem.classList.add('explanation-item');
+
+            const userAnswer = userAnswers[index] || "Tidak dijawab"; 
+            const isCorrect = (userAnswer === qData.answer);
+            const iconClass = isCorrect ? 'fa-circle-check' : 'fa-circle-xmark';
+            const iconColor = isCorrect ? '#4CAF50' : '#c62828';
+
+            explanationItem.innerHTML = `
+                <h5>
+                    <i class="fa-solid ${iconClass}" style="color: ${iconColor};"></i> 
+                    Soal ${index + 1}: ${qData.question}
+                </h5>
+                <p><strong>Jawaban Anda:</strong> ${userAnswer}</p>
+                <p><strong>Jawaban Benar:</strong> ${qData.answer}</p>
+                <p>${qData.explanation}</p>
+            `;
+            parseBoldMarkdown(explanationItem); // Parse bold for explanations
+            explanationSectionElement.appendChild(explanationItem);
+        });
+        console.log("Explanations displayed.");
+    }
+
+    // -------------------- DOMContentLoaded: MAIN INITIALIZATION --------------------
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("DOMContentLoaded: DOM fully loaded and parsed. Initializing elements and event listeners.");
+
+        // Get DOM element references
+        introCardElement = document.getElementById('introCard');
+        startButtonElement = document.getElementById('startButton');
+        quizSectionElement = document.getElementById('quizSection');
+        questionsContainerElement = document.getElementById('questionsContainer');
+        timerDisplayElement = document.getElementById('timer');
+        quizSummaryElement = document.getElementById('quizSummary');
+        finalTimeElement = document.getElementById('finalTime');
+        correctCountElement = document.getElementById('correctCount');
+        finalScoreElement = document.getElementById('finalScore');
+        explanationSectionElement = document.getElementById('explanationSection');
+        nextQuestionButtonElement = document.getElementById('nextQuestionButton');
+        submitQuizButtonElement = document.getElementById('submitQuizButton');
+
+        // Critical check: ensure all essential elements are found
+        const essentialElements = {
+            'introCard': introCardElement,
+            'startButton': startButtonElement,
+            'quizSection': quizSectionElement,
+            'questionsContainer': questionsContainerElement,
+            'timer': timerDisplayElement,
+            'quizSummary': quizSummaryElement,
+            'finalTime': finalTimeElement,
+            'correctCount': correctCountElement,
+            'finalScore': finalScoreElement,
+            'explanationSection': explanationSectionElement,
+            'nextQuestionButton': nextQuestionButtonElement,
+            'submitQuizButton': submitQuizButtonElement
+        };
+
+        for (const [id, element] of Object.entries(essentialElements)) {
+            if (!element) {
+                console.error(`CRITICAL ERROR: Element with ID '${id}' not found. Please check HTML.`);
+                alert("Terjadi kesalahan teknis: Beberapa bagian penting tidak dapat dimuat. Silakan periksa konsol browser atau hubungi dukungan.");
+                return; // Stop execution if any essential element is missing
+            }
+        }
+        console.log("All essential HTML elements found.");
+
+        // 1. Parse markdown-like bold (**) in the intro card
+        const elementsToParse = introCardElement.querySelectorAll('p, li');
+        elementsToParse.forEach(el => parseBoldMarkdown(el));
+        console.log("Markdown bold parsing completed for intro card elements.");
+
+        // 2. Attach click event listener to the start button
+        startButtonElement.addEventListener('click', startQuiz);
+        console.log("Event listener attached to 'startButton'.");
+
+        // 3. Attach click event listener to the 'Next Question' button
+        nextQuestionButtonElement.addEventListener('click', goToNextQuestion);
+        console.log("Event listener attached to 'nextQuestionButton'.");
+
+        // 4. Attach click event listener to the 'Submit Quiz' button
+        submitQuizButtonElement.addEventListener('click', submitQuiz);
+        console.log("Event listener attached to 'submitQuizButton'.");
+    });
+  </script>
+</body>
+</html>
