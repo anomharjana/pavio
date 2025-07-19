@@ -121,6 +121,15 @@
     <div class="card" id="outputArea">
       <h1>Perhitungan Besar Sampel <span>Perbandingan Dua Rata-Rata Independen</span></h1>
 
+      <!-- Contoh Studi Kasus -->
+      <div class="case-study" style="background-color: #f0f8ff; padding: 20px; border-radius: 12px; margin-bottom: 30px; border-left: 4px solid #007bff;">
+        <h2 style="margin-top: 0; font-size: 18px; color: #007bff;">📚 Contoh Studi Kasus</h2>
+        <p style="font-size: 15px; color: #444; line-height: 1.6;">
+          Seorang peneliti ingin mengetahui apakah terdapat perbedaan signifikan dalam skor rata-rata matematika antara siswa yang mengikuti program bimbingan belajar dan yang tidak.
+          Berdasarkan data sebelumnya, varians skor matematika adalah 5. Peneliti ingin mendeteksi perbedaan rata-rata minimal 3 poin dengan tingkat kepercayaan 95% dan kekuatan statistik 80%.
+        </p>
+      </div>
+
       <form id="sampleSizeForm">
         <label for="sigma">Varians Populasi (σ²):</label>
         <input type="number" id="sigma" required min="0" step="0.01" />
@@ -203,10 +212,7 @@
         return;
       }
 
-      // Perhitungan sampel dasar
       const n = Math.ceil(2 * Math.pow(zAlpha + zBeta, 2) * Math.pow(sigma, 2) / Math.pow(delta, 2));
-
-      // Menambahkan 10% untuk rekomendasi tambahan
       const nRecommended = Math.ceil(n * 1.1);
 
       const explanation = `
@@ -238,7 +244,6 @@
     }
 
     pngBtn.addEventListener("click", () => {
-      // Tambahkan footer ke outputArea agar tercetak dalam PNG
       const footer = document.querySelector('footer');
       outputArea.appendChild(footer);
 
@@ -248,7 +253,6 @@
         link.href = canvas.toDataURL();
         link.click();
 
-        // Kembalikan footer ke posisi semula
         document.body.appendChild(footer);
       });
     });
