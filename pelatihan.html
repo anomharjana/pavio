@@ -329,15 +329,15 @@
   </header>
 
   <div class="module-content">
-    <div class="card service-card pelatihan" onclick="window.location.href='https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20tertarik%20dengan%20Pelatihan%20Rutin.'">
+    <div class="card service-card pelatihan" onclick="window.location.href='pelatihan-rutin.html'">
         <div class="icon-wrapper">
             <i class="fas fa-chalkboard-teacher"></i>
         </div>
         <h2>Pelatihan Rutin</h2>
         <p>Tingkatkan keahlian analisis data Anda dengan jadwal pelatihan yang teratur dan terstruktur. Dapatkan materi mendalam, sesi interaktif, dan latihan praktis dari para ahli di bidangnya. Cocok untuk Anda yang ingin menguasai teknik analisis data secara konsisten.</p>
         <div class="button-group">
-            <a href="https://wa.me/+6285935201571?text=Halo%20Pavio,%20saya%20tertarik%20dengan%20Pelatihan%20Rutin." class="action-button pelatihan-button">
-                <i class="fab fa-whatsapp"></i> Detail & Daftar
+            <a href="pelatihan-rutin.html" class="action-button pelatihan-button">
+                <i class="fas fa-info-circle"></i> Selengkapnya
             </a>
         </div>
     </div>
@@ -386,8 +386,9 @@
         const serviceCardHeadings = document.querySelectorAll('.service-card h2');
         serviceCardHeadings.forEach(el => parseBoldMarkdown(el));
 
-        // You can add more JavaScript here if you need any dynamic behavior
-        // related to these new cards, e.g., animations or specific redirects.
+        // Note: The onclick for the card itself and href for the button
+        // for "Pelatihan Rutin" now point to 'pelatihan-rutin.html' directly.
+        // No additional JavaScript is needed for simple page navigation.
     });
   </script>
 </body>
