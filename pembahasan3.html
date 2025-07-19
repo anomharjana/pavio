@@ -4,25 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Soal dan Pembahasan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
+    /* Variabel CSS untuk warna biru */
+    :root {
+      --primary-blue: #2563eb; /* Biru utama yang lebih cerah */
+      --primary-dark-blue: #1d4ed8; /* Biru gelap untuk hover */
+      --light-blue-bg: #eff6ff; /* Latar belakang biru sangat muda */
+      --card-bg: #ffffff; /* Latar belakang card tetap putih */
+      --text-color: #333; /* Warna teks gelap */
+      --light-text: #666; /* Warna teks lebih ringan */
+      --border-color: #e5e7eb; /* Warna border abu-abu muda */
+      --success-color: #16a34a; /* Hijau untuk jawaban benar */
+      --shadow-color: rgba(0, 0, 0, 0.08); /* Warna shadow */
+    }
+
     * {
       box-sizing: border-box;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Inter', sans-serif; /* Menggunakan font Inter */
       margin: 0;
       padding: 2rem;
-      background-color: #eaeaea;
+      background-color: var(--light-blue-bg); /* Latar belakang biru muda */
+      color: var(--text-color);
     }
 
     header {
       display: flex;
       align-items: center;
-      background-color: #800000;
-      padding: 10px 20px;
-      border-bottom: 2px solid #ccc;
-      margin-bottom: 20px;
+      background-color: var(--card-bg); /* Header menjadi putih */
+      padding: 1rem 2rem; /* Padding lebih besar */
+      border-bottom: 1px solid var(--border-color); /* Border lebih halus */
+      margin-bottom: 2rem; /* Jarak bawah lebih besar */
+      box-shadow: 0 4px 10px var(--shadow-color); /* Shadow pada header */
+      border-radius: 8px; /* Sudut sedikit melengkung */
     }
 
     header img {
@@ -31,55 +48,100 @@
     }
 
     header h1 {
-      font-size: 20px;
-      color: #ffffff;
+      font-size: 24px; /* Ukuran font lebih besar */
+      color: var(--text-color); /* Warna teks header menjadi gelap */
       margin: 0;
       line-height: 1.3;
+      font-weight: 700; /* Lebih tebal */
     }
 
     .card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      max-width: 800px;
+      background: var(--card-bg);
+      border-radius: 12px; /* Lebih bulat */
+      padding: 2.5rem; /* Padding lebih besar */
+      box-shadow: 0 6px 20px var(--shadow-color); /* Shadow lebih menonjol */
+      max-width: 900px; /* Lebar maksimal diperbesar sedikit */
       margin: 0 auto;
     }
 
     .question {
-      font-weight: bold;
-      margin-bottom: 1rem;
+      font-weight: 600; /* Lebih tebal */
+      margin-bottom: 1.5rem; /* Jarak bawah lebih besar */
+      font-size: 1.25rem; /* Ukuran font pertanyaan lebih besar */
+      line-height: 1.6;
+      color: var(--text-color);
+    }
+
+    .options {
+      list-style: none; /* Hilangkan bullet point default */
+      padding: 0;
+      margin: 0;
     }
 
     .options li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.8rem; /* Jarak antar opsi */
+      padding: 0.8rem 1.2rem; /* Padding opsi */
+      border: 1px solid var(--border-color);
+      border-radius: 8px; /* Sudut lebih bulat */
+      background-color: #f9fafb; /* Latar belakang opsi sedikit abu */
+      font-size: 1.05rem; /* Ukuran font opsi */
+      color: var(--text-color);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .options li:hover {
+      background-color: #f3f4f6; /* Hover state */
+      border-color: var(--primary-blue);
     }
 
     .answer {
-      background: #e6ffe6;
-      border-left: 5px solid #2ecc71;
-      padding: 1rem;
-      margin-top: 1.5rem;
+      background: #ecfdf5; /* Latar hijau muda */
+      border-left: 5px solid var(--success-color); /* Border hijau terang */
+      padding: 1.5rem; /* Padding lebih besar */
+      margin-top: 2rem; /* Jarak atas lebih besar */
+      border-radius: 8px;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .answer strong {
+      color: var(--primary-blue); /* Warna kunci jawaban */
     }
 
     .pagination {
       text-align: center;
-      margin-top: 2rem;
+      margin-top: 3rem; /* Jarak atas lebih besar */
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem; /* Jarak antar tombol pagination */
     }
 
     .pagination button {
-      padding: 0.5rem 1rem;
-      margin: 0 0.5rem;
+      padding: 0.8rem 1.8rem; /* Padding lebih besar */
+      margin: 0; /* Hilangkan margin horizontal default */
       border: none;
-      border-radius: 5px;
-      background: #800000;
+      border-radius: 8px; /* Lebih bulat */
+      background: var(--primary-blue); /* Warna biru utama */
       color: white;
       cursor: pointer;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); /* Shadow biru */
+    }
+
+    .pagination button:hover {
+      background: var(--primary-dark-blue); /* Warna biru gelap saat hover */
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
     }
 
     .pagination button:disabled {
-      background: #ccc;
+      background: #d1d5db; /* Abu-abu terang saat disabled */
+      color: #9ca3af;
       cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
 
     @media (max-width: 600px) {
@@ -88,30 +150,55 @@
       }
 
       header {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        padding: 10px;
+        flex-direction: column; /* Header menjadi kolom di mobile */
+        align-items: flex-start;
+        padding: 0.8rem 1rem;
+        margin-bottom: 1.5rem;
       }
 
       header img {
         height: 50px;
-        margin-right: 10px;
+        margin-right: 0; /* Hilangkan margin kanan di mobile */
+        margin-bottom: 0.8rem; /* Tambah margin bawah */
       }
 
       header h1 {
-        font-size: 16px;
+        font-size: 18px;
+        text-align: left;
       }
 
       .card {
-        padding: 1rem;
+        padding: 1.5rem;
         margin: 0 0.5rem;
+        border-radius: 10px;
+      }
+
+      .question {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+      }
+
+      .options li {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.95rem;
+      }
+
+      .answer {
+        padding: 1rem;
+        margin-top: 1.5rem;
+        font-size: 0.95rem;
+      }
+
+      .pagination {
+        margin-top: 2rem;
+        flex-direction: column; /* Tombol pagination menjadi kolom */
+        gap: 0.8rem;
       }
 
       .pagination button {
-        padding: 0.5rem 0.8rem;
-        margin: 0 0.3rem;
-        font-size: 14px;
+        padding: 0.7rem 1.5rem;
+        font-size: 0.95rem;
+        width: 100%; /* Tombol penuh lebar di mobile */
       }
     }
   </style>
@@ -119,8 +206,8 @@
 <body>
 
 <header>
-  <img src="https://res.cloudinary.com/djexglfns/image/upload/v1747277441/WhatsApp_Image_2025-05-15_at_10.49.29_AM-modified_jeccm6.png" alt="Logo Primajana Education" />
-  <h1>COMPUTER ASSISTED TEST<br>Primajana Education Center</h1>
+  <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="BKN Primajana Education">
+    <h1>COMPUTER ASSISTED TEST<br>Tools Simulasi CPNS</h1>
 </header>
 
 <div class="card" id="soalCard">
@@ -133,6 +220,7 @@
   <button onclick="sebelumnya()" id="prevBtn" disabled>Sebelumnya</button>
   <button onclick="berikutnya()" id="nextBtn">Berikutnya</button>
 </div>
+
 
 <script>
   // ============================
