@@ -4,314 +4,302 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pavio — Tempel & Lihat Seketika</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <title>Pavio — Beranda Utama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
+    :root {
+      --primary-color: #f97316; /* Oranye */
+      --primary-dark: #c2410c;
+      --secondary-color: #333;
+      --light-bg: #f9f9fb;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --light-text: #666;
+      --border-color: #eee;
+    }
+
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #f9f9fb;
-      color: #333;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+      overflow-x: hidden; /* Mencegah scroll horizontal */
     }
 
     header {
-      padding: 2rem;
+      padding: 3.5rem 2rem;
       text-align: center;
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      animation: fadeInDown 1s ease-out;
     }
 
     header img {
       width: 100%;
-      max-width: 320px;
-      aspect-ratio: 16 / 9;
-      object-fit: contain;
-      margin-bottom: 1rem;
+      max-width: 250px;
+      height: auto;
+      margin-bottom: 1.5rem;
     }
 
     h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin: 0 0 0.5rem 0;
+      font-size: 3rem;
+      font-weight: 800;
+      margin: 0 0 1rem 0;
+      color: var(--secondary-color);
     }
 
     p.lead {
-      font-size: 1.25rem;
-      margin-top: 1rem;
-      color: #666;
+      font-size: 1.4rem;
+      margin-top: 1.5rem;
+      color: var(--light-text);
+      max-width: 750px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .cta {
-      margin-top: 2rem;
-    }
-
-    .cta.button-group {
+    .main-menu-container {
       display: flex;
-      gap: 1rem;
       justify-content: center;
-      margin-top: 2rem;
       flex-wrap: wrap;
+      gap: 2.8rem; /* Sedikit lebih besar */
+      padding: 4.5rem 2rem; /* Sedikit lebih besar */
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    .cta.button-group button {
-      font-size: 1rem;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      color: white;
-      flex: 1 1 auto;
-      max-width: 180px;
-    }
-
-    .cta .btn-try {
-      background-color: #333;
-    }
-
-    .cta .btn-try:hover {
-      background-color: #000;
-      transform: scale(1.05);
-    }
-
-    .cta .btn-login {
-      background-color: #f97316; /* oranye */
-    }
-
-    .cta .btn-login:hover {
-      background-color: #c2410c;
-      transform: scale(1.05);
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      max-width: 960px;
-      margin: 4rem auto;
-      padding: 0 2rem;
-    }
-
-    .feature {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .feature:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    }
-
-    .feature h3 {
-      margin-top: 0;
-      font-size: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .feature svg {
-      width: 20px;
-      height: 20px;
-      stroke: #333;
-      stroke-width: 2;
-      fill: none;
-    }
-
-    .carousel-container {
-      max-width: 960px;
-      margin: 4rem auto;
+    .menu-card {
+      background: var(--card-bg);
+      padding: 2.8rem; /* Sedikit lebih besar */
+      border-radius: 18px; /* Lebih bulat */
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.09); /* Lebih tegas */
+      transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease, border-color 0.3s ease; /* Transisi lebih halus */
       text-align: center;
-      padding: 0 2rem;
-    }
-
-    .carousel-wrapper {
-      position: relative;
-      overflow: hidden;
-      border-radius: 12px;
-    }
-
-    .carousel {
-      display: flex;
-      transition: transform 0.5s ease-in-out;
-    }
-
-    .carousel img {
       width: 100%;
-      flex-shrink: 0;
-      border-radius: 12px;
-      max-height: 300px;
-      object-fit: contain;
-    }
-
-    .carousel-controls {
-      margin-top: 1rem;
-    }
-
-    .carousel-controls button {
-      background-color: #333;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      margin: 0 0.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.3s ease;
-    }
-
-    .carousel-controls button:hover {
-      background-color: #000;
-    }
-
-    .carousel-indicators {
+      max-width: 360px; /* Sedikit lebih lebar */
       display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 1rem;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      border: 2px solid transparent; /* Border transparan untuk efek hover */
+      animation: fadeInUp 0.8s ease-out forwards; /* Animasi muncul */
+      opacity: 0; /* Mulai dengan opacity 0 */
     }
 
-    .carousel-indicators span {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background-color: #ccc;
+    .menu-card:nth-child(1) { animation-delay: 0.2s; }
+    .menu-card:nth-child(2) { animation-delay: 0.4s; }
+    .menu-card:nth-child(3) { animation-delay: 0.6s; }
+
+
+    .menu-card:hover {
+      transform: translateY(-12px) scale(1.02); /* Lebih menonjol */
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.15); /* Bayangan lebih kuat */
+      border-color: var(--primary-color); /* Border berwarna saat hover */
+    }
+
+    .menu-card .icon {
+      font-size: 4.5rem; /* Ukuran ikon lebih besar */
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .menu-card:hover .icon {
+      transform: scale(1.1); /* Ikon membesar saat hover */
+    }
+
+    .menu-card h2 {
+      margin-top: 0;
+      font-size: 2.1rem; /* Ukuran judul lebih besar */
+      color: var(--secondary-color);
+      margin-bottom: 1.2rem;
+      font-weight: 700;
+    }
+
+    .menu-card p {
+      font-size: 1.15rem; /* Ukuran teks lebih besar */
+      color: var(--light-text);
+      margin-bottom: 2.2rem;
+      flex-grow: 1;
+    }
+
+    .menu-card .btn {
       display: inline-block;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .carousel-indicators span.active {
-      background-color: #333;
-    }
-
-    .converter {
-      max-width: 600px;
-      margin: 4rem auto;
-      text-align: center;
-      padding: 2rem;
-      background-color: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .converter input[type="file"] {
-      margin: 1rem 0;
-    }
-
-    .converter button {
-      background-color: #333;
+      background-color: var(--primary-color);
       color: white;
+      padding: 1rem 2.4rem; /* Padding lebih besar */
       border: none;
-      padding: 0.5rem 1.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.3s ease;
+      border-radius: 10px; /* Lebih bulat */
+      font-size: 1.15rem; /* Ukuran teks tombol lebih besar */
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    .converter button:hover {
-      background-color: #000;
+    .menu-card .btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-3px); /* Tombol sedikit terangkat */
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     }
 
     footer {
       text-align: center;
-      padding: 2rem;
+      padding: 2.5rem;
       color: #aaa;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      margin-top: 4rem;
+      border-top: 1px solid var(--border-color);
+      background-color: var(--card-bg);
     }
 
     /* Floating Help Button */
     .help-button {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 56px;
-      height: 56px;
+      bottom: 30px;
+      right: 30px;
+      width: 65px; /* Lebih besar */
+      height: 65px; /* Lebih besar */
       border-radius: 50%;
       background-color: #4caf50;
       color: white;
       border: none;
-      font-size: 1.5rem;
+      font-size: 2rem; /* Ukuran ikon lebih besar */
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); /* Bayangan lebih kuat */
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     }
 
     .help-button:hover {
       background-color: #43a047;
+      transform: scale(1.1) translateY(-3px); /* Sedikit membesar dan terangkat */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Keyframe Animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Responsive styles */
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       header {
-        padding: 1rem;
-      }
-
-      header img {
-        max-width: 100%;
-        height: auto;
+        padding: 2.5rem 1.5rem;
       }
 
       h1 {
+        font-size: 2.4rem;
+      }
+
+      p.lead {
+        font-size: 1.2rem;
+      }
+
+      .main-menu-container {
+        padding: 3rem 1.5rem;
+        gap: 2rem;
+      }
+
+      .menu-card {
+        padding: 2rem;
+        max-width: none; /* Biarkan kartu mengambil lebar penuh pada mobile */
+      }
+
+      .menu-card .icon {
+        font-size: 3.8rem;
+      }
+
+      .menu-card h2 {
         font-size: 1.8rem;
+      }
+
+      .menu-card p {
+        font-size: 1.05rem;
+      }
+
+      .menu-card .btn {
+        padding: 0.9rem 2rem;
+        font-size: 1.05rem;
+      }
+
+      .help-button {
+        width: 55px;
+        height: 55px;
+        font-size: 1.8rem;
+        bottom: 25px;
+        right: 25px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 2rem 1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
       }
 
       p.lead {
         font-size: 1rem;
-        margin-top: 0.75rem;
       }
 
-      .cta.button-group {
-        flex-direction: column;
-        gap: 1rem;
-        margin-top: 1.5rem;
-      }
-
-      .cta.button-group button {
-        width: 100%;
-        padding: 0.75rem;
-        font-size: 1.1rem;
-        max-width: none;
-      }
-
-      .features {
-        padding: 0 1rem;
-        margin: 2rem auto;
+      .main-menu-container {
+        padding: 2.5rem 1rem;
         gap: 1.5rem;
       }
 
-      .feature {
-        padding: 1rem;
+      .menu-card {
+        padding: 1.8rem;
       }
 
-      .carousel-container {
-        padding: 0 1rem;
-        margin: 2rem auto;
+      .menu-card .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
       }
 
-      .converter {
-        margin: 2rem 1rem;
-        padding: 1.5rem 1rem;
+      .menu-card h2 {
+        font-size: 1.6rem;
       }
 
-      .carousel-controls button {
-        padding: 0.5rem 0.8rem;
-        margin: 0 0.25rem;
-        font-size: 0.9rem;
+      .menu-card p {
+        font-size: 0.95rem;
+      }
+
+      .menu-card .btn {
+        padding: 0.8rem 1.6rem;
+        font-size: 0.95rem;
       }
 
       .help-button {
-        width: 48px;
-        height: 48px;
-        font-size: 1.2rem;
-        bottom: 15px;
-        right: 15px;
+        width: 50px;
+        height: 50px;
+        font-size: 1.6rem;
+        bottom: 20px;
+        right: 20px;
       }
     }
   </style>
@@ -320,164 +308,37 @@
 <body>
   <header>
     <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745342403/Final_Logo_Pavio_rikmvg.png" alt="Logo Pavio" />
-    <h1></h1>
-    <p class="lead">Tempel atau unggah data Anda. Lihat hasil analisis langsung tanpa ribet!</p>
-    <div class="cta button-group">
-      <button class="btn-login" onclick="window.location.href='home.html'">MULAI</button>
-    </div>
+    <h1>Selamat Datang di <span style="color: var(--primary-color);">Pavio</span></h1>
+    <p class="lead">Pilih <strong>alat</strong> yang Anda butuhkan untuk riset, persiapan tes, atau analisis data. Kami menyediakan solusi <strong>lengkap</strong> dan <strong>mudah digunakan</strong>.</p>
   </header>
 
-  <!-- Fitur 7: Carousel -->
-  <div class="feature" style="grid-column: 1 / -1">
-    <div class="carousel-container">
-      <h3> 🕹️ Proses Analisis Menggunakan Pavio </h3>
-      <div class="carousel-wrapper">
-        <div class="carousel" id="carouselImages">
-          <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0001_mftemk.jpg" alt="Langkah 1" />
-          <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148414/Tutorial_Pavio_page-0002_ujuiom.jpg" alt="Langkah 2" />
-          <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0003_ogenvd.jpg" alt="Langkah 3" />
-          <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148415/Tutorial_Pavio_page-0004_xqaqjb.jpg" alt="Langkah 4" />
-          <img src="https://res.cloudinary.com/djexglfns/image/upload/v1746148417/Tutorial_Pavio_page-0005_b6ascm.jpg" alt="Langkah 5" />
-        </div>
-      </div>
-      <div class="carousel-controls">
-        <button onclick="prevSlide()">Sebelumnya</button>
-        <button onclick="nextSlide()">Berikutnya</button>
-      </div>
-      <div class="carousel-indicators" id="carouselDots"></div>
+  <section class="main-menu-container">
+    <div class="menu-card" onclick="window.location.href='home-pavio.html'">
+      <i class="fas fa-chart-line icon"></i> <h2>Tools Penelitian &amp; Analisis Data</h2>
+      <p>Akses berbagai alat untuk membantu Anda dalam proses penelitian dan analisis data yang mendalam. Visualisasikan data dengan <strong>mudah</strong>.</p>
+      <a href="research-tools.html" class="btn">Mulai Analisis</a>
     </div>
-  </div>
 
-  <!-- Fitur 8: Konversi Excel ke CSV -->
-  <div class="feature" style="grid-column: 1 / -1">
-    <div class="converter">
-      <h3>📤 Konversi Excel ke CSV</h3>
-      <input type="file" id="excelFile" accept=".xls,.xlsx" />
-      <br />
-      <button onclick="convertExcelToCSV()">Konversi Sekarang</button>
+    <div class="menu-card" onclick="window.location.href='cpns-simulation.html'">
+      <i class="fas fa-user-tie icon"></i> <h2>Tools Simulasi CPNS</h2>
+      <p>Persiapkan diri Anda menghadapi tes CPNS dengan simulasi yang <strong>realistis</strong> dan latihan soal <strong>komprehensif</strong>. Tingkatkan peluang lolos Anda!</p>
+      <a href="cpns-simulation.html" class="btn">Mulai Simulasi CPNS</a>
     </div>
-  </div>
 
-  <section class="features">
-    <!-- 6 fitur asli Anda -->
-    <div class="feature">
-      <h3>
-        <svg viewBox="0 0 24 24">
-          <path d="M9 12h6M9 16h6M5 8h14M4 6h16v14H4z" />
-        </svg>
-        Tempel atau Unggah
-      </h3>
-      <p>Salin dari Excel atau unggah file CSV/XLSX — tanpa instalasi, tanpa kerumitan.</p>
-    </div>
-    <div class="feature">
-      <h3>
-        <svg viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>
-        Visualisasi Instan
-      </h3>
-      <p>Ubah tabel menjadi grafik dan tabel pivot dalam hitungan detik.</p>
-    </div>
-    <div class="feature">
-      <h3>
-        <svg viewBox="0 0 24 24">
-          <path d="M8 7v10M16 7v10M3 7h18" />
-        </svg>
-        Data Filter & Sortir
-      </h3>
-      <p>Kelola dan analisis data secara dinamis dengan filter dan sortir otomatis.</p>
-    </div>
-    <div class="feature">
-      <h3>
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 6v6l4 2" />
-        </svg>
-        Real-Time Update
-      </h3>
-      <p>Perbarui data Anda secara langsung tanpa perlu refresh halaman.</p>
-    </div>
-    <div class="feature">
-      <h3>
-        <svg viewBox="0 0 24 24">
-          <path d="M12 3v18M3 12h18" />
-        </svg>
-        Ekspor Mudah
-      </h3>
-      <p>Ekspor data dan grafik ke berbagai format file dengan mudah.</p>
-    </div>
-    <div class="feature">
-      <h3>
-        <svg viewBox="0 0 24 24">
-          <path d="M4 4h16v16H4z" />
-          <path d="M4 4l16 16" />
-        </svg>
-        User Friendly
-      </h3>
-      <p>Antarmuka sederhana yang ramah pengguna dan mudah dipelajari.</p>
+    <div class="menu-card" onclick="window.location.href='psychotest-simulation.html'">
+      <i class="fas fa-brain icon"></i> <h2>Tools Simulasi Psikotes</h2>
+      <p>Latih kemampuan Anda untuk tes psikotes dengan berbagai jenis soal dan umpan balik <strong>instan</strong>. Pahami pola soal dengan lebih <strong>baik</strong>.</p>
+      <a href="psychotest-simulation.html" class="btn">Mulai Simulasi Psikotes</a>
     </div>
   </section>
 
-  <button class="help-button" title="Bantuan" onclick="alert('Butuh bantuan? Hubungi kami! WA:0859-5377-4400')">?</button>
+  <button class="help-button" title="Butuh Bantuan? Hubungi Kami" onclick="alert('Butuh bantuan? Hubungi kami! WA: 0859-5377-4400')">
+    <i class="fas fa-question"></i>
+  </button>
 
   <footer>
     &copy; 2025 Pavio. Semua hak cipta dilindungi.
   </footer>
-
-  <script>
-    // Carousel JS
-    const carousel = document.getElementById('carouselImages');
-    const dotsContainer = document.getElementById('carouselDots');
-    const totalSlides = carousel.children.length;
-    let currentIndex = 0;
-
-    function updateCarousel() {
-      const offset = -currentIndex * 100;
-      carousel.style.transform = `translateX(${offset}%)`;
-
-      // Update dots
-      [...dotsContainer.children].forEach((dot, idx) => {
-        dot.classList.toggle('active', idx === currentIndex);
-      });
-    }
-
-    function createDots() {
-      for (let i = 0; i < totalSlides; i++) {
-        const dot = document.createElement('span');
-        dot.addEventListener('click', () => {
-          currentIndex = i;
-          updateCarousel();
-        });
-        dotsContainer.appendChild(dot);
-      }
-    }
-
-    function nextSlide() {
-      currentIndex = (currentIndex + 1) % totalSlides;
-      updateCarousel();
-    }
-
-    function prevSlide() {
-      currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-      updateCarousel();
-    }
-
-    createDots();
-    updateCarousel();
-
-    // Convert Excel to CSV
-    function convertExcelToCSV() {
-      const input = document.getElementById('excelFile');
-      if (!input.files.length) {
-        alert('Pilih file Excel terlebih dahulu!');
-        return;
-      }
-      const file = input.files[0];
-      // Placeholder alert, implementasi sebenarnya perlu library seperti SheetJS
-      alert(`File "${file.name}" siap dikonversi ke CSV (fitur belum diimplementasikan).`);
-    }
-  </script>
 </body>
 
 </html>
