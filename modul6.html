@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pavio — Modul 6: Regresi dan Prediksi</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    /* Global Reset & Base Styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      line-height: 1.7;
+      font-size: 16px;
+      overflow-x: hidden; /* Prevent horizontal scroll on some effects */
+    }
+
+    /* Force strong tag to be bold */
+    strong {
+        font-weight: 700 !important; /* Use !important to override any conflicting styles */
+    }
+
+    /* Header Styling */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-brand img {
+      height: 52px;
+      width: 52px;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .header-brand img:hover {
+        transform: scale(1.1);
+    }
+
+    .header-text h1 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin: 0;
+      color: #1a237e;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    /* Main Content Layout */
+    .module-content {
+      max-width: 900px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    /* Module Card Styling (Main Introduction) */
+    .module-card {
+      background: linear-gradient(145deg, #f8faff, #eff3f7);
+      padding: 2.2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      border: 1px solid #c9e6ff;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .module-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(240, 248, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+        opacity: 0;
+        transform: scale(0);
+        border-radius: 50%;
+        transition: all 0.6s ease-out;
+        z-index: 0;
+    }
+
+    .module-card:hover::before {
+        opacity: 1;
+        transform: scale(1);
+        top: -10%;
+        left: -10%;
+    }
+
+    .module-card h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin-top: 0;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      line-height: 1.3;
+      text-align: left;
+      flex-wrap: wrap;
+    }
+
+    .module-card h2 .module-title-primary {
+        display: block;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        margin-bottom: 0.2rem;
+        color: #3f51b5;
+    }
+
+    .module-card h2 .fa-solid {
+        font-size: 2.8rem;
+        color: #42a5f5;
+    }
+
+    .module-card h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #3f51b5;
+      margin-top: 1.8rem;
+      margin-bottom: 0.8rem;
+      position: relative;
+      z-index: 1;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .module-card p {
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 0.8rem;
+      position: relative;
+      z-index: 1;
+      text-align: justify;
+      hyphens: auto; /* Allow words to break at hyphens */
+      word-wrap: break-word; /* Ensure long words break and wrap */
+      overflow-wrap: break-word; /* Modern equivalent of word-wrap */
+    }
+
+    .module-card ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 0.8rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .module-card ul li {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 0.6rem;
+      padding-left: 1.8rem;
+      position: relative;
+      text-align: left;
+      hyphens: auto; /* Allow words to break at hyphens */
+      word-wrap: break-word; /* Ensure long words break and wrap */
+      overflow-wrap: break-word; /* Modern equivalent of word-wrap */
+    }
+
+    .module-card ul li::before {
+      content: '✔';
+      font-size: 1.1em;
+      color: #4CAF50;
+      position: absolute;
+      left: 0;
+      top: 0;
+      line-height: inherit;
+    }
+
+    /* Detailed Content Sections */
+    .content-section {
+        background-color: #ffffff;
+        padding: 2.2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        margin-top: 2.2rem;
+        border: 1px solid #e8e8e8;
+        animation: fadeIn 0.8s ease-out;
+        animation-fill-mode: backwards;
+    }
+
+    /* Staggered animation delays for sections */
+    .module-card { animation-delay: 0s; }
+    .content-section:nth-of-type(1) { animation-delay: 0.2s; }
+    .content-section:nth-of-type(2) { animation-delay: 0.4s; }
+    .content-section:nth-of-type(3) { animation-delay: 0.6s; }
+    .content-section:nth-of-type(4) { animation-delay: 0.8s; }
+    .content-section:nth-of-type(5) { animation-delay: 1.0s; }
+    .module-actions-bottom { animation-delay: 1.2s; }
+
+    .content-section h3 {
+        font-size: 1.7rem;
+        color: #1a237e;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        line-height: 1.3;
+        text-align: left;
+    }
+
+    .content-section h4 {
+      font-size: 1.25rem;
+      color: #3f51b5;
+      margin-top: 1.6rem;
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .content-section p {
+        font-size: 0.95rem;
+        color: #444;
+        margin-bottom: 0.8rem;
+        text-align: justify;
+        hyphens: auto; /* Allow words to break at hyphens */
+        word-wrap: break-word; /* Ensure long words break and wrap */
+        overflow-wrap: break-word; /* Modern equivalent of word-wrap */
+    }
+
+    .content-section ul {
+        padding-left: 1.2rem;
+    }
+
+    .content-section ul li {
+        font-size: 0.95rem;
+        color: #555;
+        margin-bottom: 0.4rem;
+        padding-left: 1.2rem;
+        position: relative;
+        text-align: left;
+        hyphens: auto; /* Allow words to break at hyphens */
+        word-wrap: break-word; /* Ensure long words break and wrap */
+        overflow-wrap: break-word; /* Modern equivalent of word-wrap */
+    }
+
+    .content-section ul li::before {
+      content: '•';
+      font-size: 1.3em;
+      color: #64b5f6;
+      position: absolute;
+      left: 0;
+      top: 0;
+      line-height: inherit;
+    }
+
+    .visual-example {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin: 1.8rem auto;
+        max-width: 85%;
+        padding: 1.6rem;
+        background-color: #f6f8fa;
+        border-radius: 12px;
+        border: 1px dashed #d0e0ed;
+    }
+
+    .visual-example .fa-solid, .visual-example .fa-chart-bar, .visual-example .fa-table, .visual-example .fa-chart-scatter, .visual-example .fa-grip-vertical {
+        font-size: 3.5rem;
+        color: #64b5f6;
+        margin-bottom: 1rem;
+    }
+
+    .visual-example p {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
+        text-align: center;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* New: Interactive Box/Container */
+    .interactive-box {
+        background-color: #e0f7fa;
+        padding: 1.8rem;
+        border-radius: 12px;
+        border: 1px solid #80deea;
+        margin-top: 2.2rem;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .interactive-box h4 {
+        font-size: 1.4rem;
+        color: #006064;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+    }
+
+    .interactive-box p {
+        font-size: 0.95rem;
+        color: #00838f;
+        margin-bottom: 1.2rem;
+        text-align: center;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Activity Specific Styles */
+    .activity-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.3rem;
+        margin-top: 1.3rem;
+    }
+
+    .question {
+        background-color: #f0f8ff;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #a7d9f7;
+        width: 100%;
+        max-width: 600px;
+        text-align: left;
+    }
+
+    .question p {
+        margin-top: 0;
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+        color: #1a237e;
+        text-align: left;
+    }
+
+    .options label {
+        display: block;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        padding: 0.5rem 0.7rem;
+        border-radius: 5px;
+        transition: background-color 0.2s ease;
+        font-size: 0.9rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .options label:hover {
+        background-color: #e0f2f7;
+    }
+
+    .options input[type="radio"] {
+        margin-right: 0.7rem;
+        transform: scale(1.05);
+    }
+
+    .feedback {
+        margin-top: 1.2rem;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-align: center;
+        padding: 0.4rem 0.8rem;
+        border-radius: 5px;
+        min-height: 2.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .feedback.correct {
+        color: #2e7d32;
+        background-color: #e6ffe6;
+        border: 1px solid #4CAF50;
+    }
+
+    .feedback.incorrect {
+        color: #d32f2f;
+        background-color: #ffe6e6;
+        border: 1px solid #d32f2f;
+    }
+
+    /* Drag & Drop Specific - Enhanced Visuals and Layout */
+    .drag-drop-zone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 750px;
+        gap: 1.5rem;
+    }
+
+    .draggable-items-pool {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.8rem;
+        width: 100%;
+        padding: 1.2rem;
+        background-color: #eef7f0;
+        border-radius: 12px;
+        border: 1px dashed #c8e6c9;
+        min-height: 90px;
+        align-items: center;
+        box-shadow: inset 0 1px 5px rgba(0,0,0,0.05);
+    }
+
+    .draggable-item {
+        background-color: #bbdefb;
+        color: #1a237e;
+        padding: 0.7rem 1.1rem;
+        border: 1px solid #64b5f6;
+        border-radius: 6px;
+        cursor: grab;
+        font-weight: 500;
+        text-align: center;
+        transition: all 0.2s ease;
+        flex-basis: calc(50% - 0.4rem); /* Occupy half width with gap */
+        max-width: 180px; /* Limit max width for larger screens */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        font-size: 0.95rem;
+        white-space: normal; /* Allow text to wrap naturally */
+        word-wrap: break-word; /* Ensure long words break and wrap */
+        overflow-wrap: break-word; /* Modern equivalent of word-wrap */
+        overflow: visible; /* Ensure content is not hidden */
+        text-overflow: clip; /* Prevent ellipsis if word-wrap is sufficient */
+    }
+
+    .draggable-item:hover {
+        background-color: #90caf9;
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .draggable-item.dragging {
+        opacity: 0.6;
+        border: 2px dashed #3f51b5;
+        transform: scale(0.95);
+        background-color: #e0e0e0;
+        box-shadow: none;
+    }
+
+    .drop-targets-container {
+        display: flex;
+        gap: 1.2rem;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .drop-target {
+        background-color: #fff3e0;
+        color: #e65100;
+        padding: 1.2rem;
+        border: 2px dashed #ffb74d;
+        border-radius: 12px;
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        font-style: italic;
+        font-size: 1.05rem;
+        transition: all 0.3s ease;
+        flex: 1;
+        min-width: 280px; /* Ensure minimum width for targets */
+        position: relative;
+        overflow: hidden; /* Keep overflow hidden for drop target structure */
+    }
+
+    .drop-target::before {
+        content: attr(data-label);
+        font-weight: 600;
+        font-style: normal;
+        margin-bottom: 0.7rem;
+        font-size: 1.2em;
+        color: #e65100;
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .drop-target.hover {
+        background-color: #ffe0b2;
+        border-color: #ff9800;
+        transform: scale(1.01);
+        box-shadow: 0 4px 12px rgba(255,165,0,0.2);
+    }
+
+    .drop-target.correct-drop {
+        background-color: #dcedc8;
+        border-color: #8bc34a;
+        color: #33691e;
+    }
+
+    .drop-target.incorrect-drop {
+        background-color: #ffcdd2;
+        border-color: #e57373;
+        color: #b71c1c;
+    }
+
+    .drop-target .dropped-items-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6rem;
+        width: 100%;
+        padding: 0.5rem;
+        min-height: 80px;
+        border-top: 1px solid rgba(0,0,0,0.1);
+        margin-top: 0.5rem;
+    }
+
+    .drop-target .dropped-item {
+        background-color: #ffffff;
+        color: #333;
+        padding: 0.6rem 0.9rem;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-weight: 500;
+        font-style: normal;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        width: calc(50% - 0.5rem); /* Adjust width for dropped items */
+        text-align: center;
+        cursor: default;
+        font-size: 0.9rem;
+        animation: popIn 0.3s ease-out;
+        flex-shrink: 0;
+        white-space: normal; /* Allow text to wrap naturally */
+        word-wrap: break-word; /* Ensure long words break and wrap */
+        overflow-wrap: break-word; /* Modern equivalent of word-wrap */
+        overflow: visible; /* Ensure content is not hidden */
+        text-overflow: clip; /* Prevent ellipsis if word-wrap is sufficient */
+    }
+
+    @keyframes popIn {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Matching Activity Specific */
+    .matching-columns-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 700px;
+        margin: auto;
+        padding-bottom: 20px;
+    }
+
+    .matching-columns {
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        flex-wrap: wrap;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+    }
+
+    .matching-source, .matching-target {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        flex: 1;
+        min-width: 180px;
+    }
+
+    .matching-item {
+        background-color: #e0f7fa;
+        color: #006064;
+        padding: 1rem 1.4rem;
+        border: 1px solid #80deea;
+        border-radius: 6px;
+        min-width: 150px;
+        text-align: center;
+        font-weight: 500;
+        font-size: 0.95rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+        white-space: normal; /* Allow text to wrap naturally */
+        word-wrap: break-word; /* Ensure long words break and wrap */
+        overflow-wrap: break-word; /* Modern equivalent of word-wrap */
+        overflow: visible; /* Ensure content is not hidden */
+        text-overflow: clip; /* Prevent ellipsis if word-wrap is sufficient */
+    }
+
+    .matching-item:hover:not(.selected):not(.matched-correct) {
+        background-color: #b2ebf2;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .matching-item.selected {
+        border: 2px solid #3f51b5;
+        background-color: #d8dee9;
+        box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.3);
+        transform: scale(1.02);
+    }
+
+    .matching-item.matched-correct {
+        background-color: #dcedc8;
+        border-color: #8bc34a;
+        color: #33691e;
+        pointer-events: none;
+        opacity: 0.9;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* SVG for lines */
+    .matching-lines-svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .matching-lines-svg line {
+        stroke: #3f51b5;
+        stroke-width: 2.5;
+        transition: stroke 0.3s ease, stroke-width 0.3s ease;
+    }
+
+    .matching-lines-svg line.correct-line {
+        stroke: #4CAF50;
+        stroke-width: 3;
+    }
+
+    /* Expand/Collapse (Accordion) Styling */
+    .accordion-item {
+        background-color: #f7f9fc;
+        border: 1px solid #e0e7f2;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+
+    .accordion-header {
+        background-color: #eaf1f8;
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        color: #1a237e;
+        font-size: 1.1rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .accordion-header:hover {
+        background-color: #dbe4ee;
+    }
+
+    .accordion-header .icon {
+        transition: transform 0.3s ease;
+    }
+
+    .accordion-header.active .icon {
+        transform: rotate(90deg);
+    }
+
+    .accordion-content {
+        padding: 0 1.5rem;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+    }
+
+    .accordion-content.open {
+        max-height: 500px; /* Adjust as needed for content height */
+        padding: 1rem 1.5rem 1.5rem;
+    }
+
+    /* Action buttons at the bottom */
+    .module-actions-bottom {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.8rem;
+        margin-top: 3rem;
+        position: relative;
+        z-index: 1;
+        animation: fadeIn 0.8s ease-out;
+        animation-fill-mode: backwards;
+    }
+
+    .module-actions-bottom button {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.6rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .module-actions-bottom button:hover {
+      background-color: #1976d2;
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
+    }
+
+    .module-actions-bottom button.back-button {
+      background-color: #607d8b;
+    }
+
+    .module-actions-bottom button.back-button:hover {
+      background-color: #455a64;
+      box-shadow: 0 6mpx 15px rgba(96, 125, 139, 0.4);
+    }
+
+    /* Footer and Help Button */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #999;
+      font-size: 0.85rem;
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 3rem;
+    }
+
+    .help-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .help-button:hover {
+      background-color: #43a047;
+      transform: scale(1.08) rotate(5deg);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+      .module-content {
+        max-width: 768px;
+        padding: 0 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem 1.2rem;
+      }
+      .header-text h1 {
+        font-size: 1.4rem;
+      }
+      .header-text p {
+        font-size: 0.8rem;
+      }
+      .module-content {
+        padding: 0 1rem;
+        margin: 1.5rem auto;
+      }
+      .module-card {
+        padding: 1.2rem;
+        margin-bottom: 1.5rem;
+      }
+      .module-card h2 {
+        font-size: 1.6rem;
+        gap: 0.6rem;
+        flex-direction: column; /* Stack icon and text */
+        align-items: flex-start; /* Align stacked items to start */
+      }
+      .module-card h2 .module-title-primary {
+          font-size: 1.3rem;
+          margin-bottom: 0.1rem;
+      }
+      .module-card h2 .fa-solid {
+        font-size: 2.2rem;
+      }
+      .module-card h3 {
+        font-size: 1.2rem;
+        margin-top: 1.2rem;
+      }
+      .module-card p, .module-card ul li {
+        font-size: 0.9rem;
+      }
+      .module-card ul li::before {
+        font-size: 1em;
+      }
+
+      .content-section {
+        padding: 1.2rem;
+        margin-top: 1.5rem;
+      }
+      .content-section h3 {
+        font-size: 1.4rem;
+      }
+      .content-section h4 {
+        font-size: 1.1rem;
+      }
+      .content-section p {
+        font-size: 0.9rem;
+      }
+      .content-section ul li {
+        font-size: 0.9rem;
+      }
+      .visual-example {
+        padding: 1rem;
+        margin: 1.2rem auto;
+        max-width: 98%;
+      }
+      .visual-example .fa-solid, .visual-example .fa-chart-bar, .visual-example .fa-table, .visual-example .fa-chart-scatter, .visual-example .fa-grip-vertical {
+        font-size: 2.8rem;
+        margin-bottom: 0.8rem;
+      }
+      .visual-example p {
+        font-size: 0.85rem;
+      }
+
+      .interactive-box {
+        padding: 1.2rem;
+        margin-top: 1.5rem;
+      }
+      .interactive-box h4 {
+        font-size: 1.1rem;
+      }
+      .interactive-box p {
+        font-size: 0.85rem;
+        margin-bottom: 0.8rem;
+      }
+      .interactive-box button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+
+      .draggable-item {
+        flex-basis: 100%; /* Full width on small screens */
+        max-width: 100%;
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+      }
+      .drop-target {
+        min-height: 120px;
+        min-width: 100%; /* Full width on small screens */
+        font-size: 0.95rem;
+        padding: 1rem;
+      }
+      .drop-target::before {
+          font-size: 1.1em;
+      }
+      .drop-target .dropped-item {
+          width: calc(100% - 1.2rem); /* Adjusted for better fit */
+          font-size: 0.85rem;
+      }
+
+      .matching-columns {
+        gap: 1.5rem;
+      }
+      .matching-source, .matching-target {
+        min-width: 140px;
+      }
+      .matching-item {
+        padding: 0.8rem 1.1rem;
+        min-width: 100%; /* Full width on small screens */
+        font-size: 0.85rem;
+      }
+
+      .module-actions-bottom {
+        flex-direction: column;
+        gap: 0.6rem;
+        margin-top: 2.5rem;
+      }
+      .module-actions-bottom button {
+        padding: 0.6rem 1.1rem;
+        font-size: 0.9rem;
+      }
+      .help-button {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+        bottom: 15px;
+        right: 15px;
+      }
+      footer {
+        padding: 1.2rem;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-brand">
+      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
+      <div class="header-text">
+        <h1>Pavio</h1>
+        <p>E-Learning Analisis Data Kuantitatif</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="module-content">
+    <div class="module-card">
+      <h2>
+        <i class="fa-solid fa-chart-line"></i> <span class="module-title-primary">MODUL 6</span>
+        <strong>Regresi dan Prediksi</strong>
+      </h2>
+
+      <h3>Tujuan Pembelajaran</h3>
+      <p>Mempelajari dasar-dasar <strong>regresi linear sederhana</strong> untuk <strong>membangun model prediktif</strong> dari data yang ada. Anda akan memahami bagaimana satu variabel dapat memprediksi variabel lain.</p>
+
+      <h3>Sub-Materi</h3>
+      <ul>
+        <li><strong>Regresi Linier Sederhana</strong>: Memahami konsep, persamaan, dan asumsi dasar.</li>
+        <li><strong>Interpretasi Koefisien dan R²</strong>: Menguraikan makna dari setiap komponen model regresi.</li>
+        <li><strong>Uji Signifikansi Model</strong>: Menentukan apakah model regresi Anda signifikan secara statistik.</li>
+        <li><strong>Aplikasi Prediksi dengan Regresi</strong>: Menerapkan model untuk membuat prediksi nilai.</li>
+      </ul>
+
+      <h3>Output Pembelajaran</h3>
+      <p>Setelah menyelesaikan modul ini, Anda akan <strong>mampu membangun model regresi linear sederhana</strong>, <strong>menginterpretasikan hasilnya</strong>, dan <strong>menggunakannya untuk membuat prediksi dasar</strong> berdasarkan data yang Anda miliki.</p>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-chart-line-up"></i> 1. Regresi Linier Sederhana</h3>
+      <p><strong>Regresi Linier Sederhana</strong> adalah metode statistik untuk memodelkan hubungan linier antara dua variabel numerik: satu variabel independen (prediktor, X) dan satu variabel dependen (respons, Y). Tujuannya adalah untuk menemukan garis lurus terbaik yang menggambarkan hubungan ini, sehingga kita bisa memprediksi nilai Y berdasarkan nilai X.</p>
+
+      <h4>Persamaan Regresi</h4>
+      <p>Model regresi linier sederhana dapat digambarkan dengan persamaan:</p>
+      <p style="text-align: center; font-weight: bold; font-size: 1.1em; background-color: #f0f4f7; padding: 0.8rem; border-radius: 8px; border: 1px solid #d0e0ed;">Y = β₀ + β₁X + ε</p>
+      <ul>
+        <li><strong>Y</strong>: Variabel dependen (yang ingin diprediksi).</li>
+        <li><strong>X</strong>: Variabel independen (prediktor).</li>
+        <li><strong>β₀ (Beta nol)</strong>: <strong>Intersep</strong>, yaitu nilai Y ketika X adalah 0. Ini adalah titik di mana garis regresi memotong sumbu Y.</li>
+        <li><strong>β₁ (Beta satu)</strong>: <strong>Koefisien kemiringan (slope)</strong>, menunjukkan berapa banyak Y berubah untuk setiap peningkatan satu unit X.</li>
+        <li><strong>ε (Epsilon)</strong>: <strong>Error term (residu)</strong>, bagian dari Y yang tidak dapat dijelaskan oleh model.</li>
+      </ul>
+      <div class="visual-example">
+        <i class="fa-solid fa-chart-scatter"></i>
+        <p>Contoh: Memprediksi harga rumah (Y) berdasarkan luas tanah (X). Memprediksi penjualan (Y) berdasarkan anggaran iklan (X).</p>
+      </div>
+
+      <h4>Asumsi Regresi Linier Sederhana</h4>
+      <p>Untuk memastikan validitas model regresi, beberapa asumsi harus dipenuhi:</p>
+      <div class="accordion-item">
+        <div class="accordion-header">
+            Asumsi-Asumsi Kunci
+            <i class="fa-solid fa-chevron-right icon"></i>
+        </div>
+        <div class="accordion-content">
+            <ul>
+                <li><strong>Linieritas</strong>: Hubungan antara X dan Y harus linier. Scatter plot dapat membantu memeriksanya.</li>
+                <li><strong>Independensi Residu</strong>: Residu (error) dari satu observasi tidak boleh berkorelasi dengan residu dari observasi lain. Ini sering menjadi masalah pada data deret waktu.</li>
+                <li><strong>Normalitas Residu</strong>: Residu harus berdistribusi normal. Ini penting untuk inferensi statistik (uji signifikansi).</li>
+                <li><strong>Homoskedastisitas</strong>: Varian residu harus konstan di semua tingkat X. Artinya, sebaran residu harus sama di sepanjang garis regresi.</li>
+                <li><strong>Tidak Ada Multikolinearitas (untuk Regresi Berganda)</strong>: Variabel independen tidak boleh sangat berkorelasi satu sama lain. (Ini lebih relevan untuk regresi berganda, namun penting untuk diketahui).</li>
+            </ul>
+        </div>
+      </div>
+    </div>
+
+    ---
+
+    <div class="interactive-box">
+        <h4><i class="fa-solid fa-calculator"></i> Aktivitas: Hitung Regresi Sederhana</h4>
+        <p>Gunakan kalkulator ini untuk melihat bagaimana perubahan nilai X mempengaruhi Y berdasarkan model regresi sederhana yang diberikan.</p>
+        <p style="font-weight: bold; font-size: 1.1em;">Model: Y = 5 + 2X</p>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 1rem;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label for="inputX">Nilai X:</label>
+                <input type="number" id="inputX" value="10" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc; width: 100px;">
+            </div>
+            <button onclick="calculatePrediction()" style="background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;">Hitung Prediksi Y</button>
+            <p style="margin-top: 10px; font-weight: bold;">Prediksi Y: <span id="predictedY" style="color: #007bff;"></span></p>
+        </div>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-magnifying-glass-chart"></i> 2. Interpretasi Koefisien dan R²</h3>
+      <p>Setelah membangun model regresi, langkah selanjutnya adalah memahami makna dari angka-angka yang dihasilkan.</p>
+
+      <h4>A. Interpretasi Koefisien (β₀ dan β₁)</h4>
+      <ul>
+        <li><strong>Koefisien Intersep (β₀)</strong>: Merepresentasikan nilai rata-rata variabel dependen (Y) ketika variabel independen (X) bernilai nol. Interpretasi ini hanya masuk akal jika X = 0 adalah nilai yang relevan dan mungkin dalam konteks data Anda.</li>
+        <li><strong>Koefisien Kemiringan (β₁)</strong>: Merepresentasikan <strong>perubahan rata-rata pada variabel dependen (Y)</strong> untuk <strong>setiap peningkatan satu unit pada variabel independen (X)</strong>, dengan asumsi variabel lain dalam model tetap konstan (untuk regresi berganda). Ini adalah bagian terpenting untuk memahami hubungan antara X dan Y.</li>
+      </ul>
+      <div class="visual-example">
+        <i class="fa-solid fa-chart-simple"></i>
+        <p>Jika model regresi memprediksi bahwa nilai ujian = 30 + 0.7 * jam belajar, maka intersep 30 berarti siswa yang tidak belajar (0 jam) diperkirakan mendapat nilai 30. Koefisien 0.7 berarti setiap tambahan 1 jam belajar diperkirakan meningkatkan nilai ujian sebesar 0.7 poin.</p>
+      </div>
+
+      <h4>B. Koefisien Determinasi (R²)</h4>
+      <p><strong>R-squared (R²)</strong> adalah statistik yang menunjukkan <strong>proporsi varians dalam variabel dependen (Y) yang dapat dijelaskan oleh variabel independen (X)</strong> dalam model regresi. Nilai R² berkisar antara 0 dan 1.</p>
+      <ul>
+        <li><strong>R² = 0</strong>: Model tidak menjelaskan variasi apapun pada Y.</li>
+        <li><strong>R² = 1</strong>: Model menjelaskan semua variasi pada Y.</li>
+      </ul>
+      <p>Semakin tinggi nilai R², semakin baik model Anda dalam menjelaskan variasi pada variabel dependen. Namun, R² yang tinggi tidak selalu berarti model itu baik, dan R² yang rendah tidak selalu berarti model itu buruk; ini tergantung pada konteks penelitian Anda.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-percent"></i>
+        <p>Jika R² = 0.65, ini berarti 65% variasi nilai ujian dapat dijelaskan oleh jam belajar, sedangkan 35% sisanya dijelaskan oleh faktor lain yang tidak termasuk dalam model.</p>
+      </div>
+    </div>
+
+    ---
+
+    <div class="interactive-box">
+        <h4><i class="fa-solid fa-list-check"></i> Latihan: Pilih Interpretasi yang Benar</h4>
+        <p>Cocokkan konsep statistik dengan interpretasi yang benar.</p>
+        <div class="matching-columns-wrapper">
+            <svg class="matching-lines-svg"></svg>
+            <div class="matching-columns">
+                <div class="matching-source" id="matchingSource">
+                    <div class="matching-item" data-id="1">Intersep (β₀)</div>
+                    <div class="matching-item" data-id="2">Koefisien Kemiringan (β₁)</div>
+                    <div class="matching-item" data-id="3">R-squared (R²)</div>
+                </div>
+                <div class="matching-target" id="matchingTarget">
+                    <div class="matching-item" data-id="a">Proporsi variasi Y yang dijelaskan oleh X.</div>
+                    <div class="matching-item" data-id="b">Perubahan rata-rata Y untuk setiap peningkatan satu unit X.</div>
+                    <div class="matching-item" data-id="c">Nilai Y ketika X adalah nol.</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 1.2rem; justify-content: center;">
+                <button onclick="checkMatchingActivity()">Periksa Jawaban</button>
+                <button onclick="resetMatchingActivity()" style="background-color: #f44336;">Ulangi</button>
+            </div>
+            <div class="feedback" id="matchingFeedback"></div>
+        </div>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-flask-vial"></i> 3. Uji Signifikansi Model</h3>
+      <p>Setelah memiliki model dan menginterpretasikan koefisiennya, kita perlu menguji apakah model tersebut <strong>signifikan secara statistik</strong>. Ini berarti kita ingin tahu apakah hubungan yang kita amati antara X dan Y bukan hanya kebetulan semata.</p>
+
+      <h4>A. Uji Signifikansi Koefisien (t-test)</h4>
+      <p>Kita menggunakan <strong>t-test</strong> untuk menguji apakah <strong>koefisien kemiringan (β₁) signifikan secara individual</strong>. Ini menguji hipotesis nol bahwa β₁ sama dengan nol (tidak ada hubungan linier antara X dan Y) terhadap hipotesis alternatif bahwa β₁ tidak sama dengan nol (ada hubungan linier).</p>
+      <ul>
+        <li>Jika p-value < level signifikansi (misalnya, 0.05), maka kita menolak hipotesis nol, dan menyimpulkan bahwa koefisien β₁ signifikan.</li>
+        <li>Ini berarti variabel independen (X) adalah prediktor yang signifikan terhadap variabel dependen (Y).</li>
+      </ul>
+
+      <h4>B. Uji Signifikansi Keseluruhan Model (F-test)</h4>
+      <p>Pada regresi sederhana, F-test akan memberikan hasil yang sama dengan t-test untuk koefisien. Namun, pada <strong>regresi berganda</strong>, F-test menjadi sangat penting karena menguji <strong>signifikansi keseluruhan model</strong>. Ini menguji hipotesis nol bahwa <strong>semua koefisien regresi (selain intersep) secara kolektif sama dengan nol</strong> (model tidak menjelaskan variasi apapun pada Y) terhadap hipotesis alternatif bahwa setidaknya satu koefisien tidak sama dengan nol (model secara keseluruhan signifikan).</p>
+      <ul>
+        <li>Jika p-value F-statistik < level signifikansi, maka kita menolak hipotesis nol dan menyimpulkan bahwa model regresi secara keseluruhan signifikan.</li>
+      </ul>
+      <div class="visual-example">
+        <i class="fa-solid fa-chart-bar"></i>
+        <p>Output dari perangkat lunak statistik (misalnya, SPSS, R, Python) akan menyediakan p-value untuk setiap koefisien dan untuk F-statistik model. P-value ini yang akan Anda gunakan untuk mengambil keputusan tentang signifikansi.</p>
+      </div>
+    </div>
+
+    ---
+
+    <div class="content-section">
+      <h3><i class="fa-solid fa-chart-simple-line"></i> 4. Aplikasi Prediksi dengan Regresi</h3>
+      <p>Tujuan utama dari regresi adalah untuk <strong>membuat prediksi</strong> tentang nilai variabel dependen (Y) untuk nilai variabel independen (X) yang baru.</p>
+
+      <h4>A. Membuat Prediksi Titik (Point Prediction)</h4>
+      <p>Setelah model regresi Anda dibangun dan dianggap signifikan, Anda dapat menggunakan persamaan regresi (Y = β₀ + β₁X) untuk memprediksi nilai Y tertentu dengan memasukkan nilai X yang Anda inginkan.</p>
+      <div class="visual-example">
+        <i class="fa-solid fa-robot"></i>
+        <p>Jika model Anda adalah <code>Nilai Ujian = 30 + 0.7 * Jam Belajar</code>, dan seorang siswa belajar 20 jam, prediksi nilai ujiannya adalah 30 + (0.7 * 20) = 30 + 14 = 44.</p>
+      </div>
+
+      <h4>B. Interval Prediksi (Prediction Interval)</h4>
+      <p>Meskipun prediksi titik memberikan perkiraan tunggal, lebih informatif untuk juga memberikan <strong>interval prediksi</strong>. Interval prediksi adalah rentang nilai di mana kita yakin (dengan tingkat kepercayaan tertentu, misal 95%) bahwa nilai Y yang sebenarnya akan jatuh untuk nilai X tertentu. Interval ini memperhitungkan ketidakpastian dalam estimasi koefisien model dan variabilitas alami data.</p>
+      <ul>
+        <li>Interval prediksi lebih lebar daripada interval kepercayaan untuk rata-rata, karena interval prediksi berusaha menangkap nilai individu, bukan rata-rata.</li>
+      </ul>
+
+      <h4>C. Batasan dan Pertimbangan Penting</h4>
+      <ul>
+        <li><strong>Ekstrapolasi</strong>: Hindari memprediksi nilai Y untuk nilai X di luar rentang data yang digunakan untuk membangun model. Akurasi prediksi di luar rentang ini tidak dapat dijamin.</li>
+        <li><strong>Overfitting</strong>: Model yang terlalu kompleks (terutama dalam regresi berganda) dapat cocok dengan data pelatihan terlalu baik tetapi berkinerja buruk pada data baru.</li>
+        <li><strong>Kualitas Data</strong>: Prediksi hanya sebaik data yang Anda masukkan. Data yang kotor atau bias akan menghasilkan prediksi yang tidak akurat.</li>
+        <li><strong>Asumsi Model</strong>: Jika asumsi regresi tidak dipenuhi, prediksi Anda mungkin tidak valid.</li>
+      </ul>
+      <p>Regresi adalah alat yang kuat untuk prediksi, tetapi penggunaannya harus bijaksana dan didukung oleh pemahaman yang kuat tentang asumsinya.</p>
+    </div>
+
+    <div class="module-actions-bottom">
+        <button class="back-button" onclick="window.location.href='elearning.html'"><i class="fa-solid fa-arrow-left"></i> Kembali ke Modul</button>
+        <button onclick="window.location.href='modul-test.html'"><i class="fa-solid fa-play"></i> Selesaikan & Lanjut Latihan</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
+  </footer>
+
+  <button class="help-button" onclick="window.location.href='https://wa.me/+6285935201571'">
+    <i class="fa-brands fa-whatsapp"></i>
+  </button>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TL1GH741HF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date()); // Added gtag('js', new Date()) for immediate loading
+    gtag('config', 'G-TL1GH741HF');
+  </script>
+
+  <script>
+    // --- JavaScript for Interactive Activities ---
+
+    // --- Expand/Collapse (Accordion) ---
+    function setupAccordions() {
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.removeEventListener('click', handleAccordionClick); // Prevent duplicate listeners
+            header.addEventListener('click', handleAccordionClick);
+        });
+    }
+
+    function handleAccordionClick(e) {
+        const header = e.currentTarget;
+        const accordionContent = header.nextElementSibling;
+        header.classList.toggle('active');
+        if (accordionContent.classList.contains('open')) {
+            accordionContent.classList.remove('open');
+        } else {
+            accordionContent.classList.add('open');
+        }
+    }
+
+    // --- Calculator: Predict Y with Simple Regression ---
+    function calculatePrediction() {
+        const inputX = document.getElementById('inputX');
+        const predictedY = document.getElementById('predictedY');
+        const xValue = parseFloat(inputX.value);
+
+        if (isNaN(xValue)) {
+            predictedY.textContent = "Masukkan angka yang valid.";
+            predictedY.style.color = '#d32f2f';
+            return;
+        }
+
+        // Model: Y = 5 + 2X
+        const beta0 = 5;
+        const beta1 = 2;
+        const resultY = beta0 + (beta1 * xValue);
+        
+        predictedY.textContent = resultY.toFixed(2); // Display with 2 decimal places
+        predictedY.style.color = '#007bff';
+    }
+
+
+    // --- Matching Activity: Interpretasi Regresi ---
+    let selectedSourceItem = null;
+    let selectedTargetItem = null;
+    let lines = []; // To store active lines
+
+    const correctMatches = {
+        '1': 'c', // Intersep (β₀) -> Nilai Y ketika X adalah nol.
+        '2': 'b', // Koefisien Kemiringan (β₁) -> Perubahan rata-rata Y untuk setiap peningkatan satu unit X.
+        '3': 'a'  // R-squared (R²) -> Proporsi variasi Y yang dijelaskan oleh X.
+    };
+
+    function setupMatchingActivity() {
+        const sourceItems = document.querySelectorAll('#matchingSource .matching-item');
+        const targetItems = document.querySelectorAll('#matchingTarget .matching-item');
+        const svg = document.querySelector('.matching-lines-svg');
+        svg.innerHTML = ''; // Clear existing lines
+
+        sourceItems.forEach(item => {
+            item.removeEventListener('click', handleMatchingClick);
+            item.addEventListener('click', handleMatchingClick);
+            item.classList.remove('selected', 'matched-correct');
+        });
+        targetItems.forEach(item => {
+            item.removeEventListener('click', handleMatchingClick);
+            item.addEventListener('click', handleMatchingClick);
+            item.classList.remove('selected', 'matched-correct');
+        });
+
+        selectedSourceItem = null;
+        selectedTargetItem = null;
+        lines = [];
+        document.getElementById('matchingFeedback').textContent = '';
+        document.getElementById('matchingFeedback').className = 'feedback';
+    }
+
+    function handleMatchingClick(e) {
+        const clickedItem = e.currentTarget;
+
+        // If it's already matched, do nothing
+        if (clickedItem.classList.contains('matched-correct')) {
+            return;
+        }
+
+        // Determine if it's a source or target item
+        const isSource = clickedItem.closest('#matchingSource');
+
+        if (isSource) {
+            if (selectedSourceItem) {
+                selectedSourceItem.classList.remove('selected');
+            }
+            selectedSourceItem = clickedItem;
+            selectedSourceItem.classList.add('selected');
+        } else { // It's a target item
+            if (selectedTargetItem) {
+                selectedTargetItem.classList.remove('selected');
+            }
+            selectedTargetItem = clickedItem;
+            selectedTargetItem.classList.add('selected');
+        }
+
+        // If both source and target are selected, attempt a match
+        if (selectedSourceItem && selectedTargetItem) {
+            attemptMatch();
+        }
+    }
+
+    function attemptMatch() {
+        const sourceId = selectedSourceItem.dataset.id;
+        const targetId = selectedTargetItem.dataset.id;
+
+        const isCorrect = correctMatches[sourceId] === targetId;
+
+        if (isCorrect) {
+            selectedSourceItem.classList.add('matched-correct');
+            selectedTargetItem.classList.add('matched-correct');
+            drawConnectingLine(selectedSourceItem, selectedTargetItem, true); // Draw green line
+        } else {
+            drawConnectingLine(selectedSourceItem, selectedTargetItem, false); // Draw red line for a moment
+            setTimeout(() => {
+                // Remove the incorrect line after a brief display
+                const svg = document.querySelector('.matching-lines-svg');
+                lines = lines.filter(line => {
+                    if (line.source === selectedSourceItem && line.target === selectedTargetItem && !isCorrect) {
+                        svg.removeChild(line.element);
+                        return false;
+                    }
+                    return true;
+                });
+            }, 500); // Remove after 0.5 seconds
+        }
+
+        // Deselect items regardless of correctness
+        selectedSourceItem.classList.remove('selected');
+        selectedTargetItem.classList.remove('selected');
+        selectedSourceItem = null;
+        selectedTargetItem = null;
+    }
+
+    function drawConnectingLine(sourceElem, targetElem, isCorrect) {
+        const svg = document.querySelector('.matching-lines-svg');
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+        // Get coordinates relative to SVG container
+        const svgRect = svg.getBoundingClientRect();
+        const sourceRect = sourceElem.getBoundingClientRect();
+        const targetRect = targetElem.getBoundingClientRect();
+
+        const x1 = sourceRect.right - svgRect.left;
+        const y1 = sourceRect.top + sourceRect.height / 2 - svgRect.top;
+        const x2 = targetRect.left - svgRect.left;
+        const y2 = targetRect.top + targetRect.height / 2 - svgRect.top;
+
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('stroke', isCorrect ? '#4CAF50' : '#f44336'); // Green for correct, Red for incorrect
+        line.setAttribute('stroke-width', '2');
+        if (isCorrect) {
+            line.classList.add('correct-line');
+        }
+
+        svg.appendChild(line);
+        lines.push({ element: line, source: sourceElem, target: targetElem, correct: isCorrect });
+    }
+
+    function checkMatchingActivity() {
+        const feedbackElement = document.getElementById('matchingFeedback');
+        const sourceItems = document.querySelectorAll('#matchingSource .matching-item');
+        let allMatchedCorrectly = true;
+
+        if (sourceItems.length > 0 && Array.from(sourceItems).every(item => item.classList.contains('matched-correct'))) {
+            feedbackElement.textContent = "Hebat! Semua konsep telah dicocokkan dengan benar!";
+            feedbackElement.className = 'feedback correct';
+        } else {
+            feedbackElement.textContent = "Belum lengkap atau ada yang salah. Silakan coba lagi.";
+            feedbackElement.className = 'feedback incorrect';
+            allMatchedCorrectly = false;
+        }
+
+        // Re-draw all correct lines to be sure
+        const svg = document.querySelector('.matching-lines-svg');
+        svg.innerHTML = ''; // Clear all lines first
+        lines = []; // Reset stored lines
+        document.querySelectorAll('.matching-item.matched-correct').forEach(matchedItem => {
+            const sourceItem = matchedItem.closest('#matchingSource') ? matchedItem : 
+                                document.querySelector(`#matchingSource .matching-item[data-id="${Object.keys(correctMatches).find(key => correctMatches[key] === matchedItem.dataset.id)}"]`);
+            const targetItem = matchedItem.closest('#matchingTarget') ? matchedItem : 
+                                document.querySelector(`#matchingTarget .matching-item[data-id="${correctMatches[matchedItem.dataset.id]}"]`);
+            if (sourceItem && targetItem) {
+                drawConnectingLine(sourceItem, targetItem, true);
+            }
+        });
+    }
+
+    function resetMatchingActivity() {
+        setupMatchingActivity(); // Resets all states
+    }
+
+
+    // --- Initialize all interactive elements on page load ---
+    window.addEventListener('load', () => {
+        setupAccordions();
+        setupMatchingActivity();
+    });
+
+  </script>
+</body>
+</html>
