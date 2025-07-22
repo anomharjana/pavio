@@ -181,70 +181,6 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    .popup-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: rgba(0, 0, 0, 0.6);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-
-    .popup-box {
-      background: white;
-      padding: 2rem;
-      border-radius: 14px;
-      max-width: 400px;
-      width: 90%;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
-      text-align: center;
-    }
-
-    .popup-box h2 {
-      margin-top: 0;
-      color: var(--secondary-color);
-    }
-
-    .popup-box input {
-      box-sizing: border-box;
-      padding: 0.75rem 1rem;
-      width: 100%;
-      max-width: 100%;
-      border: 1.5px solid #ccc;
-      border-radius: 8px;
-      margin: 1.2rem 0;
-      font-size: 1rem;
-      outline: none;
-    }
-
-    .popup-box button {
-      margin: 0.5rem;
-      padding: 0.8rem 1.6rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .btn-akses {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    .btn-akses:hover {
-      background-color: var(--primary-dark);
-    }
-
-    .btn-premium {
-      background-color: #4caf50;
-      color: white;
-    }
-
-    .btn-premium:hover {
-      background-color: #388e3c;
-    }
   </style>
 </head>
 
@@ -285,39 +221,5 @@
   <footer>
     &copy; 2025 Pavio. Semua hak cipta dilindungi.
   </footer>
-
-  <!-- POPUP -->
-  <div class="popup-overlay" id="popup-access">
-    <div class="popup-box">
-      <h2>Masukkan Kode Akses</h2>
-      <input type="text" id="access-code" placeholder="Kode Akses (4 digit angka)" />
-      <div>
-        <button class="btn-akses" onclick="checkAccess()">Akses</button>
-        <button class="btn-premium" onclick="window.location.href='https://pavio.id/subscribe'">Mulai Berlangganan</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    window.addEventListener('load', () => {
-      const alreadyAccessed = sessionStorage.getItem("hasAccess");
-      if (!alreadyAccessed) {
-        setTimeout(() => {
-          document.getElementById('popup-access').style.display = 'flex';
-        }, 3000);
-      }
-    });
-
-    function checkAccess() {
-      const code = document.getElementById('access-code').value.trim();
-      const validCode = "8188";
-      if (code === validCode) {
-        sessionStorage.setItem("hasAccess", "true");
-        document.getElementById('popup-access').style.display = 'none';
-      } else {
-        alert("Kode akses salah. Silakan coba lagi.");
-      }
-    }
-  </script>
 </body>
 </html>
