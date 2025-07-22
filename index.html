@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pavio — Beranda Utama</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     :root {
       --primary-color: #f97316;
@@ -16,10 +17,6 @@
       --text-color: #333;
       --light-text: #666;
       --border-color: #eee;
-    }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
     }
 
     body {
@@ -40,9 +37,7 @@
     }
 
     header img {
-      width: 100%;
       max-width: 250px;
-      height: auto;
       margin-bottom: 1.5rem;
     }
 
@@ -55,11 +50,9 @@
 
     p.lead {
       font-size: 1.4rem;
-      margin-top: 1.5rem;
       color: var(--light-text);
       max-width: 750px;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 1.5rem auto 0;
     }
 
     .main-menu-container {
@@ -104,7 +97,7 @@
       font-size: 4.5rem;
       color: var(--primary-color);
       margin-bottom: 1.5rem;
-      transition: transform 0.3s ease-in-out;
+      transition: transform 0.3s;
     }
 
     .menu-card:hover .icon {
@@ -112,7 +105,6 @@
     }
 
     .menu-card h2 {
-      margin-top: 0;
       font-size: 2.1rem;
       color: var(--secondary-color);
       margin-bottom: 1.2rem;
@@ -127,7 +119,6 @@
     }
 
     .menu-card .btn {
-      display: inline-block;
       background-color: var(--primary-color);
       color: white;
       padding: 1rem 2.4rem;
@@ -173,7 +164,6 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
     }
 
     .help-button:hover {
@@ -192,37 +182,33 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* POPUP STYLES */
-    #popup-access {
-      display: none;
+    .popup-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0; right: 0; bottom: 0;
       background-color: rgba(0, 0, 0, 0.6);
-      z-index: 9999;
+      display: none;
       align-items: center;
       justify-content: center;
+      z-index: 2000;
     }
 
     .popup-box {
       background: white;
       padding: 2rem;
-      border-radius: 15px;
+      border-radius: 14px;
       max-width: 400px;
       width: 90%;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
       text-align: center;
-      animation: fadeInUp 0.3s ease;
     }
 
     .popup-box h2 {
       margin-top: 0;
-      font-size: 1.6rem;
+      color: var(--secondary-color);
     }
 
     .popup-box input {
+      box-sizing: border-box;
       padding: 0.75rem 1rem;
       width: 100%;
       max-width: 100%;
@@ -231,33 +217,33 @@
       margin: 1.2rem 0;
       font-size: 1rem;
       outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .popup-box input:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
     }
 
     .popup-box button {
-      width: 100%;
-      padding: 0.8rem 1rem;
+      margin: 0.5rem;
+      padding: 0.8rem 1.6rem;
+      font-size: 1rem;
       border: none;
       border-radius: 8px;
-      font-weight: bold;
-      font-size: 1rem;
-      margin-top: 0.5rem;
       cursor: pointer;
     }
 
-    .popup-box .access-btn {
-      background-color: #f97316;
+    .btn-akses {
+      background-color: var(--primary-color);
       color: white;
     }
 
-    .popup-box .subscribe-btn {
+    .btn-akses:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .btn-premium {
       background-color: #4caf50;
       color: white;
+    }
+
+    .btn-premium:hover {
+      background-color: #388e3c;
     }
   </style>
 </head>
@@ -273,54 +259,61 @@
     <div class="menu-card" onclick="window.location.href='research-tools.html'">
       <i class="fas fa-chart-line icon"></i>
       <h2>Tools Penelitian</h2>
-      <p>Akses berbagai alat riset dan analisis data.</p>
+      <p>Alat bantu untuk riset dan analisis data yang mendalam.</p>
       <a href="research-tools.html" class="btn">Mulai Analisis</a>
     </div>
+
     <div class="menu-card" onclick="window.location.href='cpns-simulation.html'">
       <i class="fas fa-user-tie icon"></i>
       <h2>Simulasi CPNS</h2>
-      <p>Persiapan maksimal menghadapi tes CPNS.</p>
-      <a href="registrasi_cpns.html" class="btn">Mulai CPNS</a>
+      <p>Latihan soal dan simulasi tes CPNS yang realistis.</p>
+      <a href="registrasi_cpns.html" class="btn">Mulai Simulasi</a>
     </div>
+
     <div class="menu-card" onclick="window.location.href='psychotest-simulation.html'">
       <i class="fas fa-brain icon"></i>
       <h2>Simulasi Psikotes</h2>
-      <p>Berlatih dan pahami pola soal psikotes.</p>
+      <p>Latihan soal dan pembahasan psikotes secara interaktif.</p>
       <a href="psychotest-simulation.html" class="btn">Mulai Psikotes</a>
     </div>
   </section>
+
+  <a class="help-button" title="Butuh Bantuan?" href="https://wa.me/+6285935201571" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
 
   <footer>
     &copy; 2025 Pavio. Semua hak cipta dilindungi.
   </footer>
 
-  <a class="help-button" href="https://wa.me/+6285935201571" target="_blank" title="Butuh Bantuan?">
-    <i class="fab fa-whatsapp"></i>
-  </a>
-
-  <!-- POPUP ACCESS -->
-  <div id="popup-access">
+  <!-- POPUP -->
+  <div class="popup-overlay" id="popup-access">
     <div class="popup-box">
       <h2>Masukkan Kode Akses</h2>
-      <input type="text" id="access-code" placeholder="Kode Akses (6 digit angka)" />
-      <button class="access-btn" onclick="checkAccess()">Akses Fitur Premium</button>
-      <button class="subscribe-btn" onclick="window.location.href='https://pavio.id/berlangganan'">Mulai Berlangganan</button>
+      <input type="text" id="access-code" placeholder="Kode Akses (4 digit angka)" />
+      <div>
+        <button class="btn-akses" onclick="checkAccess()">Akses</button>
+        <button class="btn-premium" onclick="window.location.href='https://pavio.id/subscribe'">Mulai Berlangganan</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // Tampilkan popup setelah 3 detik
     window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('popup-access').style.display = 'flex';
-      }, 3000);
+      const alreadyAccessed = sessionStorage.getItem("hasAccess");
+      if (!alreadyAccessed) {
+        setTimeout(() => {
+          document.getElementById('popup-access').style.display = 'flex';
+        }, 3000);
+      }
     });
 
     function checkAccess() {
       const code = document.getElementById('access-code').value.trim();
-      const validCode = "818808"; // Ganti sesuai kebutuhan
+      const validCode = "8188";
       if (code === validCode) {
-        window.location.href = "index-premium.html";
+        sessionStorage.setItem("hasAccess", "true");
+        document.getElementById('popup-access').style.display = 'none';
       } else {
         alert("Kode akses salah. Silakan coba lagi.");
       }
