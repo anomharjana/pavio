@@ -2,293 +2,204 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pavio — Berlangganan Aplikasi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Langganan Pavio</title>
   <style>
     body {
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: #f9f9fb;
+      padding: 0;
+      background: #f4f7fa;
       color: #333;
     }
 
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background-color: #4da6ff; /* Warna biru lembut */
+      color: white;
       padding: 1.5rem 2rem;
-      background-color: #fff;
-      border-bottom: 1px solid #eee;
-      flex-wrap: wrap;
+      text-align: center;
     }
 
-    .header-brand {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .header-brand img {
-      height: 48px;
-      width: 48px;
-      object-fit: contain;
-    }
-
-    .header-text h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
+    header h1 {
       margin: 0;
+      font-size: 2rem;
     }
 
-    .header-text p {
-      margin: 0;
-      font-size: 0.95rem;
-      color: #777;
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .intro h2 {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .intro p {
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .subscription-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .subscription-card h3 {
+      margin-top: 0;
+      color: #4da6ff;
+      font-size: 1.8rem;
+    }
+
+    .subscription-card p {
+      margin: 0.5rem 0;
+      color: #444;
+    }
+
+    .price {
+      font-size: 2rem;
+      margin: 1rem 0;
+      color: #28a745;
+    }
+
+    .subscribe-btn {
+      background-color: #4da6ff;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .subscribe-btn:hover {
+      background-color: #3399ff;
     }
 
     .feature-section {
-      max-width: 960px;
-      margin: 3rem auto;
-      padding: 0 2rem;
+      margin-top: 3rem;
     }
 
     .feature-section h2 {
+      font-size: 1.5rem;
+      color: #333;
       text-align: center;
-      font-size: 1.75rem;
-      font-weight: 700;
       margin-bottom: 1rem;
     }
 
     .feature-section p {
       text-align: center;
-      max-width: 720px;
-      margin: 0 auto 2rem auto;
-      font-size: 1.05rem;
       color: #555;
+      max-width: 700px;
+      margin: 0 auto 2rem auto;
     }
 
     .feature-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
     }
 
     .feature-card {
       background: white;
+      border-radius: 10px;
       padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      transition: transform 0.2s ease;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-4px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .feature-card h4 {
       margin-top: 0;
-      font-size: 1.1rem;
-      color: #222;
-    }
-
-    .feature-card p {
-      font-size: 0.95rem;
-      color: #555;
-      margin: 0.5rem 0 0 0;
-    }
-
-    .subscription-section {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      max-width: 960px;
-      margin: 2rem auto 4rem auto;
-      padding: 0 2rem;
-    }
-
-    .subscription-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      position: relative;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 2px solid transparent;
-    }
-
-    .subscription-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    }
-
-    .subscription-card h3 {
-      margin-top: 0;
-      font-size: 1.25rem;
-      font-weight: 700;
-    }
-
-    .subscription-card .price {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #111;
-      margin: 0.5rem 0 1rem 0;
-    }
-
-    .subscription-card p {
-      font-size: 0.95rem;
-      color: #555;
-    }
-
-    .subscription-card button {
-      margin-top: 1.5rem;
-      background-color: #333;
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      font-size: 0.95rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    .subscription-card button:hover {
-      background-color: #000;
-      transform: scale(1.05);
-    }
-
-    .popular {
-      border: 2px solid #3b82f6;
-    }
-
-    .badge {
-      position: absolute;
-      top: -12px;
-      left: 16px;
-      background-color: #3b82f6;
-      color: white;
-      font-size: 0.75rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 8px;
-      font-weight: 600;
-    }
-
-    .badge.starter {
-      background-color: #f97316;
-    }
-
-    .badge.pro {
-      background-color: #10b981;
+      color: #4da6ff;
     }
 
     footer {
+      margin-top: 3rem;
+      padding: 1rem;
+      background: #f0f0f0;
       text-align: center;
-      padding: 2rem;
-      color: #aaa;
       font-size: 0.9rem;
+      color: #777;
     }
 
-    .help-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .help-button:hover {
-      background-color: #43a047;
+    @media (max-width: 600px) {
+      .price {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <div class="header-brand">
-      <img src="https://res.cloudinary.com/djexglfns/image/upload/v1745343065/Final_Logo_Pavio_-_eye_ovnarj.png" alt="Logo Pavio" />
-      <div class="header-text">
-        <h1>Pavio</h1>
-        <p>Berlangganan & Nikmati Fitur Premium</p>
-      </div>
-    </div>
+    <h1>Langganan Premium Pavio</h1>
   </header>
 
-  <!-- Fitur Analisis -->
-  <section class="feature-section">
-    <h2>📊 Fitur Analisis Data</h2>
-    <p>
-      Dengan langganan Pavio, Anda mendapatkan akses ke berbagai fitur analisis data untuk mendukung tugas, skripsi, penelitian, hingga kebutuhan profesional.
-    </p>
+  <div class="container">
+    <section class="intro">
+      <h2>Akses Semua Fitur Hanya dengan Satu Kode Langganan</h2>
+      <p>Dapatkan akses ke alat hitung statistik, analisis data otomatis, simulasi tes CPNS & Psikotes, dan masih banyak lagi.</p>
+    </section>
 
-    <div class="feature-grid">
-      <div class="feature-card"><h4>📊 Visualisasi Otomatis</h4><p>Hasilkan grafik interaktif dari data Anda tanpa perlu coding.</p></div>
-      <div class="feature-card"><h4>📉 Analisis Statistik Canggih</h4><p>Dari univariat, multivariat, pemodelan, hingga pemetaan.</p></div>
-      <div class="feature-card"><h4>📁 Upload Dataset Excel</h4><p>Upload data dalam format .xls, .xlsx, atau .csv dengan mudah.</p></div>
-      <div class="feature-card"><h4>📈 Prediksi Tren</h4><p>Gunakan model regresi untuk melihat tren dan proyeksi masa depan.</p></div>
-      <div class="feature-card"><h4>📤 Export Laporan</h4><p>Unduh hasil analisis dalam format PDF atau PNG untuk presentasi.</p></div>
-      <div class="feature-card"><h4>🎓 Konsultasi Ahli</h4><p>Dapatkan sesi Zoom 1-on-1 dengan mentor untuk diskusi data Anda.</p></div>
-    </div>
-  </section>
+    <section class="subscription-card">
+      <h3>Langganan 6 Bulan</h3>
+      <p>Akses semua fitur premium Pavio selama 6 bulan.</p>
+      <p style="margin-top: 1rem; font-size: 0.9rem; color: #444;">
+        ✅ Berlaku untuk <strong>seluruh fitur</strong>: Kalkulator Sampel, Analisis Data, CPNS, Psikotes, dan lainnya.
+      </p>
+      <div class="price">Rp 25.000</div>
+      <button class="subscribe-btn" onclick="window.location.href='http://lynk.id/primajanaedu/2q46wjnpngky/checkout'">Langganan Sekarang</button>
+    </section>
 
- <!-- Harga Langganan -->
-<section class="subscription-section">
-  <div class="subscription-card" style="border: 2px solid #f97316;">
-    <span class="badge starter">Cocok untuk Pemula</span>
-    <h3>Langganan 1 Bulan</h3>
-    
-    <!-- Harga dengan diskon -->
-    <p class="price">
-      <span style="text-decoration: line-through; color: #999;">Rp25.000</span>
-      <span style="color: #e11d48; font-weight: bold; margin-left: 0.5rem;">Rp10.000</span> / bulan
-    </p>
-    
-    <p>Akses semua fitur premium Pavio selama 30 hari.</p>
-    <button onclick="window.location.href='http://lynk.id/primajanaedu/nmvy6e8okg8p/checkout'">
-      Mulai Berlangganan
-    </button>
+    <section class="feature-section">
+      <h2>🚀 Semua Fitur Pavio dalam Satu Langganan</h2>
+      <p>
+        Cukup satu kode akses untuk menikmati seluruh fitur Pavio — mulai dari <strong>alat perhitungan sampel</strong>, <strong>analisis data otomatis</strong>, hingga <strong>simulasi tes CPNS & Psikotes</strong>.
+        Cocok untuk mahasiswa, dosen, peneliti, guru, hingga pencari kerja.
+      </p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>🧮 Kalkulator Sampel</h4>
+          <p>Gunakan rumus Slovin, Krejcie-Morgan, dan lainnya untuk menghitung ukuran sampel yang tepat.</p>
+        </div>
+        <div class="feature-card">
+          <h4>📊 Analisis Data Otomatis</h4>
+          <p>Upload data, lalu dapatkan visualisasi, ringkasan statistik, hingga model regresi.</p>
+        </div>
+        <div class="feature-card">
+          <h4>📝 Simulasi CPNS & Psikotes</h4>
+          <p>Latih kemampuan Anda dengan soal-soal pilihan dan pembahasan interaktif.</p>
+        </div>
+        <div class="feature-card">
+          <h4>📤 Export & Download</h4>
+          <p>Download hasil analisis atau simulasi dalam format PDF atau gambar.</p>
+        </div>
+        <div class="feature-card">
+          <h4>🎓 Konsultasi Ahli</h4>
+          <p>Diskusikan data atau strategi belajar Anda lewat sesi Zoom 1-on-1.</p>
+        </div>
+        <div class="feature-card">
+          <h4>🔑 Akses Premium</h4>
+          <p>Satu kode akses untuk membuka semua fitur di seluruh platform Pavio.</p>
+        </div>
+      </div>
+    </section>
   </div>
-</section>
 
   <footer>
-    &copy; 2025 Pavio. Seluruh hak cipta dilindungi.
+    &copy; 2025 Pavio.id — Hak cipta dilindungi.
   </footer>
 
-  <a href="https://wa.me/+6285935201571" target="_blank" rel="noopener noreferrer">
-    <button class="help-button">?</button>
-  </a>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TL1GH741HF"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-TL1GH741HF');
-  </script>
-
-  <!-- Toggle Detail Script -->
-  <script>
-    function toggleFeatureDetails() {
-      const details = document.getElementById("featureDetails");
-      const button = document.getElementById("toggleButton");
-      if (details.style.display === "none" || details.style.display === "") {
-        details.style.display = "block";
-        button.textContent = "Sembunyikan Rincian Fitur";
-      } else {
-        details.style.display = "none";
-        button.textContent = "Lihat Rincian Fitur";
-      }
-    }
-  </script>
 </body>
 </html>
