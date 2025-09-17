@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kalkulator Simulasi Remunerasi — RSUD Karangasem</title>
+  <style>
+    :root{--bg:#f7fafc;--card:#ffffff;--accent:#0f63a6;--muted:#6b7280}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg); color:#0f172a; margin:0; padding:24px}
+    .container{max-width:1100px;margin:0 auto}
+    h1{font-size:20px;margin:0 0 8px}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:18px}
+    .card{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 6px 18px rgba(12,18,22,0.06)}
+    label{display:block;font-size:13px;margin-bottom:6px}
+    input[type=text], input[type=number], select {width:100%;padding:8px;border:1px solid #e6e9ef;border-radius:6px}
+    .row{display:flex;gap:8px}
+    .btn{background:var(--accent);color:white;padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+    .btn.secondary{background:#e6eef9;color:var(--accent)}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:8px;border-bottom:1px solid #eef2f7;text-align:left;font-size:13px}
+    th{background:#fbfdff}
+    .small{font-size:12px;color:var(--muted)}
+    .numeric{text-align:right}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    .results{margin-top:12px}
+    .summary{display:flex;gap:12px;flex-wrap:wrap}
+    .pill{background:#f1f5f9;padding:8px 12px;border-radius:8px}
+    .download{margin-left:auto}
+    @media (max-width:980px){.grid{grid-template-columns:1fr} .download{margin-left:0}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Kalkulator Simulasi Remunerasi — RSUD Karangasem</h1>
+    <p class="lead">Aplikasi sederhana untuk menghitung poin dan mendistribusikan pool remunerasi berdasarkan formula: <code>Points = BasePoint × TypeWeight × ProductivityIndex × ProfScore</code>. Cocok untuk uji skenario 30/35/40% dan stress test.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Input Global</h3>
+        <label>Total Pendapatan Jasa Layanan (Rp)</label>
+        <input id="revenue" type="number" value="1000000000" />
+
+        <label>Proporsi Remunerasi</label>
+        <select id="proporsi">
+          <option value="0.30">30%</option>
+          <option value="0.35" selected>35%</option>
+          <option value="0.40">40%</option>
+          <option value="custom">Custom...</option>
+        </select>
+        <input id="customProp" type="number" placeholder="Masukkan proporsi % (contoh: 33)" style="display:none;margin-top:8px" />
+
+        <label>Base Point (konstanta)</label>
+        <input id="basePoint" type="number" value="100" />
+
+        <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+          <button id="addRow" class="btn">Tambah Pegawai</button>
+          <button id="loadSample" class="btn secondary">Isi Contoh Data</button>
+          <button id="clearAll" class="btn secondary">Bersihkan</button>
+          <button id="runSim" class="btn" style="margin-left:auto">Jalankan Simulasi</button>
+        </div>
+
+        <hr />
+        <h3>Pengaturan Bobot Tipe Kepegawaian</h3>
+        <p class="small">Definisikan TypeWeight per kategori. Gunakan FGD untuk validasi.</p>
+        <div class="row" style="margin-bottom:8px">
+          <div style="flex:1"><label>Spesialis</label><input id="w_specialist" type="number" step="0.01" value="3.0" /></div>
+          <div style="flex:1"><label>Dokter Umum</label><input id="w_doctor" type="number" step="0.01" value="2.0" /></div>
+        </div>
+        <div class="row">
+          <div style="flex:1"><label>Perawat</label><input id="w_nurse" type="number" step="0.01" value="1.0" /></div>
+          <div style="flex:1"><label>Admin / Penunjang</label><input id="w_admin" type="number" step="0.01" value="0.8" /></div>
+        </div>
+
+        <hr />
+        <h3>Stress test</h3>
+        <p class="small">Uji pengaruh perubahan pendapatan terhadap alokasi (±10%, ±20%).</p>
+        <div class="row">
+          <label style="width:140px">Aktifkan Stress Test</label>
+          <select id="stressOn"><option value="no">Tidak</option><option value="yes" selected>Ya</option></select>
+        </div>
+
+      </div>
+
+      <div class="card">
+        <h3>Data Pegawai</h3>
+        <p class="small">Tambahkan pegawai dengan: nama, kategori, produktivitas, dan skor profesionalisme.</p>
+        <table id="empTable">
+          <thead><tr><th>Nama</th><th>Role</th><th>TypeWeight</th><th class="numeric">Productivity</th><th class="numeric">ProfScore</th><th class="numeric">Points</th><th class="numeric">Payout (Rp)</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+          <button id="exportCsv" class="btn secondary">Export CSV</button>
+          <button id="importCsv" class="btn secondary">Import CSV (paste)</button>
+          <div class="download"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <h3>Hasil Simulasi</h3>
+      <div class="results">
+        <div class="summary" id="summary"></div>
+        <div id="scenarioResults"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <h3>Instruksi Singkat</h3>
+      <ol>
+        <li>Isi total pendapatan, pilih proporsi (atau custom), dan base point.</li>
+        <li>Tambah pegawai satu-satu atau muat contoh data, sesuaikan TypeWeight jika perlu.</li>
+        <li>Klik <strong>Jalankan Simulasi</strong> untuk melihat distribusi per skenario dan hasil stress test.</li>
+        <li>Gunakan tombol export CSV untuk menyimpan hasil.</li>
+      </ol>
+    </div>
+
+  </div>
+
+  <script>
+    // Helper utilities
+    function fmt(x){return Number(x).toLocaleString('id-ID')}
+    function toNum(v){return Number(String(v).replace(/[^0-9.-]+/g,''))||0}
+
+    const empTable = document.querySelector('#empTable tbody')
+    const revenueInput = document.getElementById('revenue')
+    const propSelect = document.getElementById('proporsi')
+    const customProp = document.getElementById('customProp')
+    const basePointInput = document.getElementById('basePoint')
+    const w_specialist = document.getElementById('w_specialist')
+    const w_doctor = document.getElementById('w_doctor')
+    const w_nurse = document.getElementById('w_nurse')
+    const w_admin = document.getElementById('w_admin')
+
+    propSelect.addEventListener('change', ()=>{
+      if(propSelect.value==='custom') customProp.style.display='block'; else customProp.style.display='none'
+    })
+
+    document.getElementById('addRow').addEventListener('click', ()=>addRow())
+    document.getElementById('loadSample').addEventListener('click', loadSample)
+    document.getElementById('clearAll').addEventListener('click', ()=>{empTable.innerHTML=''; renderSummary();})
+    document.getElementById('runSim').addEventListener('click', runSimulation)
+    document.getElementById('exportCsv').addEventListener('click', exportCsv)
+
+    function getTypeWeightForRole(role){
+      role = (role||'').toLowerCase()
+      if(role.includes('spesialis')||role.includes('special')) return parseFloat(w_specialist.value)||3.0
+      if(role.includes('dokter')||role.includes('doctor')) return parseFloat(w_doctor.value)||2.0
+      if(role.includes('perawat')||role.includes('nurse')) return parseFloat(w_nurse.value)||1.0
+      return parseFloat(w_admin.value)||0.8
+    }
+
+    function addRow(data){
+      const row = document.createElement('tr')
+      const name = data?.name||''
+      const role = data?.role||''
+      const prod = data?.productivity!=null?data.productivity:1.0
+      const prof = data?.prof!=null?data.prof:1.0
+      const tw = data?.typeWeight!=null?data.typeWeight:getTypeWeightForRole(role)
+      row.innerHTML = `
+        <td><input class="inpName" value="${name}" /></td>
+        <td><input class="inpRole" value="${role}" /></td>
+        <td><input class="inpTW" type="number" step="0.01" value="${tw}" /></td>
+        <td class="numeric"><input class="inpProd" type="number" step="0.01" value="${prod}" /></td>
+        <td class="numeric"><input class="inpProf" type="number" step="0.01" value="${prof}" /></td>
+        <td class="numeric cellPoints">-</td>
+        <td class="numeric cellPayout">-</td>
+        <td><button class="btn del">Hapus</button></td>`
+      empTable.appendChild(row)
+      row.querySelector('.del').addEventListener('click', ()=>{row.remove(); renderSummary();})
+    }
+
+    function loadSample(){
+      empTable.innerHTML=''
+      const sample = [
+        {name:'Dr. Agus (Spesialis)', role:'Spesialis', typeWeight:3.0, productivity:1.2, prof:1.1},
+        {name:'Dr. Budi (Dokter Umum)', role:'Dokter Umum', typeWeight:2.0, productivity:1.05, prof:1.0},
+        {name:'Siti (Perawat)', role:'Perawat', typeWeight:1.0, productivity:0.95, prof:1.0},
+        {name:'Tono (Adm)', role:'Administrasi', typeWeight:0.8, productivity:1.0, prof:0.95}
+      ]
+      sample.forEach(s=>addRow(s))
+    }
+
+    function collectEmployees(){
+      const rows = Array.from(empTable.querySelectorAll('tr'))
+      return rows.map(r=>{
+        const name = r.querySelector('.inpName').value.trim()
+        const role = r.querySelector('.inpRole').value.trim()
+        const typeWeight = toNum(r.querySelector('.inpTW').value)
+        const productivity = parseFloat(r.querySelector('.inpProd').value)||1.0
+        const prof = parseFloat(r.querySelector('.inpProf').value)||1.0
+        return {row:r,name,role,typeWeight,productivity,prof,points:0,payout:0}
+      })
+    }
+
+    function computePointsForEmployees(employees, basePoint){
+      // Normalisasi produktivitas per role: compute mean per role
+      const groups = {}
+      employees.forEach(e=>{
+        const key = (e.role||'__other').toLowerCase()
+        groups[key] = groups[key]||[]
+        groups[key].push(e)
+      })
+      const means = {}
+      for(const k in groups){
+        const arr = groups[k]
+        const mean = arr.reduce((s,a)=>s+a.productivity,0)/arr.length || 1
+        means[k]=mean
+      }
+
+      employees.forEach(e=>{
+        const key = (e.role||'__other').toLowerCase()
+        const mean = means[key]||1
+        let prodIndex = mean===0?1:(e.productivity/mean)
+        // cap to avoid outliers
+        if(prodIndex>1.5) prodIndex=1.5
+        if(prodIndex<0.5) prodIndex=0.5
+        const pts = Number(basePoint) * Number(e.typeWeight) * Number(prodIndex) * Number(e.prof)
+        e.points = Math.round((pts + Number.EPSILON)*100)/100
+      })
+      return employees
+    }
+
+    function runSimulation(){
+      const revenue = toNum(revenueInput.value)
+      let prop = parseFloat(propSelect.value)
+      if(propSelect.value==='custom'){
+        const cp = parseFloat(customProp.value)
+        prop = (isNaN(cp)?0:cp/100)
+      }
+      const basePoint = toNum(basePointInput.value)||100
+      const stressOn = document.getElementById('stressOn').value==='yes'
+
+      let employees = collectEmployees()
+      if(employees.length===0){alert('Tambahkan minimal 1 pegawai atau muat contoh data.'); return}
+
+      employees = computePointsForEmployees(employees, basePoint)
+      const totalPoints = employees.reduce((s,e)=>s+e.points,0)
+
+      const scenarios = []
+      const mainPool = revenue * prop
+      scenarios.push({label:`Main (${Math.round(prop*100)}%)`, pool:mainPool, employees:JSON.parse(JSON.stringify(employees))})
+
+      if(stressOn){
+        scenarios.push({label:'+10% Revenue', pool: (revenue*1.10)*prop, employees:JSON.parse(JSON.stringify(employees))})
+        scenarios.push({label:'-10% Revenue', pool: (revenue*0.90)*prop, employees:JSON.parse(JSON.stringify(employees))})
+        scenarios.push({label:'+20% Revenue', pool: (revenue*1.20)*prop, employees:JSON.parse(JSON.stringify(employees))})
+        scenarios.push({label:'-20% Revenue', pool: (revenue*0.80)*prop, employees:JSON.parse(JSON.stringify(employees))})
+      }
+
+      // calculate payouts
+      scenarios.forEach(sc=>{
+        sc.employees.forEach(e=>{
+          e.payout = Math.round(((e.points/totalPoints) * sc.pool) + Number.EPSILON)
+        })
+      })
+
+      // update UI
+      renderSummary(revenue, prop, basePoint, totalPoints, scenarios)
+      // update main table cells
+      const currentEmployees = scenarios[0].employees
+      currentEmployees.forEach((e,i)=>{
+        const r = employees[i].row
+        r.querySelector('.cellPoints').textContent = e.points
+        r.querySelector('.cellPayout').textContent = fmt(e.payout)
+      })
+    }
+
+    function renderSummary(revenue, prop, basePoint, totalPoints, scenarios){
+      const summary = document.getElementById('summary')
+      summary.innerHTML=''
+      if(!scenarios){
+        summary.innerHTML = '<div class="pill">Tambahkan pegawai lalu jalankan simulasi.</div>'
+        document.getElementById('scenarioResults').innerHTML=''
+        return
+      }
+
+      const main = scenarios[0]
+      const pool = Math.round(main.pool)
+      const sdiv = document.createElement('div')
+      sdiv.className='summary'
+      sdiv.innerHTML = `
+        <div class="pill"><strong>Total Revenue</strong><div class="small">Rp ${fmt(revenue)}</div></div>
+        <div class="pill"><strong>Proporsi</strong><div class="small">${Math.round(prop*100)}% (BasePoint ${basePoint})</div></div>
+        <div class="pill"><strong>Remuneration Pool</strong><div class="small">Rp ${fmt(pool)}</div></div>
+        <div class="pill"><strong>Total Points</strong><div class="small">${totalPoints}</div></div>`
+      summary.appendChild(sdiv)
+
+      const out = document.getElementById('scenarioResults')
+      out.innerHTML=''
+      scenarios.forEach(sc=>{
+        const card = document.createElement('div')
+        card.style.marginTop='12px'
+        card.innerHTML = `<h4>${sc.label}</h4>`
+        const tbl = document.createElement('table')
+        tbl.innerHTML = '<thead><tr><th>Nama</th><th>Role</th><th class="numeric">Points</th><th class="numeric">Payout (Rp)</th></tr></thead>'
+        const tb = document.createElement('tbody')
+        sc.employees.forEach(e=>{
+          const tr = document.createElement('tr')
+          tr.innerHTML = `<td>${escapeHtml(e.name)}</td><td>${escapeHtml(e.role)}</td><td class="numeric">${e.points}</td><td class="numeric">${fmt(e.payout)}</td>`
+          tb.appendChild(tr)
+        })
+        tbl.appendChild(tb)
+        card.appendChild(tbl)
+        out.appendChild(card)
+      })
+    }
+
+    // Export CSV
+    function exportCsv(){
+      const employees = collectEmployees()
+      if(employees.length===0){alert('Tidak ada data.');return}
+      // run a quick compute to ensure points
+      const basePoint = toNum(basePointInput.value)||100
+      computePointsForEmployees(employees, basePoint)
+      const header = ['name','role','typeWeight','productivity','profScore','points']
+      const rows = employees.map(e=>[e.name,e.role,e.typeWeight,e.productivity,e.prof,e.points])
+      const csv = [header.join(','), ...rows.map(r=>r.map(cell=>`"${String(cell).replace(/"/g,'""')}"`).join(','))].join('\n')
+      const blob = new Blob([csv], {type:'text/csv'})
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url; a.download = 'remuneration_employees.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url)
+    }
+
+    function escapeHtml(s){ if(!s) return ''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+
+    // init
+    loadSample()
+  </script>
+</body>
+</html>
