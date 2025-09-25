@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ICHP — Kalkulator Kerentanan Iklim-Kesehatan (Demo by Anom Harjana)</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { padding: 1rem; }
+    #map { height: 360px; border: 1px solid #ddd; }
+    .indicator-row { gap: .5rem; }
+    .small-input { width: 6rem; }
+    .weight-slider { width: 8rem; }
+    .domain-card { margin-bottom: 1rem; }
+    .score-pill { font-weight:700; font-size:1.05rem; }
+    .conf-band { font-style: italic; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-md-8">
+        <h3>ICHP — Kalkulator Kerentanan Iklim‑Kesehatan (Demo)</h3>
+        <p class="text-muted">Antarmuka: Indonesia. Mode: entri manual. Unit spasial default: <strong>District</strong>. Waktu: <strong>Bulanan</strong>.</p>
+      </div>
+      <div class="col-md-4 text-end">
+        <div class="mb-2">Contoh data: <select id="demoDistrict" class="form-select form-select-sm w-75 d-inline-block"></select></div>
+        <button id="fillDemo" class="btn btn-sm btn-outline-primary">Isi data demo</button>
+        <button id="computeBtn" class="btn btn-primary btn-sm">Hitung Kerentanan</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card domain-card">
+          <div class="card-header">Pengaturan Normalisasi & Threshold</div>
+          <div class="card-body">
+            <div class="mb-2">
+              <label class="form-label">Metode Normalisasi</label>
+              <select id="normMethod" class="form-select form-select-sm">
+                <option value="percentile" selected>Persentil historis (direkomendasikan)</option>
+                <option value="minmax">Min-Max (skala sederhana)</option>
+              </select>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">Ambang Kerentanan (Green / Yellow / Red)</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text">T1 (Green→Yellow)</span>
+                <input id="T1" type="number" class="form-control" step="0.01" value="0.33" min="0" max="1">
+                <span class="input-group-text">T2 (Yellow→Red)</span>
+                <input id="T2" type="number" class="form-control" step="0.01" value="0.66" min="0" max="1">
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">Bobot Domain (sesuaikan)</label>
+              <div class="d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center mb-1"><small>Climate</small><input id="wClimate" type="range" min="0" max="1" step="0.01" value="0.25" class="weight-slider"></div>
+                <div class="d-flex justify-content-between align-items-center mb-1"><small>Exposure</small><input id="wExposure" type="range" min="0" max="1" step="0.01" value="0.25" class="weight-slider"></div>
+                <div class="d-flex justify-content-between align-items-center mb-1"><small>Health</small><input id="wHealth" type="range" min="0" max="1" step="0.01" value="0.25" class="weight-slider"></div>
+                <div class="d-flex justify-content-between align-items-center mb-1"><small>Capacity</small><input id="wCapacity" type="range" min="0" max="1" step="0.01" value="0.25" class="weight-slider"></div>
+                <div class="mt-2"><small class="text-muted">(Bobot akan dinormalisasi ke total = 1 saat dihitung.)</small></div>
+              </div>
+            </div>
+
+            <div>
+              <label class="form-label">Konfidensi & Ketidakpastian</label>
+              <div class="small text-muted">Konfidensi dihitung dari ketersediaan input & variasi historis (demo).</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card domain-card">
+          <div class="card-header">Indikator — Masukkan nilai / bulan</div>
+          <div class="card-body">
+            <div class="accordion" id="indAccordion">
+              <!-- Climate Domain -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingClimate">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseClimate">I. Iklim (Climate)</button>
+                </h2>
+                <div id="collapseClimate" class="accordion-collapse collapse" data-bs-parent="#indAccordion">
+                  <div class="accordion-body">
+                    <div class="mb-2">Masukkan nilai indikator iklim untuk distrik terpilih (satuan: lihat placeholder).</div>
+                    <div id="climateIndicators"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Exposure Domain -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingExposure">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExposure">II. Paparan & Lingkungan (Exposure)</button>
+                </h2>
+                <div id="collapseExposure" class="accordion-collapse collapse" data-bs-parent="#indAccordion">
+                  <div class="accordion-body">
+                    <div id="exposureIndicators"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Health Domain -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHealth">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHealth">III. Kesehatan Anak (Health)</button>
+                </h2>
+                <div id="collapseHealth" class="accordion-collapse collapse" data-bs-parent="#indAccordion">
+                  <div class="accordion-body">
+                    <div id="healthIndicators"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Capacity Domain -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingCapacity">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCapacity">IV. Kapasitas Sistem (Capacity)</button>
+                </h2>
+                <div id="collapseCapacity" class="accordion-collapse collapse" data-bs-parent="#indAccordion">
+                  <div class="accordion-body">
+                    <div id="capacityIndicators"></div>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- accordion -->
+          </div>
+        </div>
+
+      </div><!-- left column -->
+
+      <div class="col-md-8">
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Pilih Waktu (YYYY-MM)</label>
+                <input id="period" type="month" class="form-control" value="2025-09">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Nama Distrik</label>
+                <input id="districtName" class="form-control" placeholder="Contoh: Kabupaten A" value="Kabupaten Demo A">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="border rounded p-2">
+                  <div>Skor Kerentanan Komposit: <span id="compositeScore" class="badge bg-secondary score-pill">-</span></div>
+                  <div class="mt-1">Warna status: <span id="compositeColor" class="badge bg-light">-</span></div>
+                  <div class="mt-2 conf-band">Konfidensi: <span id="confidence" class="fw-bold">-</span></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div id="domainBars"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div id="map" role="region" aria-label="Peta distrik demo"></div>
+              </div>
+              <div class="col-md-6">
+                <h6>Top Kontributor</h6>
+                <div id="topContributors"></div>
+
+                <h6 class="mt-3">Rekomendasi Tindakan</h6>
+                <div id="recommendedActions"></div>
+
+                <h6 class="mt-3">Ketidakpastian</h6>
+                <div id="uncertaintyText" class="small text-muted"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Grafik & Analisis</div>
+          <div class="card-body">
+            <div id="charts" style="min-height:220px"></div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- row -->
+
+    <footer class="mt-3 small text-muted">Demo: nilai historis bersifat sintetis untuk ilustrasi. Sistem produksi memerlukan pengayaan data historis nyata.</footer>
+  </div>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+  // -----------------------------
+  // CONFIG: full indicator list (grouped) + demo historical arrays (synthetic)
+  // -----------------------------
+  const INDICATORS = {
+    Climate: [
+      {key: 'temp_max', label:'Temperatur maks (°C)', unit:'°C'},
+      {key: 'temp_min', label:'Temperatur min (°C)', unit:'°C'},
+      {key: 'heat_index', label:'Heat index', unit:''},
+      {key: 'rainfall', label:'Curah hujan (mm)', unit:'mm'},
+      {key: 'rain_anom', label:'Anomali curah hujan', unit:''},
+      {key: 'air_pm25', label:'PM2.5 (µg/m³)', unit:'µg/m3'},
+      {key: 'extreme_events', label:'Jumlah kejadian ekstrim (bulan)', unit:''}
+    ],
+    Exposure: [
+      {key: 'water_ecoli', label:'E.coli (CFU/100ml)', unit:''},
+      {key: 'water_turbidity', label:'Turbiditas (NTU)', unit:''},
+      {key: 'access_water_pct', label:'Akses air aman (%)', unit:'%'},
+      {key: 'sanitation_pct', label:'Sanitasi tersedia (%)', unit:'%'},
+      {key: 'vector_index', label:'Indeks vektor (mosquito)', unit:''},
+      {key: 'crop_yield_index', label:'Indeks hasil pangan', unit:''},
+      {key: 'urban_heat_island', label:'Urban heat island (°C)', unit:''},
+      {key: 'housing_vuln_pct', label:'Rumah rentan (%)', unit:'%'}
+    ],
+    Health: [
+      {key: 'u5_mortality', label:'Angka kematian <5 (per 1000)', unit:''},
+      {key: 'diarrhea_inc', label:'Insiden diare (kasus/bulan)', unit:''},
+      {key: 'malaria_inc', label:'Insiden malaria (kasus/bulan)', unit:''},
+      {key: 'dengue_inc', label:'Insiden dengue (kasus/bulan)', unit:''},
+      {key: 'heat_illness', label:'Kasus terkait panas (klinik/bulan)', unit:''},
+      {key: 'malnutrition_wasting', label:'Wasting (%)', unit:'%'},
+      {key: 'amr_flag', label:'Insiden AMR (laporan)', unit:''}
+    ],
+    Capacity: [
+      {key: 'health_fac_density', label:'Fasilitas kesehatan (per 10k)', unit:''},
+      {key: 'chw_density', label:'CHW per 10k', unit:''},
+      {key: 'vaccine_cov', label:'Cakupan vaksin (%)', unit:'%'},
+      {key: 'ors_stock_days', label:'Stok ORS (hari)', unit:'hari'},
+      {key: 'net_coverage', label:'Cakupan kelambu (%)', unit:'%'},
+      {key: 'surveillance_cov', label:'Cakupan surveillance (%)', unit:'%'},
+      {key: 'commms_reach_pct', label:'Jangkauan komunikasi (%)', unit:'%'}
+    ]
+  };
+
+  // Sample demo districts and synthetic historical distributions for percentile normalization
+  const DEMO_DISTRICTS = {
+    'Kabupaten Demo A': {},
+    'Kabupaten Demo B': {},
+    'Kabupaten Demo C': {}
+  };
+
+  // Build synthetic historical arrays for each indicator and district (for demo only)
+  function synthHistorical() {
+    for (const d of Object.keys(DEMO_DISTRICTS)) {
+      DEMO_DISTRICTS[d] = {};
+      for (const domain of Object.keys(INDICATORS)) {
+        for (const ind of INDICATORS[domain]) {
+          // make synthetic sample depending on indicator name patterns
+          const key = ind.key;
+          const arr = [];
+          for (let i=0;i<120;i++){
+            let base = 0;
+            if (key.includes('temp')) base = 24 + Math.random()*6; // temp
+            else if (key.includes('rain')) base = 80 + Math.random()*80;
+            else if (key.includes('pm25')) base = 10 + Math.random()*40;
+            else if (key.includes('water')) base = 50 + Math.random()*50;
+            else if (key.includes('access')||key.includes('sanitation')||key.includes('vaccine')||key.includes('net')||key.includes('commms')) base = 60 + Math.random()*30;
+            else if (key.includes('vector')||key.includes('malaria')||key.includes('dengue')) base = Math.random()*50;
+            else if (key.includes('diarrhea')) base = Math.random()*100;
+            else if (key.includes('u5_mortality')) base = 20 + Math.random()*40;
+            else if (key.includes('malnutrition')) base = 10 + Math.random()*20;
+            else if (key.includes('health_fac')||key.includes('chw')) base = 1 + Math.random()*5;
+            else base = Math.random()*50;
+            // seasonal effect
+            const month = i % 12;
+            const seasonal = (month>=11 || month<=2) ? base*1.1 : base;
+            arr.push(Math.max(0, seasonal + (Math.random()-0.5)*base*0.4));
+          }
+          DEMO_DISTRICTS[d][key] = arr;
+        }
+      }
+    }
+  }
+  synthHistorical();
+
+  // -----------------------------
+  // Build the UI indicator inputs dynamically
+  // -----------------------------
+  function createIndicatorRow(ind, domain) {
+    const wrapper = document.createElement('div'); wrapper.className='d-flex align-items-center indicator-row mb-2';
+    const label = document.createElement('div'); label.style.minWidth='220px'; label.textContent = ind.label + (ind.unit?(' ('+ind.unit+')'):'');
+    const input = document.createElement('input'); input.type='number'; input.step='any'; input.className='form-control form-control-sm small-input ms-2'; input.id = 'val__'+ind.key;
+    input.placeholder='nilai';
+    const wlabel = document.createElement('small'); wlabel.className='ms-2'; wlabel.textContent='Bobot';
+    const wslider = document.createElement('input'); wslider.type='range'; wslider.min='0'; wslider.max='1'; wslider.step='0.01'; wslider.value='1'; wslider.className='form-range weight-slider ms-2'; wslider.id='w__'+ind.key;
+    const wtext = document.createElement('span'); wtext.className='ms-2 small'; wtext.id='wtxt__'+ind.key; wtext.textContent='1.00';
+    wslider.addEventListener('input', ()=>{ wtext.textContent = Number(wslider.value).toFixed(2); });
+    wrapper.appendChild(label); wrapper.appendChild(input); wrapper.appendChild(wlabel); wrapper.appendChild(wslider); wrapper.appendChild(wtext);
+    return wrapper;
+  }
+
+  function populateIndicators() {
+    const cdiv = document.getElementById('climateIndicators');
+    const ediv = document.getElementById('exposureIndicators');
+    const hdiv = document.getElementById('healthIndicators');
+    const rdiv = document.getElementById('capacityIndicators');
+    for (const ind of INDICATORS.Climate) cdiv.appendChild(createIndicatorRow(ind,'Climate'));
+    for (const ind of INDICATORS.Exposure) ediv.appendChild(createIndicatorRow(ind,'Exposure'));
+    for (const ind of INDICATORS.Health) hdiv.appendChild(createIndicatorRow(ind,'Health'));
+    for (const ind of INDICATORS.Capacity) rdiv.appendChild(createIndicatorRow(ind,'Capacity'));
+  }
+  populateIndicators();
+
+  // fill demo district select
+  const demoSelect = document.getElementById('demoDistrict');
+  Object.keys(DEMO_DISTRICTS).forEach(d=>{ const opt = document.createElement('option'); opt.value=d; opt.textContent=d; demoSelect.appendChild(opt); });
+
+  document.getElementById('fillDemo').addEventListener('click', ()=>{
+    const d = demoSelect.value;
+    fillDemoData(d);
+  });
+
+  function fillDemoData(district){
+    const hist = DEMO_DISTRICTS[district];
+    for (const domain of Object.keys(INDICATORS)){
+      for (const ind of INDICATORS[domain]){
+        const key = ind.key; const el = document.getElementById('val__'+key);
+        if (!el) continue;
+        // pick last historical value + noise
+        const arr = hist[key] || [0];
+        const sample = arr[arr.length-1] * (0.8 + Math.random()*0.4);
+        el.value = Math.round(sample*100)/100;
+        // set weight default to 1
+        document.getElementById('w__'+key).value = 1; document.getElementById('wtxt__'+key).textContent='1.00';
+      }
+    }
+    document.getElementById('districtName').value = district;
+  }
+
+  // -----------------------------
+  // Helper functions: percentile rank, normalize, aggregate
+  // -----------------------------
+  function percentileRank(arr, value){
+    if (!arr || arr.length===0) return 0.5; // fallback
+    let less = arr.filter(v=>v<value).length;
+    let eq = arr.filter(v=>v===value).length;
+    return (less + 0.5*eq)/arr.length; // between 0 and 1
+  }
+
+  function normalizeIndicator(key, value, method, district){
+    if (value===null || value===undefined || value==='') return null;
+    const v = Number(value);
+    if (method==='percentile'){
+      const hist = (DEMO_DISTRICTS[district] && DEMO_DISTRICTS[district][key]) || [];
+      return percentileRank(hist, v); // 0..1
+    } else {
+      // minmax using synthetic min/max from hist
+      const hist = (DEMO_DISTRICTS[district] && DEMO_DISTRICTS[district][key]) || [];
+      if (!hist || hist.length===0) return 0.5;
+      const lo = d3.quantile(hist, 0.01); const hi = d3.quantile(hist, 0.99);
+      return Math.max(0, Math.min(1, (v - lo) / (hi - lo)));
+    }
+  }
+
+  function computeScores(){
+    const district = document.getElementById('districtName').value || Object.keys(DEMO_DISTRICTS)[0];
+    const norm = document.getElementById('normMethod').value;
+    const T1 = Number(document.getElementById('T1').value);
+    const T2 = Number(document.getElementById('T2').value);
+
+    // domain weights normalized
+    const rawW = {
+      Climate: Number(document.getElementById('wClimate').value),
+      Exposure: Number(document.getElementById('wExposure').value),
+      Health: Number(document.getElementById('wHealth').value),
+      Capacity: Number(document.getElementById('wCapacity').value)
+    };
+    const wsum = rawW.Climate + rawW.Exposure + rawW.Health + rawW.Capacity;
+    const W = {}; for (const k of Object.keys(rawW)) W[k] = rawW[k]/(wsum||1);
+
+    const domainScores = {};
+    const indicatorContribs = [];
+    let missingCount = 0; let totalInds = 0;
+
+    for (const domain of Object.keys(INDICATORS)){
+      const inds = INDICATORS[domain];
+      let numer = 0; let denom = 0;
+      for (const ind of inds){
+        totalInds += 1;
+        const valEl = document.getElementById('val__'+ind.key);
+        const wEl = document.getElementById('w__'+ind.key);
+        const indWeight = wEl ? Number(wEl.value) : 1;
+        const rawVal = valEl ? valEl.value : null;
+        if (rawVal===null || rawVal==='') { missingCount += 1; continue;} // skip
+        const s = normalizeIndicator(ind.key, Number(rawVal), norm, district); // 0..1
+        numer += s * indWeight; denom += indWeight;
+        indicatorContribs.push({domain, key:ind.key, label:ind.label, score:s, weight:indWeight, contribution:null});
+      }
+      const domainScore = denom>0 ? numer/denom : 0.5; // if no data, neutral
+      domainScores[domain] = domainScore;
+    }
+
+    // compute contribution per indicator (normalized to composite later)
+    // first compute composite
+    let composite = 0;
+    for (const d of Object.keys(domainScores)) composite += domainScores[d] * W[d];
+
+    // compute indicator-level contribution: contribution = (ind_score * ind_weight / domain_denom) * domain_weight
+    // to do that, recalc domain denominators
+    const domainDenoms = {};
+    for (const domain of Object.keys(INDICATORS)){
+      let denom=0; for (const ind of INDICATORS[domain]){ const w = Number((document.getElementById('w__'+ind.key)||{value:1}).value); denom += w; } domainDenoms[domain]=denom||1;
+    }
+    for (const ic of indicatorContribs){
+      const indScore = ic.score; const w = ic.weight; const d = ic.domain;
+      const contr = indScore * w / domainDenoms[d] * W[d];
+      ic.contribution = contr; // relative to composite (0..1 scale approximately)
+    }
+
+    // confidence metric simple: 1 - missing/total
+    const confidence = Math.max(0, 1 - (missingCount / Math.max(1,totalInds)) );
+
+    // uncertainty band using historical stddev proxy: compute stddev of domain historical sample means
+    let uncertainty = 0.05; // base
+    // compute variance across domain hist series for district
+    try {
+      let varSum = 0; let varCount=0;
+      for (const domain of Object.keys(INDICATORS)){
+        for (const ind of INDICATORS[domain]){
+          const hist = (DEMO_DISTRICTS[district] && DEMO_DISTRICTS[district][ind.key]) || [];
+          if (hist && hist.length>1){ varSum += d3.deviation(hist); varCount += 1; }
+        }
+      }
+      if (varCount>0){ const avgStd = varSum/varCount; uncertainty = Math.min(0.35, 0.02 + (avgStd/100)); }
+    } catch(e){ /* ignore */ }
+
+    // map composite to color
+    function colorForScore(v){ if (v<=T1) return {text:'HIJAU', cls:'bg-success'}; if (v<=T2) return {text:'KUNING', cls:'bg-warning text-dark'}; return {text:'MERAH', cls:'bg-danger'} }
+    const colorObj = colorForScore(composite);
+
+    // top contributors sorted by absolute contribution
+    indicatorContribs.sort((a,b)=>Math.abs(b.contribution)-Math.abs(a.contribution));
+    const top = indicatorContribs.slice(0,6);
+
+    // recommended actions mapping (simple rules)
+    const recActions = [];
+    top.forEach(ic=>{
+      const key = ic.key;
+      if (['diarrhea_inc','water_ecoli','water_turbidity','access_water_pct'].includes(key)) recActions.push('Periksa sumber air, kampanye kebersihan, distribusi ORS & chlorine tablets.');
+      if (['malaria_inc','vector_index','net_coverage'].includes(key)) recActions.push('Perkuat kontrol vektor: kelambu, larvasida, fogging terarah, fokus pada sekolah & rumah anak.');
+      if (['heat_index','temp_max','heat_illness'].includes(key)) recActions.push('Pemberitahuan panas ke sekolah: kurangi aktivitas luar, pastikan hidrasi & ruang teduh.');
+      if (['amr_flag'].includes(key)) recActions.push('Perkuat laboratorium & pedoman resep antibiotik, pantau kasus pasca-banjir.');
+      if (['vaccine_cov'].includes(key)) recActions.push('Tingkatkan cakupan imunisasi, kampanye vaksinasi di hotspot.');
+      if (['health_fac_density','ors_stock_days'].includes(key)) recActions.push('Perkuat rantai pasokan & distribusi medis, cek stok ORS dan kelambu.');
+    });
+
+    // prepare outputs
+    return {
+      district, norm, domainScores, W, composite, colorObj, top, recActions: [...new Set(recActions)], confidence: Number(confidence.toFixed(2)), uncertainty: Number(uncertainty.toFixed(3)), missingCount, totalInds
+    };
+  }
+
+  // -----------------------------
+  // Rendering functions: charts, map, lists
+  // -----------------------------
+  let map, geoLayer;
+  function initMap(){
+    map = L.map('map').setView([-6.2, 106.8], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+    // demo geojson: 3 rough polygons for demo
+    const demoGeo = {
+      "type":"FeatureCollection",
+      "features":[
+        {"type":"Feature","properties":{name:'Kabupaten Demo A'},"geometry":{"type":"Polygon","coordinates":[[[106.6,-6.2],[106.9,-6.2],[106.9,-6.0],[106.6,-6.0],[106.6,-6.2]]]}},
+        {"type":"Feature","properties":{name:'Kabupaten Demo B'},"geometry":{"type":"Polygon","coordinates":[[[106.9,-6.3],[107.2,-6.3],[107.2,-6.1],[106.9,-6.1],[106.9,-6.3]]]}},
+        {"type":"Feature","properties":{name:'Kabupaten Demo C'},"geometry":{"type":"Polygon","coordinates":[[[106.5,-6.4],[106.8,-6.4],[106.8,-6.2],[106.5,-6.2],[106.5,-6.4]]]}}
+      ]
+    };
+    geoLayer = L.geoJSON(demoGeo, {style:()=>({color:'#444', weight:1, fillOpacity:0.2})}).addTo(map);
+  }
+
+  function renderMapScores(scores){
+    // color demo polygons by score for district name matching
+    geoLayer.eachLayer(layer=>{
+      const name = layer.feature.properties.name;
+      let color = '#ccc'; if (name === scores.district) color = scores.colorObj.cls.includes('bg-success')? '#2ca02c': scores.colorObj.cls.includes('bg-warning')? '#ffcc00':'#d62728';
+      layer.setStyle({fillColor: color, fillOpacity: 0.5});
+      layer.bindPopup(`<b>${name}</b><br/>Skor: ${Number(scores.composite).toFixed(2)} (${scores.colorObj.text})`);
+    });
+  }
+
+  function renderDomainBars(scores){
+    const data = Object.keys(scores.domainScores).map(k=>({domain:k, score:scores.domainScores[k]}));
+    // small bar using d3
+    const container = d3.select('#domainBars'); container.html('');
+    const w = 300; const h = 140; const svg = container.append('svg').attr('width',w).attr('height',h);
+    const x = d3.scaleLinear().domain([0,1]).range([0,220]);
+    const y = d3.scaleBand().domain(data.map(d=>d.domain)).range([0,h]).padding(0.2);
+    svg.selectAll('rect').data(data).join('rect').attr('x',80).attr('y',d=>y(d.domain)).attr('height',y.bandwidth()).attr('width',d=>x(d.score)).attr('fill','#4682b4');
+    svg.selectAll('text.labels').data(data).join('text').attr('x',5).attr('y',d=>y(d.domain)+y.bandwidth()/1.5).text(d=>d.domain);
+    svg.selectAll('text.vals').data(data).join('text').attr('x',290).attr('y',d=>y(d.domain)+y.bandwidth()/1.5).text(d=>Number(d.score).toFixed(2));
+  }
+
+  function renderTopContributors(top){
+    const div = document.getElementById('topContributors'); div.innerHTML='';
+    top.forEach(t=>{
+      const p = document.createElement('div'); p.className='mb-1';
+      p.innerHTML = `<strong>${t.label}</strong> — skor_ind:${(t.score||0).toFixed(2)}, kontribusi:${(t.contribution||0).toFixed(3)}`;
+      div.appendChild(p);
+    });
+  }
+
+  function renderRecommended(actions){
+    const div = document.getElementById('recommendedActions'); div.innerHTML='';
+    if (actions.length===0) div.textContent='Tidak ada rekomendasi otomatis (cek indikator).';
+    actions.forEach(a=>{ const p = document.createElement('div'); p.className='mb-1'; p.textContent='• '+a; div.appendChild(p); });
+  }
+
+  function renderUncertaintyText(scores){
+    const t = document.getElementById('uncertaintyText');
+    t.innerHTML = `Missing indikator: ${scores.missingCount}/${scores.totalInds}. Konfidensi (simple): ${scores.confidence} — ketidakpastian (proxy): ±${(scores.uncertainty*100).toFixed(1)}%`;
+  }
+
+  function renderCharts(scores){
+    const div = d3.select('#charts'); div.html('');
+    // simple pie of composite color
+    div.append('div').html(`<strong>Skor komposit: ${(scores.composite).toFixed(2)} (${scores.colorObj.text})</strong>`);
+    // bar chart of top contributors
+    const top = scores.top;
+    const svg = div.append('svg').attr('width',600).attr('height',200);
+    const x = d3.scaleLinear().domain([0,d3.max(top,d=>Math.abs(d.contribution))||1]).range([0,400]);
+    svg.selectAll('rect').data(top).join('rect').attr('x',150).attr('y',(d,i)=>i*28+10).attr('width',d=>x(Math.abs(d.contribution))).attr('height',20).attr('fill','#ff7f0e');
+    svg.selectAll('text').data(top).join('text').attr('x',10).attr('y',(d,i)=>i*28+25).text(d=>d.label.substring(0,40));
+  }
+
+  // -----------------------------
+  // Main compute & render
+  // -----------------------------
+  document.getElementById('computeBtn').addEventListener('click', ()=>{
+    const out = computeScores();
+    document.getElementById('compositeScore').textContent = Number(out.composite).toFixed(2);
+    const colorBadge = document.getElementById('compositeColor'); colorBadge.textContent = out.colorObj.text; colorBadge.className = 'badge '+out.colorObj.cls;
+    document.getElementById('confidence').textContent = (out.confidence*100).toFixed(0)+'%';
+    renderDomainBars(out); renderTopContributors(out.top); renderRecommended(out.recActions); renderUncertaintyText(out); renderCharts(out); renderMapScores(out);
+  });
+
+  // init
+  initMap();
+  // fill sample demo by default
+  fillDemoData(Object.keys(DEMO_DISTRICTS)[0]);
+
+  </script>
+</body>
+</html>
