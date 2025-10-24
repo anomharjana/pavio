@@ -1,360 +1,250 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Alat Bantu Item Analysis Soal — Demo</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Item Analysis Tool</title>
   <style>
-    /* Sedikit styling tambahan */
-    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-    .card { background: white; border-radius: 12px; box-shadow: 0 4px 18px rgba(15,23,42,0.06); padding: 1rem; }
-    .chip { display:inline-block; padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; }
-    .table-fixed { table-layout: fixed; }
-    textarea { min-height: 6rem; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    header {
+      background-color: #2563eb;
+      color: white;
+      width: 100%;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    main {
+      width: 95%;
+      max-width: 1000px;
+      background: white;
+      margin-top: 1rem;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    input[type="file"], input[type="number"] {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.2rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #1e40af;
+    }
+    .table-container {
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.5rem;
+      border-bottom: 1px solid #ccc;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    th {
+      background-color: #f0f4f8;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    select {
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 48%;
+    }
+    @media (max-width: 600px) {
+      main {
+        padding: 1rem;
+      }
+      button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      select {
+        width: 100%;
+      }
+      table, th, td {
+        font-size: 0.8rem;
+      }
+    }
   </style>
 </head>
-<body class="bg-gray-50 p-6">
-  <div class="max-w-6xl mx-auto">
-    <header class="mb-6">
-      <h1 class="text-2xl font-semibold">Alat Bantu Item Analysis Soal (Demo)</h1>
-      <p class="text-sm text-gray-600">Unggah CSV (kolom: <code>id,soal,jumlah_benar</code>) lalu masukkan jumlah peserta. Aplikasi ini akan melakukan: analisis tingkat kesukaran, klasifikasi tingkat taksonomi Bloom otomatis (heuristik keyword), dan menampilkan ringkasan + grafik. Untuk perhitungan diskriminasi & pengecoh, gunakan tombol <strong>Gunakan Mode Demo</strong> yang membuat data respon peserta (simulasi) — karena untuk analisis nyata diperlukan data jawaban per-peserta.</p>
-    </header>
+<body>
+  <header>Analisis Butir Soal (Item Analysis Tool)</header>
+  <main>
+    <label>Unggah File CSV:</label>
+    <input type="file" id="csvInput" accept=".csv">
 
-    <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-      <div class="card">
-        <label class="block text-sm font-medium text-gray-700">File CSV (id,soal,jumlah_benar)</label>
-        <input id="csvFile" type="file" accept=".csv" class="mt-2 block w-full text-sm text-gray-700" />
+    <label>Jumlah Peserta Ujian:</label>
+    <input type="number" id="totalParticipants" placeholder="Masukkan jumlah peserta">
 
-        <label class="block text-sm font-medium text-gray-700 mt-4">Jumlah peserta (global)</label>
-        <input id="totalParticipants" type="number" min="1" value="100" class="mt-2 block w-full border rounded p-2" />
+    <button onclick="analyzeCSV()">Analisis Soal</button>
+    <button onclick="demoMode()">Mode Demo</button>
 
-        <div class="flex items-center space-x-2 mt-4">
-          <button id="analyzeBtn" class="px-4 py-2 bg-indigo-600 text-white rounded">Analisis</button>
-          <button id="demoBtn" class="px-4 py-2 bg-green-600 text-white rounded">Gunakan Mode Demo (buat data respon)</button>
-          <button id="exportBtn" class="px-4 py-2 bg-gray-700 text-white rounded">Ekspor Hasil CSV</button>
-        </div>
+    <div class="filters">
+      <select id="filterBloom" onchange="applyFilters()">
+        <option value="">Filter Taksonomi Bloom</option>
+      </select>
+      <select id="filterDifficulty" onchange="applyFilters()">
+        <option value="">Filter Tingkat Kesulitan</option>
+        <option value="Mudah">Mudah</option>
+        <option value="Sedang">Sedang</option>
+        <option value="Sulit">Sulit</option>
+      </select>
+    </div>
 
-        <div class="mt-4 text-sm text-gray-600">
-          <strong>Keterangan:</strong>
-          <ul class="list-disc ml-5 mt-2">
-            <li>CSV harus punya header <code>id,soal,jumlah_benar</code> (urutan tidak penting).</li>
-            <li>Jika ingin analisis diskriminasi & pengecoh, gunakan <em>Mode Demo</em> atau unggah data jawaban per-peserta (fitur ini belum tersedia untuk unggah jawaban per-peserta dalam versi ini).</li>
-          </ul>
-        </div>
-      </div>
+    <div class="table-container">
+      <table id="resultTable">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Soal</th>
+            <th>Tingkat Kesulitan</th>
+            <th>Nilai P</th>
+            <th>Bloom Level</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-      <div class="card lg:col-span-2">
-        <h2 class="font-medium">Filter & Ringkasan</h2>
-        <div class="flex flex-wrap items-center gap-3 mt-3">
-          <select id="bloomFilter" class="p-2 border rounded">
-            <option value="all">Semua Level Bloom</option>
-            <option value="Remember">Remember (Mengingat)</option>
-            <option value="Understand">Understand (Memahami)</option>
-            <option value="Apply">Apply (Menerapkan)</option>
-            <option value="Analyze">Analyze (Menganalisis)</option>
-            <option value="Evaluate">Evaluate (Mengevaluasi)</option>
-            <option value="Create">Create (Mencipta)</option>
-            <option value="Uncertain">Tak Terkategori</option>
-          </select>
+    <canvas id="chartDifficulty" style="width:100%;max-width:400px;margin-top:1rem;"></canvas>
+  </main>
 
-          <select id="difficultyFilter" class="p-2 border rounded">
-            <option value="all">Semua Tingkat Kesukaran</option>
-            <option value="easy">Mudah</option>
-            <option value="medium">Sedang</option>
-            <option value="hard">Sulit</option>
-          </select>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    let dataItems = [];
 
-          <div class="ml-auto text-sm text-gray-700">
-            <span class="mr-3">Total Soal: <span id="totalItems">0</span></span>
-            <span>Soal Mudah: <span id="countEasy">0</span></span>
-          </div>
-        </div>
-
-        <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div class="card">
-            <h3 class="font-medium">Tabel Hasil Analisis</h3>
-            <div class="mt-3 overflow-auto">
-              <table id="resultTable" class="w-full table-fixed text-sm">
-                <thead class="text-left text-gray-600 text-xs uppercase">
-                  <tr>
-                    <th class="p-2 w-12">#</th>
-                    <th class="p-2">Soal</th>
-                    <th class="p-2 w-28">Jumlah Benar</th>
-                    <th class="p-2 w-28">P (Difficulty)</th>
-                    <th class="p-2 w-36">Kesukaran</th>
-                    <th class="p-2 w-36">Bloom Level</th>
-                  </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="card">
-            <h3 class="font-medium">Grafik Ringkasan</h3>
-            <div class="mt-3">
-              <canvas id="chartDifficulty" height="180"></canvas>
-            </div>
-            <div class="mt-3">
-              <canvas id="chartBloom" height="180"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer class="text-sm text-gray-600 mt-6">Catatan: Untuk analisis diskriminasi (D) dan efektivitas pengecoh (distractor effectiveness) diperlukan data jawaban per peserta (matrix responses). Karena kamu meminta CSV ringkas (jumlah benar saja), aplikasi ini menghitung tingkat kesukaran (P) dan klasifikasi Bloom otomatis. Tombol <strong>Mode Demo</strong> membuat data respon simulasi sehingga demo D & distractor dapat dihitung untuk tujuan ilustrasi.</footer>
-  </div>
-
-<script>
-// --- Utility helpers ---
-function parseCSV(text) {
-  const lines = text.trim().split(/\r?\n/).filter(l=>l.trim()!="");
-  if(lines.length === 0) return [];
-  const headers = lines[0].split(',').map(h=>h.trim());
-  const rows = lines.slice(1).map(line => {
-    const parts = line.split(',');
-    const obj = {};
-    headers.forEach((h,i)=> obj[h] = (parts[i] !== undefined) ? parts[i].trim() : '');
-    return obj;
-  });
-  return { headers, rows };
-}
-
-// Bloom keyword heuristics (bahasa inggris dan indonesia common verbs)
-const BLOOM_KEYWORDS = {
-  "Remember": ["define","mengenal","sebut","apa itu","who","when","where","list","identify","recall","mengidentifikasi","mengingat","sebutkan"],
-  "Understand": ["explain","describe","menggambarkan","menjelaskan","interpret","understand","maksud","mengapa","mengapa"],
-  "Apply": ["apply","solve","gunakan","menggunakan","implement","demonstrate","terapkan","hitung","calculate","solve"],
-  "Analyze": ["analyze","menganalisis","compare","contrast","organize","struktur","break down","analisis"],
-  "Evaluate": ["evaluate","menilai","kritik","justify","nilai","compare"],
-  "Create": ["create","design","synthesize","mencipta","merancang","buat","compose","develop"]
-};
-
-function classifyBloom(text) {
-  if(!text) return 'Uncertain';
-  const t = text.toLowerCase();
-  let best = {level: 'Uncertain', score: 0};
-  Object.entries(BLOOM_KEYWORDS).forEach(([level, keys])=>{
-    let s=0;
-    keys.forEach(k=>{ if(t.includes(k)) s++; });
-    if(s>best.score){ best={level,score:s}; }
-  });
-  return best.level;
-}
-
-function classifyDifficulty(p) {
-  if(p > 0.70) return 'Mudah';
-  if(p >= 0.30 && p <= 0.70) return 'Sedang';
-  return 'Sulit';
-}
-
-function numberFixed(n, digits=3){ return Number(n).toFixed(digits); }
-
-// --- Application state ---
-let items = []; // {id, soal, jumlah_benar, p, difficulty, bloom}
-let totalParticipants = 100;
-let chartDiff=null, chartBloom=null;
-
-// --- Rendering ---
-function renderTable(filterBloom='all', filterDiff='all'){
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = '';
-  let idx=0;
-  items.forEach(it=>{
-    if(filterBloom!=='all' && it.bloom !== filterBloom) return;
-    if(filterDiff!=='all'){
-      const d = (it.difficulty==='Mudah'?'easy': it.difficulty==='Sedang'?'medium':'hard');
-      if(d !== filterDiff) return;
-    }
-    idx++;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td class="p-2 align-top">${idx}</td>
-      <td class="p-2 align-top break-words">${escapeHtml(it.soal)}</td>
-      <td class="p-2 align-top text-center">${it.jumlah_benar}</td>
-      <td class="p-2 align-top text-center">${numberFixed(it.p,3)}</td>
-      <td class="p-2 align-top">${it.difficulty}</td>
-      <td class="p-2 align-top">${it.bloom}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-  document.getElementById('totalItems').innerText = items.length;
-  document.getElementById('countEasy').innerText = items.filter(i=>i.difficulty==='Mudah').length;
-}
-
-function updateCharts(){
-  // Difficulty chart
-  const counts = {Mudah:0,Sedang:0,Sulit:0};
-  const bloomCounts = {};
-  items.forEach(it=>{
-    counts[it.difficulty]++;
-    bloomCounts[it.bloom] = (bloomCounts[it.bloom]||0) + 1;
-  });
-
-  const diffLabels = ['Mudah','Sedang','Sulit'];
-  const diffData = diffLabels.map(l=>counts[l]);
-
-  if(chartDiff) chartDiff.destroy();
-  const ctx = document.getElementById('chartDifficulty').getContext('2d');
-  chartDiff = new Chart(ctx, {
-    type: 'pie',
-    data: { labels: diffLabels, datasets: [{ data: diffData }] },
-    options: { plugins:{legend:{position:'bottom'}} }
-  });
-
-  // Bloom chart
-  if(chartBloom) chartBloom.destroy();
-  const ctx2 = document.getElementById('chartBloom').getContext('2d');
-  chartBloom = new Chart(ctx2, {
-    type: 'bar',
-    data: { labels: Object.keys(bloomCounts), datasets: [{ label: 'Jumlah soal', data: Object.values(bloomCounts) }] },
-    options: { plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
-  });
-}
-
-// --- CSV export ---
-function exportResultsCSV(){
-  if(items.length===0){ alert('Belum ada hasil untuk diekspor.'); return; }
-  const hdr = ['id','soal','jumlah_benar','p','kesukaran','bloom_level'];
-  const lines = [hdr.join(',')];
-  items.forEach(it=>{
-    const row = [escapeCsv(it.id||''), escapeCsv(it.soal||''), it.jumlah_benar, it.p, it.difficulty, it.bloom];
-    lines.push(row.join(','));
-  });
-  const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'item_analysis_result.csv'; a.click(); URL.revokeObjectURL(url);
-}
-
-// --- Demo simulation ---
-function simulateStudentResponses(items, totalParticipants, optionsPerItem=4){
-  // Generate per-student response matrix (rows: students, cols: items) with MCQ options 0..(k-1)
-  // Probability of correct for each item equals observed p; incorrect options uniformly distributed.
-  const matrix = Array.from({length: totalParticipants}, ()=>Array(items.length).fill(0));
-  for(let j=0;j<items.length;j++){
-    const p = items[j].p;
-    // For each student decide correct or incorrect by Bernoulli(p)
-    for(let s=0;s<totalParticipants;s++){
-      const isCorrect = Math.random() < p;
-      if(isCorrect) matrix[s][j] = 0; // encode 0 as correct option index 0
-      else matrix[s][j] = 1 + Math.floor(Math.random()*(optionsPerItem-1));
-    }
-  }
-  return matrix;
-}
-
-function computeDiscriminationAndDistractors(matrix, items, totalParticipants, optionsPerItem=4){
-  // matrix: students x items, values = chosen option index (0..k-1), assume 0 is correct
-  const n = totalParticipants;
-  const topCount = Math.max(1, Math.round(n * 0.27));
-  const bottomCount = topCount;
-
-  // compute total score per student
-  const scores = matrix.map(row => row.reduce((acc,v)=> acc + (v===0?1:0),0));
-  // sort indices by score
-  const idxs = scores.map((s,i)=>[s,i]).sort((a,b)=> b[0]-a[0]).map(x=>x[1]);
-  const topIdx = idxs.slice(0, topCount);
-  const bottomIdx = idxs.slice(n - bottomCount, n);
-
-  const results = items.map((it, j)=>{
-    // proportion correct in top and bottom
-    const topCorrect = topIdx.filter(i => matrix[i][j]===0).length / topCount;
-    const bottomCorrect = bottomIdx.filter(i => matrix[i][j]===0).length / bottomCount;
-    const D = topCorrect - bottomCorrect;
-
-    // distractor counts
-    const distractorCounts = Array(optionsPerItem).fill(0);
-    for(let s=0;s<n;s++) distractorCounts[matrix[s][j]]++;
-    const distractorEffectiveness = distractorCounts.map(c => ({count:c, percent: c / n}));
-
-    return {D, topCorrect, bottomCorrect, distractorCounts, distractorEffectiveness};
-  });
-  return results;
-}
-
-// --- Events & handlers ---
-document.getElementById('analyzeBtn').addEventListener('click', ()=>{
-  const fileEl = document.getElementById('csvFile');
-  const totalEl = document.getElementById('totalParticipants');
-  totalParticipants = Math.max(1, parseInt(totalEl.value) || 0);
-  if(!fileEl.files || fileEl.files.length===0){ alert('Pilih file CSV terlebih dahulu atau gunakan Mode Demo.'); return; }
-  const f = fileEl.files[0];
-  const reader = new FileReader();
-  reader.onload = e => {
-    try{
-      const parsed = parseCSV(e.target.result);
-      // find columns
-      const headers = parsed.headers.map(h=>h.toLowerCase());
-      const idKey = parsed.headers.find(h=>h.toLowerCase()==='id') || parsed.headers[0];
-      const soalKey = parsed.headers.find(h=>h.toLowerCase()==='soal' || h.toLowerCase()==='pertanyaan') || parsed.headers[1] || parsed.headers[0];
-      const benarKey = parsed.headers.find(h=>h.toLowerCase()==='jumlah_benar' || h.toLowerCase()==='benar' || h.toLowerCase()==='correct') || parsed.headers[2] || parsed.headers[1] || parsed.headers[0];
-
-      items = parsed.rows.map(r=>{
-        const jumlah_benar = Number((r[benarKey]||r[benarKey.toLowerCase()]||'0').toString().replace(/[^0-9.-]/g,'')) || 0;
-        const soal = (r[soalKey]||r[soalKey.toLowerCase()]||'').toString();
-        const id = (r[idKey]||'').toString();
-        const p = totalParticipants>0 ? (jumlah_benar / totalParticipants) : 0;
-        return { id, soal, jumlah_benar, p, difficulty: classifyDifficulty(p), bloom: classifyBloom(soal) };
+    function parseCSV(content) {
+      const rows = content.trim().split('\n');
+      return rows.slice(1).map((row, index) => {
+        const [soal, benar] = row.split(',');
+        return { id: index+1, soal: soal.trim(), benar: parseInt(benar.trim()) };
       });
+    }
 
-      renderTable(); updateCharts();
-      alert('Analisis selesai (hanya tingkat kesukaran & Bloom otomatis). Untuk diskriminasi & pengecoh, gunakan Mode Demo.');
-    }catch(err){ console.error(err); alert('Gagal membaca CSV: ' + err.message); }
-  };
-  reader.readAsText(f, 'UTF-8');
-});
+    function classifyBloom(text) {
+      const lower = text.toLowerCase();
+      if (lower.match(/sebutkan|ingat|identifikasi/)) return 'Remember';
+      if (lower.match(/jelaskan|uraikan|deskripsikan/)) return 'Understand';
+      if (lower.match(/gunakan|hitung|tentukan|terapkan/)) return 'Apply';
+      if (lower.match(/bandingkan|analisis|kelompokkan/)) return 'Analyze';
+      if (lower.match(/nilai|tentukan terbaik|kritik/)) return 'Evaluate';
+      if (lower.match(/rancang|buat|susun/)) return 'Create';
+      return 'Understand';
+    }
 
-// Demo mode: generate sample items if no file, or use uploaded items but generate simulated student responses
-document.getElementById('demoBtn').addEventListener('click', ()=>{
-  const totalEl = document.getElementById('totalParticipants');
-  totalParticipants = Math.max(10, parseInt(totalEl.value) || 100);
+    function analyzeCSV() {
+      const fileInput = document.getElementById('csvInput');
+      const total = parseInt(document.getElementById('totalParticipants').value);
+      if (!fileInput.files[0] || !total) {
+        alert('Unggah file CSV dan masukkan jumlah peserta.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = e.target.result;
+        dataItems = parseCSV(content);
+        dataItems.forEach(item => {
+          const P = item.benar / total;
+          if (P > 0.7) item.kesulitan = 'Mudah';
+          else if (P >= 0.3) item.kesulitan = 'Sedang';
+          else item.kesulitan = 'Sulit';
+          item.P = P.toFixed(2);
+          item.bloom = classifyBloom(item.soal);
+        });
+        displayResults();
+      };
+      reader.readAsText(fileInput.files[0]);
+    }
 
-  if(items.length===0){
-    // create demo items
-    items = [
-      {id:'1', soal:'Sebutkan definisi HIV.', jumlah_benar: 85},
-      {id:'2', soal:'Jelaskan perbedaan antara virus dan bakteri.', jumlah_benar: 60},
-      {id:'3', soal:'Gunakan rumus untuk menghitung prevalensi.', jumlah_benar: 45},
-      {id:'4', soal:'Analisis data berikut dan simpulkan pola utama.', jumlah_benar: 30},
-      {id:'5', soal:'Berikan argumen untuk kebijakan pencegahan X.', jumlah_benar: 20},
-      {id:'6', soal:'Rancang sebuah kampanye edukasi yang inovatif.', jumlah_benar: 10}
-    ].map(it=>({ ...it, p: it.jumlah_benar / totalParticipants, difficulty: classifyDifficulty(it.jumlah_benar / totalParticipants), bloom: classifyBloom(it.soal) }));
-  } else {
-    // refresh p/difficulty/bloom based on current totalParticipants
-    items = items.map(it=>({ ...it, p: (it.jumlah_benar/ totalParticipants), difficulty: classifyDifficulty(it.jumlah_benar/ totalParticipants), bloom: classifyBloom(it.soal) }));
-  }
+    function displayResults() {
+      const tbody = document.querySelector('#resultTable tbody');
+      tbody.innerHTML = '';
+      dataItems.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${item.id}</td><td>${item.soal}</td><td>${item.kesulitan}</td><td>${item.P}</td><td>${item.bloom}</td>`;
+        tbody.appendChild(tr);
+      });
+      updateChart();
+      populateBloomFilter();
+    }
 
-  renderTable(); updateCharts();
+    function populateBloomFilter() {
+      const select = document.getElementById('filterBloom');
+      const blooms = [...new Set(dataItems.map(i => i.bloom))];
+      select.innerHTML = '<option value="">Filter Taksonomi Bloom</option>' + blooms.map(b => `<option value="${b}">${b}</option>`).join('');
+    }
 
-  // simulate student responses and compute D & distractors
-  const matrix = simulateStudentResponses(items, totalParticipants, 4);
-  const results = computeDiscriminationAndDistractors(matrix, items, totalParticipants, 4);
+    function applyFilters() {
+      const bloom = document.getElementById('filterBloom').value;
+      const diff = document.getElementById('filterDifficulty').value;
+      const tbody = document.querySelector('#resultTable tbody');
+      tbody.innerHTML = '';
+      dataItems.filter(i => (!bloom || i.bloom === bloom) && (!diff || i.kesulitan === diff)).forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${item.id}</td><td>${item.soal}</td><td>${item.kesulitan}</td><td>${item.P}</td><td>${item.bloom}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
 
-  // attach results to items for display (non-persistent)
-  items = items.map((it,i)=> ({ ...it, D: results[i].D, topCorrect: results[i].topCorrect, bottomCorrect: results[i].bottomCorrect, distractorCounts: results[i].distractorCounts }));
+    function updateChart() {
+      const ctx = document.getElementById('chartDifficulty');
+      const counts = { Mudah: 0, Sedang: 0, Sulit: 0 };
+      dataItems.forEach(i => counts[i.kesulitan]++);
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: Object.keys(counts),
+          datasets: [{ data: Object.values(counts), backgroundColor: ['#22c55e','#facc15','#ef4444'] }]
+        }
+      });
+    }
 
-  // show modal with D values (simple prompt)
-  let summary = 'Hasil simulasi diskriminasi (D) per soal:\n';
-  items.forEach((it, i)=>{
-    summary += `${i+1}. ID:${it.id} — D=${numberFixed(it.D,3)} (top:${numberFixed(it.topCorrect,3)}, bottom:${numberFixed(it.bottomCorrect,3)})\n`;
-  });
-  alert(summary + '\nCatatan: nilai di atas adalah hasil SIMULASI (untuk demonstrasi). Untuk analisis asli, unggah data jawaban per-peserta.');
-});
-
-// filters
-document.getElementById('bloomFilter').addEventListener('change', (e)=>{ renderTable(e.target.value, document.getElementById('difficultyFilter').value); });
-document.getElementById('difficultyFilter').addEventListener('change', (e)=>{ renderTable(document.getElementById('bloomFilter').value, e.target.value); });
-
-// export
-document.getElementById('exportBtn').addEventListener('click', exportResultsCSV);
-
-// helper escape
-function escapeHtml(text){ return (text+'').replace(/[&<>"]+/g, function(s){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s];}); }
-function escapeCsv(s){ if(typeof s==='number') return s; const str = (s||'').toString(); if(/[,"\n]/.test(str)) return '"'+str.replace(/"/g,'""')+'"'; return str; }
-
-</script>
+    function demoMode() {
+      const demoCSV = 'soal,jumlah_benar\nSebutkan ciri makhluk hidup,80\nJelaskan proses fotosintesis,50\nGunakan rumus luas lingkaran,30\nAnalisis hasil percobaan,20\nRancang alat ukur sederhana,10';
+      document.getElementById('totalParticipants').value = 100;
+      dataItems = parseCSV(demoCSV);
+      dataItems.forEach(item => {
+        const P = item.benar / 100;
+        if (P > 0.7) item.kesulitan = 'Mudah';
+        else if (P >= 0.3) item.kesulitan = 'Sedang';
+        else item.kesulitan = 'Sulit';
+        item.P = P.toFixed(2);
+        item.bloom = classifyBloom(item.soal);
+      });
+      displayResults();
+    }
+  </script>
 </body>
 </html>
