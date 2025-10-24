@@ -102,6 +102,9 @@
 <body>
   <header>Analisis Butir Soal (Item Analysis Tool)</header>
   <main>
+    <label>Unduh Template Excel:</label>
+    <button onclick="downloadTemplate()">Download Template</button>
+
     <label>Unggah File CSV:</label>
     <input type="file" id="csvInput" accept=".csv">
 
@@ -244,6 +247,17 @@
         item.bloom = classifyBloom(item.soal);
       });
       displayResults();
+    }
+
+    function downloadTemplate() {
+      const data = 'soal,jumlah_benar\nSebutkan ciri makhluk hidup,80\nJelaskan proses fotosintesis,50';
+      const blob = new Blob([data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'template_item_analysis.csv';
+      a.click();
+      window.URL.revokeObjectURL(url);
     }
   </script>
 </body>
