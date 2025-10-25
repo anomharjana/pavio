@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Contextual Analyzer (Frontend-Only)</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/natural/5.3.0/natural.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: "Inter", sans-serif; background: #f9fafb; padding: 30px; }
+    h1 { color: #1d4ed8; }
+    .card { background: white; padding: 20px; border-radius: 12px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    textarea, input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-top: 8px; }
+    button { background: #2563eb; color: white; padding: 10px 16px; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer; }
+    button:hover { background: #1e40af; }
+    .result { margin-top: 20px; }
+    .quote { background: #f1f5f9; border-left: 4px solid #3b82f6; padding: 10px; margin: 8px 0; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Contextual Thematic Analyzer (Frontend-Only)</h1>
+
+  <div class="card">
+    <label>📄 Upload Transkrip (.docx)</label>
+    <input type="file" id="fileInput" accept=".docx">
+    <label>🎯 Tujuan Penelitian</label>
+    <textarea id="goal" rows="3" placeholder="Masukkan tujuan penelitian Anda..."></textarea>
+    <button onclick="analyze()">Analisis</button>
+  </div>
+
+  <div id="output" class="result"></div>
+
+  <script>
+    async function analyze() {
+      const fileInput = document.getElementById("fileInput");
+      const goalText = document.getElementById("goal").value.trim();
+      const output = document.getElementById("output");
+      if (!fileInput.files[0] || !goalText) {
+        alert("Harap unggah file dan isi tujuan penelitian!");
+        return;
+      }
+
+      const arrayBuffer = await fileInput.files[0].arrayBuffer();
+      const result = await mammoth.extractRawText({ arrayBuffer });
+      const text = result.value;
+      const sentences = text.split(/[.!?]\s+/).filter(s => s.length > 10);
+
+      // TF-IDF untuk menghitung kedekatan semantik sederhana
+      const TfIdf = natural.TfIdf;
+      const tfidf = new TfIdf();
+      sentences.forEach(s => tfidf.addDocument(s));
+      const scores = sentences.map((s, i) => ({
+        sentence: s,
+        score: tfidf.tfidf(goalText, i)
+      }));
+
+      const topSentences = scores.sort((a,b)=>b.score-a.score).slice(0,10);
+      const themeKeywords = extractThemes(topSentences.map(t=>t.sentence));
+
+      output.innerHTML = `
+        <div class='card'>
+          <h2>🎯 Fokus Tujuan:</h2>
+          <p>${goalText}</p>
+          <h2>📊 Tema Potensial:</h2>
+          <ul>${themeKeywords.map(k=>`<li>${k}</li>`).join('')}</ul>
+          <h2>💬 Kutipan Relevan:</h2>
+          ${topSentences.map(s=>`<div class='quote'>${s.sentence}</div>`).join('')}
+        </div>
+      `;
+    }
+
+    function extractThemes(sentences) {
+      const tokenizer = new natural.WordTokenizer();
+      const allWords = sentences.flatMap(s => tokenizer.tokenize(s.toLowerCase()));
+      const freq = {};
+      allWords.forEach(w => { if (w.length>3) freq[w]=(freq[w]||0)+1; });
+      return Object.entries(freq)
+        .sort((a,b)=>b[1]-a[1])
+        .slice(0,5)
+        .map(([word])=>word);
+    }
+  </script>
+</body>
+</html>
