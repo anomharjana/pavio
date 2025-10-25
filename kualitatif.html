@@ -2,9 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Contextual Analyzer (Frontend-Only)</title>
+  <title>Contextual Analyzer v3.5 (Frontend-Only)</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/natural/5.3.0/natural.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { font-family: "Inter", sans-serif; background: #f9fafb; padding: 30px; }
@@ -15,17 +14,21 @@
     button:hover { background: #1e40af; }
     .result { margin-top: 20px; }
     .quote { background: #f1f5f9; border-left: 4px solid #3b82f6; padding: 10px; margin: 8px 0; border-radius: 6px; }
+    #loading { display: none; color: #555; margin-top: 10px; }
+    .theme-block { margin-top: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: #fff; }
+    .theme-title { font-weight: bold; color: #1e3a8a; margin-bottom: 8px; }
   </style>
 </head>
 <body>
-  <h1>🔍 Contextual Thematic Analyzer (Frontend-Only)</h1>
+  <h1>🎯 Contextual Thematic Analyzer (v3.5)</h1>
 
   <div class="card">
     <label>📄 Upload Transkrip (.docx)</label>
     <input type="file" id="fileInput" accept=".docx">
-    <label>🎯 Tujuan Penelitian</label>
-    <textarea id="goal" rows="3" placeholder="Masukkan tujuan penelitian Anda..."></textarea>
+    <label>🎯 Tujuan / Pertanyaan Penelitian</label>
+    <textarea id="goal" rows="3" placeholder="Masukkan tujuan atau pertanyaan penelitian Anda..."></textarea>
     <button onclick="analyze()">Analisis</button>
+    <div id="loading">⏳ Sedang menganalisis, mohon tunggu...</div>
   </div>
 
   <div id="output" class="result"></div>
@@ -35,50 +38,110 @@
       const fileInput = document.getElementById("fileInput");
       const goalText = document.getElementById("goal").value.trim();
       const output = document.getElementById("output");
+      const loading = document.getElementById("loading");
+
+      output.innerHTML = "";
+      loading.style.display = "block";
+
       if (!fileInput.files[0] || !goalText) {
         alert("Harap unggah file dan isi tujuan penelitian!");
+        loading.style.display = "none";
         return;
       }
 
-      const arrayBuffer = await fileInput.files[0].arrayBuffer();
-      const result = await mammoth.extractRawText({ arrayBuffer });
-      const text = result.value;
-      const sentences = text.split(/[.!?]\s+/).filter(s => s.length > 10);
+      try {
+        // Baca dokumen
+        const arrayBuffer = await fileInput.files[0].arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        const text = result.value.trim();
+        if (!text) throw new Error("File kosong atau tidak terbaca");
 
-      // TF-IDF untuk menghitung kedekatan semantik sederhana
-      const TfIdf = natural.TfIdf;
-      const tfidf = new TfIdf();
-      sentences.forEach(s => tfidf.addDocument(s));
-      const scores = sentences.map((s, i) => ({
-        sentence: s,
-        score: tfidf.tfidf(goalText, i)
-      }));
+        // Pisahkan kalimat
+        const sentences = text.split(/[\n.!?]+/).map(s => s.trim()).filter(s => s.length > 20);
 
-      const topSentences = scores.sort((a,b)=>b.score-a.score).slice(0,10);
-      const themeKeywords = extractThemes(topSentences.map(t=>t.sentence));
+        // Ambil kata kunci dari tujuan penelitian
+        const keywords = extractKeywords(goalText);
+        console.log("Keywords dari tujuan:", keywords);
 
-      output.innerHTML = `
-        <div class='card'>
-          <h2>🎯 Fokus Tujuan:</h2>
-          <p>${goalText}</p>
-          <h2>📊 Tema Potensial:</h2>
-          <ul>${themeKeywords.map(k=>`<li>${k}</li>`).join('')}</ul>
-          <h2>💬 Kutipan Relevan:</h2>
-          ${topSentences.map(s=>`<div class='quote'>${s.sentence}</div>`).join('')}
-        </div>
-      `;
+        // Kelompokkan kalimat ke dalam tema berdasarkan kata kunci
+        const themeGroups = {};
+        keywords.forEach(kw => themeGroups[kw] = []);
+
+        sentences.forEach(s => {
+          const lower = s.toLowerCase();
+          keywords.forEach(kw => {
+            if (lower.includes(kw)) {
+              themeGroups[kw].push(s);
+            }
+          });
+        });
+
+        // Urutkan tema berdasarkan banyaknya kutipan relevan
+        const sortedThemes = Object.entries(themeGroups)
+          .filter(([_, s]) => s.length > 0)
+          .sort((a,b)=>b[1].length - a[1].length);
+
+        // Ambil data untuk chart
+        const labels = sortedThemes.map(([t])=>t);
+        const counts = sortedThemes.map(([_,s])=>s.length);
+
+        // Tampilkan hasil
+        loading.style.display = "none";
+        output.innerHTML = `
+          <div class="card">
+            <h2>🎯 Tujuan / Pertanyaan Penelitian:</h2>
+            <p>${goalText}</p>
+            <h2>📊 Tema Potensial (berdasarkan tujuan penelitian):</h2>
+            <canvas id="chart" height="200"></canvas>
+            ${sortedThemes.map(([theme, quotes]) => `
+              <div class="theme-block">
+                <div class="theme-title">🟢 ${theme.toUpperCase()} (${quotes.length} kutipan)</div>
+                ${quotes.slice(0,5).map(q => `<div class="quote">${q}</div>`).join("")}
+              </div>
+            `).join("")}
+          </div>
+        `;
+
+        // Buat grafik
+        const ctx = document.getElementById('chart');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [{
+              label: 'Jumlah kutipan relevan',
+              data: counts,
+              backgroundColor: 'rgba(59,130,246,0.6)',
+              borderRadius: 8
+            }]
+          },
+          options: {
+            scales: { y: { beginAtZero: true } },
+            plugins: { legend: { display: false } }
+          }
+        });
+
+      } catch (err) {
+        console.error(err);
+        output.innerHTML = "<p>❌ Terjadi kesalahan: " + err.message + "</p>";
+        loading.style.display = "none";
+      }
     }
 
-    function extractThemes(sentences) {
-      const tokenizer = new natural.WordTokenizer();
-      const allWords = sentences.flatMap(s => tokenizer.tokenize(s.toLowerCase()));
-      const freq = {};
-      allWords.forEach(w => { if (w.length>3) freq[w]=(freq[w]||0)+1; });
-      return Object.entries(freq)
-        .sort((a,b)=>b[1]-a[1])
-        .slice(0,5)
-        .map(([word])=>word);
+    // Fungsi sederhana untuk mengambil kata kunci penting dari tujuan penelitian
+    function extractKeywords(text) {
+      const words = text.toLowerCase().split(/\s+/)
+        .map(w => w.replace(/[^a-zA-Z0-9\u00C0-\u017F]/g,"")) // hapus tanda baca
+        .filter(w => w.length > 3 && !stopwords.includes(w));
+      // ambil kata unik
+      return [...new Set(words)];
     }
+
+    const stopwords = [
+      "yang","untuk","dalam","pada","dengan","dan","atau","karena","agar",
+      "dari","oleh","para","bagi","guna","dapat","akan","sebagai","tentang",
+      "terhadap","adalah","dalam","itu","dapat","dengan","bahwa","yang","pada"
+    ];
   </script>
 </body>
 </html>
