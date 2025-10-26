@@ -1,147 +1,393 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Contextual Analyzer v3.5 (Frontend-Only)</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body { font-family: "Inter", sans-serif; background: #f9fafb; padding: 30px; }
-    h1 { color: #1d4ed8; }
-    .card { background: white; padding: 20px; border-radius: 12px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    textarea, input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-top: 8px; }
-    button { background: #2563eb; color: white; padding: 10px 16px; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer; }
-    button:hover { background: #1e40af; }
-    .result { margin-top: 20px; }
-    .quote { background: #f1f5f9; border-left: 4px solid #3b82f6; padding: 10px; margin: 8px 0; border-radius: 6px; }
-    #loading { display: none; color: #555; margin-top: 10px; }
-    .theme-block { margin-top: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: #fff; }
-    .theme-title { font-weight: bold; color: #1e3a8a; margin-bottom: 8px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contextual Analyzer v3.8 (Word Cloud Sub-tema)</title>
+    <!-- Pustaka untuk membaca .docx -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+    <!-- Pustaka untuk Word Cloud (D3.js dan d3-cloud) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1.2.5/build/d3.layout.cloud.min.js"></script>
+    
+    <style>
+        body { font-family: "Inter", sans-serif; background: #f9fafb; padding: 30px; }
+        h1 { color: #1d4ed8; }
+        .card { background: white; padding: 20px; border-radius: 12px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        textarea, input[type="file"], input[type="text"] { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #ddd; 
+            margin-top: 8px; 
+            box-sizing: border-box; 
+        }
+        button { 
+            background: #2563eb; 
+            color: white; 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 8px; 
+            margin-top: 10px; 
+            cursor: pointer; 
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+        button:hover { background: #1e40af; }
+        .result { margin-top: 20px; }
+        .quote { 
+            background: #ffffff; /* Ubah latar belakang kutipan menjadi putih */
+            border-left: 4px solid #3b82f6; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border-radius: 6px; 
+            font-style: italic;
+            color: #4b5563;
+            font-size: 0.9em;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Tambahkan sedikit bayangan */
+        }
+        #loading { 
+            display: none; 
+            color: #555; 
+            margin-top: 10px; 
+            font-weight: 500;
+        }
+        
+        /* Styling untuk Tema Utama dan Sub-tema */
+        .theme-block { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border: 2px solid #3b82f6; /* Border lebih tebal untuk Tema Utama */
+            border-radius: 8px; 
+            background: #eff6ff; /* Background biru muda untuk Tema Utama */
+        }
+        .theme-title { 
+            font-weight: bold; 
+            color: #1e3a8a; 
+            margin-bottom: 10px; 
+            font-size: 1.2em;
+        }
+        .sub-theme-block {
+            margin-top: 15px;
+            margin-left: 20px;
+            padding: 15px;
+            border-left: 5px solid #f59e0b; /* Border kuning untuk Sub-tema */
+            background: #fffdf2; /* Background kuning sangat muda untuk Sub-tema */
+            border-radius: 0 8px 8px 0; /* Hanya sudut kanan yang membulat */
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+        }
+        .sub-theme-title {
+            font-weight: 600;
+            color: #b45309;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        /* Word Cloud Styling */
+        #wordcloud-container {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
-  <h1>🎯 Contextual Thematic Analyzer (v3.5)</h1>
+    <h1>🎯 Contextual Thematic Analyzer (v3.8)</h1>
 
-  <div class="card">
-    <label>📄 Upload Transkrip (.docx)</label>
-    <input type="file" id="fileInput" accept=".docx">
-    <label>🎯 Tujuan / Pertanyaan Penelitian</label>
-    <textarea id="goal" rows="3" placeholder="Masukkan tujuan atau pertanyaan penelitian Anda..."></textarea>
-    <button onclick="analyze()">Analisis</button>
-    <div id="loading">⏳ Sedang menganalisis, mohon tunggu...</div>
-  </div>
+    <div class="card">
+        <label>📄 Unggah Transkrip (.docx)</label>
+        <input type="file" id="fileInput" accept=".docx">
+        <label>🎯 Tujuan / Pertanyaan Penelitian</label>
+        <textarea id="goal" rows="3" placeholder="Masukkan tujuan atau pertanyaan penelitian Anda (misal: 'Meneliti tantangan implementasi kurikulum merdeka dan dampak pada guru')."></textarea>
+        <button onclick="analyze()">Analisis Tematik Lanjutan</button>
+        <div id="loading">⏳ Sedang menganalisis, menghasilkan Tema, Sub-tema (Frasa), dan Word Cloud...</div>
+    </div>
 
-  <div id="output" class="result"></div>
+    <div id="output" class="result"></div>
 
-  <script>
-    async function analyze() {
-      const fileInput = document.getElementById("fileInput");
-      const goalText = document.getElementById("goal").value.trim();
-      const output = document.getElementById("output");
-      const loading = document.getElementById("loading");
+    <!-- Custom Alert Modal (Pengganti alert()) -->
+    <div id="customAlert" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; display: flex; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.3); max-width: 90%; min-width: 300px;">
+            <p id="alertMessage" style="font-size: 1.1em; font-weight: 600; color: #dc2626; margin-bottom: 20px;"></p>
+            <button onclick="document.getElementById('customAlert').style.display='none'" style="float: right; background: #ef4444;">Tutup</button>
+        </div>
+    </div>
 
-      output.innerHTML = "";
-      loading.style.display = "block";
+    <script>
+        // Helper function untuk menggantikan alert()
+        function customAlert(message) {
+            document.getElementById('alertMessage').innerText = message;
+            document.getElementById('customAlert').style.display = 'flex';
+        }
 
-      if (!fileInput.files[0] || !goalText) {
-        alert("Harap unggah file dan isi tujuan penelitian!");
-        loading.style.display = "none";
-        return;
-      }
+        // Daftar kata-kata penghenti bahasa Indonesia yang diperluas
+        const stopwords = [
+            "yang","untuk","dalam","pada","dengan","dan","atau","karena","agar",
+            "dari","oleh","para","bagi","guna","dapat","akan","sebagai","tentang",
+            "terhadap","adalah","dalam","itu","dapat","dengan","bahwa","yang","pada",
+            "bagaimana", "mengapa", "apa", "siapa", "dimana", "kapan", "ini", "itu",
+            "sudah", "belum", "telah", "tapi", "namun", "jika", "maka", "tidak", "bukan",
+            "seperti", "hanya", "saja", "kita", "saya", "kami", "mereka", "dia", "beliau",
+            "ada", "adalah", "pun", "walaupun", "sekalipun", "juga", "saat"
+        ];
+        
+        // Fungsi sederhana untuk mengambil kata kunci penting dari tujuan penelitian
+        function extractKeywords(text) {
+            const words = text.toLowerCase().split(/\s+/)
+                .map(w => w.replace(/[^a-zA-Z0-9\u00C0-\u017F]/g,"")) // hapus tanda baca
+                .filter(w => w.length > 3 && !stopwords.includes(w));
+            // ambil kata unik
+            return [...new Set(words)];
+        }
 
-      try {
-        // Baca dokumen
-        const arrayBuffer = await fileInput.files[0].arrayBuffer();
-        const result = await mammoth.extractRawText({ arrayBuffer });
-        const text = result.value.trim();
-        if (!text) throw new Error("File kosong atau tidak terbaca");
+        // FUNGSI: Menghitung frekuensi Frasa (Bigram)
+        function getPhraseFrequency(text, excludeWords = []) {
+            const frequency = {};
+            // Gunakan Set untuk pencarian yang cepat
+            const excludeSet = new Set(excludeWords.map(w => w.toLowerCase())); 
 
-        // Pisahkan kalimat
-        const sentences = text.split(/[\n.!?]+/).map(s => s.trim()).filter(s => s.length > 20);
-
-        // Ambil kata kunci dari tujuan penelitian
-        const keywords = extractKeywords(goalText);
-        console.log("Keywords dari tujuan:", keywords);
-
-        // Kelompokkan kalimat ke dalam tema berdasarkan kata kunci
-        const themeGroups = {};
-        keywords.forEach(kw => themeGroups[kw] = []);
-
-        sentences.forEach(s => {
-          const lower = s.toLowerCase();
-          keywords.forEach(kw => {
-            if (lower.includes(kw)) {
-              themeGroups[kw].push(s);
+            // Tokenisasi dan bersihkan kata-kata
+            const cleanWords = text.toLowerCase().split(/\s+/)
+                .map(w => w.replace(/[^a-zA-Z0-9\u00C0-\u017F]/g, ""))
+                // Filter kata-kata tunggal, stop words, dan kata yang ada di excludeWords (Tema Utama)
+                .filter(w => w.length > 1 && !stopwords.includes(w) && !excludeSet.has(w));
+            
+            // Buat Bigram (Frasa dua kata)
+            for (let i = 0; i < cleanWords.length - 1; i++) {
+                const bigram = `${cleanWords[i]} ${cleanWords[i+1]}`;
+                // Pastikan frasa tidak hanya terdiri dari stop words yang terlewat atau terlalu pendek
+                if (bigram.length > 6) {
+                    frequency[bigram] = (frequency[bigram] || 0) + 1;
+                }
             }
-          });
-        });
 
-        // Urutkan tema berdasarkan banyaknya kutipan relevan
-        const sortedThemes = Object.entries(themeGroups)
-          .filter(([_, s]) => s.length > 0)
-          .sort((a,b)=>b[1].length - a[1].length);
+            return frequency;
+        }
 
-        // Ambil data untuk chart
-        const labels = sortedThemes.map(([t])=>t);
-        const counts = sortedThemes.map(([_,s])=>s.length);
+        // Fungsi baru untuk menghasilkan Sub-tema (sekarang Frasa) dari sekumpulan kutipan
+        function getSubThemeData(sentences, mainTheme) {
+            // 1. Gabungkan semua kutipan/sentences menjadi satu blok teks
+            const fullText = sentences.join(" ");
 
-        // Tampilkan hasil
-        loading.style.display = "none";
-        output.innerHTML = `
-          <div class="card">
-            <h2>🎯 Tujuan / Pertanyaan Penelitian:</h2>
-            <p>${goalText}</p>
-            <h2>📊 Tema Potensial (berdasarkan tujuan penelitian):</h2>
-            <canvas id="chart" height="200"></canvas>
-            ${sortedThemes.map(([theme, quotes]) => `
-              <div class="theme-block">
-                <div class="theme-title">🟢 ${theme.toUpperCase()} (${quotes.length} kutipan)</div>
-                ${quotes.slice(0,5).map(q => `<div class="quote">${q}</div>`).join("")}
-              </div>
-            `).join("")}
-          </div>
-        `;
+            // 2. Hitung frekuensi FRASA (BIGRAM), mengecualikan stop words dan tema utama
+            const exclude = [...stopwords, mainTheme];
+            const frequencies = getPhraseFrequency(fullText, exclude); // MENGGUNAKAN FRASA (BIGRAM)
 
-        // Buat grafik
-        const ctx = document.getElementById('chart');
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels,
-            datasets: [{
-              label: 'Jumlah kutipan relevan',
-              data: counts,
-              backgroundColor: 'rgba(59,130,246,0.6)',
-              borderRadius: 8
-            }]
-          },
-          options: {
-            scales: { y: { beginAtZero: true } },
-            plugins: { legend: { display: false } }
-          }
-        });
+            // 3. Urutkan dan ambil top 4 FRASA sebagai sub-tema potensial
+            const subThemes = Object.entries(frequencies)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 4) 
+                .map(([word, count]) => ({ word, count })); // Kembalikan objek {word, count}
 
-      } catch (err) {
-        console.error(err);
-        output.innerHTML = "<p>❌ Terjadi kesalahan: " + err.message + "</p>";
-        loading.style.display = "none";
-      }
-    }
+            const subThemeData = [];
 
-    // Fungsi sederhana untuk mengambil kata kunci penting dari tujuan penelitian
-    function extractKeywords(text) {
-      const words = text.toLowerCase().split(/\s+/)
-        .map(w => w.replace(/[^a-zA-Z0-9\u00C0-\u017F]/g,"")) // hapus tanda baca
-        .filter(w => w.length > 3 && !stopwords.includes(w));
-      // ambil kata unik
-      return [...new Set(words)];
-    }
+            // 4. Kelompokkan kutipan di bawah setiap sub-tema (frasa)
+            subThemes.forEach(subTheme => {
+                const relevantQuotes = sentences
+                    // Hanya kutipan yang mengandung sub-tema (frasa)
+                    .filter(s => s.toLowerCase().includes(subTheme.word)) 
+                    // Ambil maksimal 6 kutipan untuk ditampilkan
+                    .slice(0, 6); 
+                
+                // Tema utama harus hadir di sini, namun kita hanya memverifikasi sub-tema
+                if (relevantQuotes.length >= 3) { // Hanya tambahkan sub-tema jika memiliki minimal 3 kutipan
+                    subThemeData.push({
+                        subTheme: subTheme.word,
+                        quotes: relevantQuotes,
+                        count: subTheme.count // Tambahkan hitungan untuk Word Cloud
+                    });
+                }
+            });
 
-    const stopwords = [
-      "yang","untuk","dalam","pada","dengan","dan","atau","karena","agar",
-      "dari","oleh","para","bagi","guna","dapat","akan","sebagai","tentang",
-      "terhadap","adalah","dalam","itu","dapat","dengan","bahwa","yang","pada"
-    ];
-  </script>
+            return subThemeData;
+        }
+
+
+        async function analyze() {
+            const fileInput = document.getElementById("fileInput");
+            const goalText = document.getElementById("goal").value.trim();
+            const output = document.getElementById("output");
+            const loading = document.getElementById("loading");
+
+            output.innerHTML = "";
+            loading.style.display = "block";
+
+            if (!fileInput.files[0] || !goalText) {
+                customAlert("Harap unggah file (.docx) dan isi tujuan penelitian!");
+                loading.style.display = "none";
+                return;
+            }
+
+            try {
+                // 1. Baca dokumen menggunakan mammoth.js
+                const arrayBuffer = await fileInput.files[0].arrayBuffer();
+                const result = await mammoth.extractRawText({ arrayBuffer });
+                const text = result.value.trim();
+                if (!text) throw new Error("File kosong atau tidak terbaca.");
+
+                // 2. Pisahkan kalimat
+                const sentences = text.split(/[\n.!?]+/).map(s => s.trim()).filter(s => s.length > 20);
+
+                // 3. Ambil kata kunci dari tujuan penelitian (menjadi Tema Utama)
+                const keywords = extractKeywords(goalText);
+                if (keywords.length === 0) {
+                     throw new Error("Tujuan penelitian terlalu singkat atau hanya berisi kata sandang. Harap masukkan kata kunci yang spesifik.");
+                }
+
+                // 4. Kelompokkan kalimat ke dalam Tema Utama (berdasarkan kata kunci)
+                const themeGroups = {};
+                keywords.forEach(kw => themeGroups[kw] = []);
+
+                sentences.forEach(s => {
+                    const lower = s.toLowerCase();
+                    keywords.forEach(kw => {
+                        if (lower.includes(kw)) {
+                            // Cek duplikasi untuk menghindari satu kalimat masuk ke tema yang sama berkali-kali
+                            if (!themeGroups[kw].includes(s)) {
+                                themeGroups[kw].push(s);
+                            }
+                        }
+                    });
+                });
+
+                // 5. Urutkan Tema Utama berdasarkan banyaknya kutipan relevan
+                const sortedThemes = Object.entries(themeGroups)
+                    .filter(([_, s]) => s.length > 0)
+                    .sort((a,b)=>b[1].length - a[1].length);
+                
+                if (sortedThemes.length === 0) {
+                    throw new Error("Tidak ditemukan kutipan yang relevan dengan kata kunci di tujuan penelitian Anda.");
+                }
+
+                // 6. Hasilkan struktur data bersarang (Tema Utama, Sub-tema, Kutipan)
+                const finalAnalysis = sortedThemes.map(([theme, quotes]) => {
+                    // Panggil fungsi baru untuk mendapatkan sub-tema dan kutipan terperinci (sekarang berupa Frasa)
+                    const subThemes = getSubThemeData(quotes, theme);
+                    return {
+                        theme: theme,
+                        quotesCount: quotes.length,
+                        subThemes: subThemes
+                    };
+                });
+                
+                // 7. Kumpulkan semua data Sub-tema untuk Word Cloud
+                let wordData = [];
+                finalAnalysis.forEach(theme => {
+                    theme.subThemes.forEach(subTheme => {
+                        // Cek apakah frasa sudah ada di wordData, jika ya, tambahkan hitungan (untuk menghindari frasa sama yang berasal dari Tema Utama berbeda)
+                        const existingIndex = wordData.findIndex(d => d.text === subTheme.subTheme);
+                        if (existingIndex > -1) {
+                            wordData[existingIndex].count += subTheme.quotes.length; // Gunakan jumlah kutipan sebagai hitungan
+                        } else {
+                            wordData.push({
+                                text: subTheme.subTheme,
+                                count: subTheme.quotes.length // Gunakan jumlah kutipan sebagai hitungan
+                            });
+                        }
+                    });
+                });
+                
+                // Siapkan data Word Cloud
+                wordData = wordData.map(item => ({
+                    text: item.text,
+                    // Skala ukuran font: minimal 18px, bertambah 8px untuk setiap 1 kutipan (frasa 2 kata perlu lebih besar)
+                    size: Math.max(18, item.count * 8 + 20), 
+                    count: item.count
+                }));
+
+                // 8. Tampilkan hasil di HTML
+                loading.style.display = "none";
+                output.innerHTML = `
+                    <div class="card">
+                        <h2>🎯 Tujuan / Pertanyaan Penelitian:</h2>
+                        <p>${goalText}</p>
+                        
+                        <h2>☁️ Word Cloud Sub-tema (Frasa) Teratas:</h2>
+                        <p class="text-sm text-gray-500">Ukuran frasa menunjukkan frekuensi kemunculannya sebagai Sub-tema yang didukung minimal 3 kutipan.</p>
+                        <div id="wordcloud-container"></div>
+                        
+                        <h2>📃 Hasil Analisis Tematik (Tema & Sub-tema Frasa):</h2>
+                        ${finalAnalysis.map(themeData => `
+                            <div class="theme-block p-4 mb-4">
+                                <div class="theme-title text-indigo-800">
+                                    <span class="font-extrabold">▶️ TEMA UTAMA: ${themeData.theme.toUpperCase()}</span> 
+                                    <span class="text-sm font-normal text-indigo-600">(${themeData.quotesCount} kutipan utama)</span>
+                                </div>
+                                
+                                ${themeData.subThemes.length > 0 ? themeData.subThemes.map(subThemeData => `
+                                    <div class="sub-theme-block">
+                                        <div class="sub-theme-title text-amber-800">
+                                            ✨ SUB-TEMA: ${subThemeData.subTheme.toUpperCase()} 
+                                            <span class="text-xs font-normal text-amber-600">(${subThemeData.quotes.length} kutipan relevan)</span>
+                                        </div>
+                                        ${subThemeData.quotes.map(q => `<div class="quote">"${q}"</div>`).join("")}
+                                    </div>
+                                `).join("") : `<p class="ml-4 text-gray-500 italic">Tidak ditemukan sub-tema frasa kuat (minimal 3 kutipan) di bawah tema ini.</p>`}
+                            </div>
+                        `).join("")}
+                    </div>
+                `;
+
+                // 9. Buat Word Cloud
+                drawWordCloud(wordData);
+
+            } catch (err) {
+                console.error(err);
+                customAlert("❌ Terjadi kesalahan saat memproses file: " + err.message);
+                loading.style.display = "none";
+            }
+        }
+
+        // Fungsi untuk menggambar Word Cloud
+        function drawWordCloud(words) {
+            const container = document.getElementById("wordcloud-container");
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+
+            const svg = d3.select("#wordcloud-container").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+            const layout = d3.layout.cloud()
+                .size([width, height])
+                .words(words)
+                .padding(6) 
+                .rotate(() => (Math.random() > 0.8 ? 90 : 0)) // 20% rotasi 90 derajat
+                .font("Inter, sans-serif")
+                .fontSize(d => d.size)
+                .on("end", draw);
+
+            layout.start();
+
+            function draw(words) {
+                svg.selectAll("text")
+                    .data(words)
+                    .enter().append("text")
+                    .style("font-size", d => d.size + "px")
+                    .style("fill", d => {
+                        // Pilih warna yang konsisten namun bervariasi
+                        const colors = ["#b45309", "#d97706", "#f59e0b", "#fbbf24", "#fcd34d"];
+                        return colors[d.count % colors.length]; // Menggunakan palet oranye/kuning untuk sub-tema
+                    }) 
+                    .style("font-weight", 700)
+                    .style("font-family", "Inter, sans-serif")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
+                    .text(d => d.text);
+            }
+        }
+    </script>
 </body>
 </html>
