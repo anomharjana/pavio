@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HIV Program Review 2023–2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* Warna khas Kemenkes RI */
+    :root {
+      --kemenkes-green: #009B4C;
+      --kemenkes-blue: #00ADEF;
+      --kemenkes-yellow: #FFD100;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Animasi sederhana */
+    [data-lang] {
+      transition: opacity 0.4s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-green-600 via-blue-500 to-green-600 text-white py-10 shadow-md relative">
+    <div class="max-w-6xl mx-auto text-center px-4">
+      <h1 class="text-3xl md:text-4xl font-bold mb-2" data-lang="id">HIV Program Review 2023–2025</h1>
+      <h1 class="hidden text-3xl md:text-4xl font-bold mb-2" data-lang="en">HIV Program Review 2023–2025</h1>
+
+      <p class="text-lg italic opacity-90" data-lang="id">
+        “Kolaborasi hari ini adalah fondasi untuk mencapai triple 95% di tahun 2030.”
+      </p>
+      <p class="hidden text-lg italic opacity-90" data-lang="en">
+        “Today’s collaboration is the foundation for achieving the triple 95% by 2030.”
+      </p>
+    </div>
+
+    <!-- Language Toggle -->
+    <div class="absolute top-4 right-6">
+      <button id="langToggle" class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-4 py-2 rounded-lg font-semibold shadow-md transition">
+        English 🇬🇧
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-6 py-12 space-y-16">
+
+    <!-- Timeline Section -->
+    <section class="text-center">
+      <h2 class="text-2xl font-semibold mb-4 text-green-700" data-lang="id">Timeline Kegiatan</h2>
+      <h2 class="hidden text-2xl font-semibold mb-4 text-green-700" data-lang="en">Activity Timeline</h2>
+
+      <p class="text-gray-600 mb-6" data-lang="id">Lihat jadwal lengkap kegiatan HIV Program Review Tahun 2023–2025.</p>
+      <p class="hidden text-gray-600 mb-6" data-lang="en">View the complete schedule for the 2023–2025 HIV Program Review activities.</p>
+
+      <div class="border-4 border-green-200 rounded-xl shadow-md overflow-hidden">
+        <!-- Embed Google Drive PDF Timeline -->
+        <iframe 
+          src="https://drive.google.com/file/d/1C-w3G_vIPd0GdIdARKYfYEmv_aCcSKB-/preview" 
+          class="w-full h-[600px]" 
+          allow="autoplay"
+          frameborder="0">
+        </iframe>
+      </div>
+    </section>
+
+    <!-- Key Information Section -->
+    <section class="text-center">
+      <h2 class="text-2xl font-semibold mb-4 text-green-700" data-lang="id">Key Information per Sesi</h2>
+      <h2 class="hidden text-2xl font-semibold mb-4 text-green-700" data-lang="en">Key Information by Session</h2>
+
+      <p class="text-gray-600 mb-6" data-lang="id">Dokumen ini berisi informasi penting dari setiap sesi kegiatan.</p>
+      <p class="hidden text-gray-600 mb-6" data-lang="en">This document contains key information from each activity session.</p>
+
+      <div class="border-4 border-blue-200 rounded-xl shadow-md overflow-hidden">
+        <!-- Embed Google Drive PDF Key Info -->
+        <iframe 
+          src="https://drive.google.com/file/d/1XVkrHi77hgMjgR8V5WiNWp5W-Lf1Tsaq/preview" 
+          class="w-full h-[600px]" 
+          allow="autoplay"
+          frameborder="0">
+        </iframe>
+      </div>
+    </section>
+
+    <!-- Forms Section -->
+    <section class="text-center">
+      <h2 class="text-2xl font-semibold mb-6 text-green-700" data-lang="id">Formulir FGD</h2>
+      <h2 class="hidden text-2xl font-semibold mb-6 text-green-700" data-lang="en">FGD Forms</h2>
+
+      <div class="flex flex-col md:flex-row justify-center gap-6">
+        <!-- Rapporteur Recording -->
+        <a href="https://forms.gle/utdNGAvr7kpVyVno9" target="_blank"
+           class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg shadow-md font-semibold transition"
+           data-lang="id">Form FGD Rapporteur Recording</a>
+        <a href="https://forms.gle/utdNGAvr7kpVyVno9" target="_blank"
+           class="hidden bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg shadow-md font-semibold transition"
+           data-lang="en">FGD Rapporteur Recording Form</a>
+
+        <!-- Reviewer Reflection -->
+        <a href="https://forms.gle/hYeik8tWHxPRCAA88" target="_blank"
+           class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg shadow-md font-semibold transition"
+           data-lang="id">Form FGD Reviewer Reflection</a>
+        <a href="https://forms.gle/hYeik8tWHxPRCAA88" target="_blank"
+           class="hidden bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg shadow-md font-semibold transition"
+           data-lang="en">FGD Reviewer Reflection Form</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 text-center py-6 text-gray-600 text-sm">
+    <p data-lang="id">© 2025 HIV Program Review | Bersama Menuju Triple 95% 2030</p>
+    <p class="hidden" data-lang="en">© 2025 HIV Program Review | Together Towards Triple 95% 2030</p>
+  </footer>
+
+  <!-- JavaScript Toggle Language -->
+  <script>
+    const toggleBtn = document.getElementById('langToggle');
+    let currentLang = 'id';
+
+    toggleBtn.addEventListener('click', () => {
+      currentLang = currentLang === 'id' ? 'en' : 'id';
+      document.querySelectorAll('[data-lang]').forEach(el => {
+        el.classList.toggle('hidden', el.getAttribute('data-lang') !== currentLang);
+      });
+      toggleBtn.textContent = currentLang === 'id' ? 'English 🇬🇧' : 'Indonesia 🇮🇩';
+    });
+  </script>
+
+</body>
+</html>
